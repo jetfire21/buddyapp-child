@@ -1,0 +1,535 @@
+<?php
+/**
+ * @package WordPress
+ * @subpackage BuddyApp
+ * @author SeventhQueen <themesupport@seventhqueen.com>
+ * @since BuddyApp 1.0
+ */
+
+/**
+ * BuddyApp Child Theme Functions
+ * Add custom code below
+*/ 
+
+add_filter('wp_mail_from', 'new_mail_from');
+add_filter('wp_mail_from_name', 'new_mail_from_name');
+ 
+function new_mail_from($old) {
+return 'volunteer@dugoodr.com';
+}
+function new_mail_from_name($old) {
+return 'DuGoodr Scout';
+}
+
+
+
+/* ********** alex code ********** */ 
+/* ********** code for member and groups not related,only styles and icons ********** */ 
+/* ********** for page members ********** */ 
+
+//Social Media Icons based on the profile user info
+function member_social_extend(){
+		// $dmember_id = $bp->displayed_user->id;
+		$user = wp_get_current_user();
+		$dmember_id = $user->ID;
+
+		$fb_info = xprofile_get_field_data('Facebook Profile', $dmember_id);
+		$google_info = xprofile_get_field_data('Google+', $dmember_id);
+		$instagram_info = xprofile_get_field_data('Instagram', $dmember_id);
+		$twitter_info = xprofile_get_field_data('Twitter', $dmember_id);
+		$linkedin_info = xprofile_get_field_data('LinkedIn Profile', $dmember_id);
+		echo '<div class="member-social">';
+		// echo 'test';
+		// if($fb_info||$google_info||$twitch_info||$twitter_info){
+		// 	echo 'My Social: ';
+		// }
+
+		if ($fb_info) {
+		?>
+		<span class="fb-info">
+		<!-- <a href="https://www.facebook.com/rafaelSanti21" rel="nofollow">www.facebook.com/rafaelSanti21</a>-->
+		<?php
+		// $img = '<img src="'.bloginfo('wpurl').'/wp-content/themes/buddyapp-child/images/f.png" />';
+		$img = '<img src="http://'.$_SERVER["HTTP_HOST"].'/wp-content/themes/buddyapp-child/images/fb.png" />';
+		 echo $res = preg_replace("/>[^<]+/i", " target='blank'>$img", $fb_info); ?>
+		</span>
+	<?php
+	}
+		?>
+		<?php
+		if ($google_info) {
+		?>
+		<span class="fb-info">
+		<?php
+		$img = '<img src="http://'.$_SERVER["HTTP_HOST"].'/wp-content/themes/buddyapp-child/images/google+.png" />';
+		 echo $res = preg_replace("/>[^<]+/i", " target='blank'>$img", $google_info);
+		  ?>
+		</span>
+	<?php
+	}
+		?>
+		<?php
+		if ($instagram_info) {
+		?>
+		<span class="fb-info">
+		<?php
+		$img = '<img src="http://'.$_SERVER["HTTP_HOST"].'/wp-content/themes/buddyapp-child/images/instagram.png" />';
+		 echo $res = preg_replace("/>[^<]+/i", " target='blank'>$img", $instagram_info);
+		  ?>
+		</span>
+	<?php
+	}
+	?>
+	<?php
+		if ($twitter_info) {
+		?>
+		<span class="fb-info">
+		<?php
+		$img = '<img src="http://'.$_SERVER["HTTP_HOST"].'/wp-content/themes/buddyapp-child/images/twitter.png" />';
+		 echo $res = preg_replace("/>[^<]+/i", " target='blank'>$img", $twitter_info);
+		  ?>
+		</span>
+	<?php
+	}
+	?>
+	<?php
+		if ($linkedin_info) {
+		?>
+		<span class="fb-info">
+		<?php
+		$img = '<img src="http://'.$_SERVER["HTTP_HOST"].'/wp-content/themes/buddyapp-child/images/linkedin.png" />';
+		 echo $res = preg_replace("/>[^<]+/i", " target='blank'>$img", $linkedin_info);
+		  ?>
+		</span>
+	<?php
+	}
+	echo '</div>';
+}
+add_filter( 'bp_before_member_header_meta', 'member_social_extend' ); 
+
+/* ********** soclinks for page groups ********** */ 
+
+function alex_display_social_groups() {
+
+	global $wpdb;
+
+	// echo "gr_alex";
+
+	// $group_id = 1;
+	$gid = bp_get_group_id();
+	$fields = $wpdb->get_results( $wpdb->prepare(
+		"SELECT ID, post_title, post_content
+		FROM {$wpdb->posts}
+		WHERE post_parent = %d
+		    AND post_type = %s
+		ORDER BY ID ASC",
+		intval( $gid ),
+		"alex_gfilds"
+	) );
+
+	if(!empty($fields)) echo "<div class='wrap_soclinks'>";
+
+	foreach ($fields as $field) {
+
+        if(!empty($field->post_content)) $data = trim($field->post_content); 
+        else $data = false;
+
+        if( !empty($data) ){
+        	// echo "data= ".$data;
+
+        	switch ($field->post_title) {
+        		case 'Facebook':
+					$img = '<img src="'.$home.'/wp-content/themes/buddyapp-child/images/fb.png" />';
+        			break;  		
+        		case 'Google+':
+					$img = '<img src="'.$home.'/wp-content/themes/buddyapp-child/images/google+.png" />';
+        			break;
+        		case 'Twitter':
+					$img = '<img src="'.$home.'/wp-content/themes/buddyapp-child/images/twitter.png" />';
+        			break;
+        		case 'Instagram':
+					$img = '<img src="'.$home.'/wp-content/themes/buddyapp-child/images/instagram.png" />';
+        			break;
+        		case 'Linkedin':
+					$img = '<img src="'.$home.'/wp-content/themes/buddyapp-child/images/linkedin.png" />';
+        			break;
+        	}
+
+	        // and now display field content
+	        echo '<span class="fb-info groups-soc-links"><a href="'.sanitize_text_field($data).'" target="_blank">'.$img.'</a></span>';
+        }
+
+    }
+    if(!empty($fields)) echo "</div>";
+}
+
+add_action( 'bp_before_group_header_meta', 'alex_display_social_groups');
+
+function alex_edit_group_fields(){
+
+	global $bp,$wpdb;
+
+	// info about all groups
+	$groups = groups_get_groups();
+	// print_r($groups);
+	// echo "<br> group id: ";
+	// foreach ($groups['groups'] as $gr) {
+	// 	echo $gr->id.", ";
+	// }
+	// echo "<br>";
+	$last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
+	$gid = $bp->groups->current_group->id;
+	// var_dump($a);
+	$fields = $wpdb->get_results( $wpdb->prepare(
+		"SELECT ID, post_title, post_content, post_excerpt
+		FROM {$wpdb->posts}
+		WHERE post_parent = %d
+		    AND post_type = %s
+		ORDER BY ID ASC",
+		intval( $gid ),
+		"alex_gfilds"
+	) );
+	// echo "<pre>";
+	// print_r($fields);
+	// echo "</pre>";
+	foreach ($fields as $field) {
+
+		echo '<label class="" for="alex-'.$field->ID.'">'.$field->post_title.'</label>';
+		echo '<input id="alex-'.$field->ID.'" name="alex-'.$field->ID.'" type="text" value="' . esc_attr( $field->post_content ) . '" />';
+		echo '<p class="description">Enter url</p>';
+	}
+
+}
+
+// display all fields on page manage->details
+add_action( 'groups_custom_group_fields_editable', 'alex_edit_group_fields');
+
+function alex_edit_group_fields_save(){
+
+		global $wpdb;
+		// echo 'save...add to db<br>';
+		// print_r($_POST);
+		// exit;
+		
+			foreach ( $_POST as $data => $value ) {
+				if ( substr( $data, 0, 5 ) === 'alex-' ) {
+					$to_save[ $data ] = $value;
+				}
+			}
+		// print_r($to_save);
+		// exit;
+		foreach ( $to_save as $ID => $value ) {
+				$ID = substr( $ID, 5 );
+
+				$wpdb->update(
+					$wpdb->posts,
+					array(
+						'post_content' => $value,    // [data]
+					),
+					array( 'ID' => $ID ),           // [where]
+					array( '%s' ),                  // data format
+					array( '%d' )                   // where format
+				);
+		}
+}
+add_action( 'groups_group_details_edited', 'alex_edit_group_fields_save' );
+
+// without hook,for reused code
+function alex_get_postid_and_fields( $wpdb = false){
+
+	$last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
+	$fields  = array("Facebook", "Twitter","Instagram","Google+","Linkedin");
+	$id = $last_post_id+1;
+	$id_and_fields = array($id,$fields);
+
+	return $id_and_fields;
+
+}
+
+function alex_add_soclinks_all_groups_db(){
+
+	global $wpdb;
+	// $last_post_id = $wpdb->query( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
+	// echo $sql = "SELECT * FROM `{$wpdb->posts}` WHERE ID=1";
+	// $q = $wpdb->get_results( $sql);
+	//var_dump($wpdb->posts);
+	// print_r($q);  $wpdb->
+	// echo "<br>";
+	// var_dump($last_post_id);
+
+	$groups = groups_get_groups();
+	// print_r($groups);
+	$k = 0;
+	foreach ($groups['groups'] as $gr) {
+		// echo $gr->id;s
+		$gid[$k] = $gr->id;
+		$k++;
+	}
+
+	$postid_and_fields = alex_get_postid_and_fields($wpdb);
+	$postid = $postid_and_fields[0]+1;
+	$fields = $postid_and_fields[1];
+
+	// $last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
+	// $fields  = ["Facebook", "Twitter","Instagram","Google+","Linkedin"];
+	$g = 0;
+	$total_group = count($gid);
+	for( $i=0; $i < $total_group; $i++){
+		foreach ($fields as $field_name) {
+			$wpdb->insert(
+				$wpdb->posts,
+				array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gid[$g]),
+				array( '%d','%s','%s','%d' )
+			);
+			$postid++; 
+		} 
+		$g++;
+	}
+	// echo "<script>console.log('Fields for groups has been successfully imported! Total group: ".$total_group."');</script>";
+	echo "Fields for groups has been successfully imported! Total group: ".$total_group;
+}
+
+// execute only 1 time !!! add all fields for groups in db
+// add_action("wp_head","alex_add_soclinks_all_groups_db");
+
+// Fires after the group has been successfully created.
+add_action( 'groups_group_create_complete', "alex_case_creation_new_group" );
+
+function alex_case_creation_new_group(){
+	global $wpdb,$bp;
+
+	$gid = $bp->groups->new_group_id;
+	// echo 'add new group '.$gid;
+	// exit;
+	$postid_and_fields = alex_get_postid_and_fields($wpdb);
+	// $postid = $postid_and_fields[0];
+	$fields = $postid_and_fields[1];
+	foreach ($fields as $field_name) {
+		$wpdb->insert(
+			$wpdb->posts,
+			array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gid),
+			array( '%d','%s','%s','%d' )
+		);
+		$postid++; 
+	}
+}
+
+
+function buddyapp_search_shortcode() {
+    $context = sq_option( 'search_context', '' );
+    echo kleo_search_form(array('context' => $context));
+}
+
+// add_shortcode('buddyapp_search_shortcode','buddyapp_search_shortcode');
+// use [buddyapp_search_shortcode]
+
+
+
+
+/* ****** modification searchbox and signin/register form for landing page ******* */
+
+// [vc_row el_class="alex-search-wrap"][vc_column][vc_column_text][buddyapp_search_shortcode]
+
+// [alex_search_form]
+// [/vc_column_text][/vc_column][/vc_row][vc_row][vc_column][vc_column_text]
+// [sq_login_form before_input="User: <strong>demo</strong>   Password: <strong>demo</strong>"]
+// [/vc_column_text][/vc_column][/vc_row]
+
+// add_shortcode( 'kleo_search_form', 'kleo_search_form' );
+add_shortcode( 'alex_search_form', 'alex_search_form' );
+function alex_search_form( $atts = array(), $content = null ) {
+	
+	// print_r($_REQUEST);
+	// echo "bp_active-".function_exists( 'bp_is_active' );
+	// echo "<br>";
+
+	$form_style = $type = $placeholder = $context = $hidden = $el_class = '';
+	
+	extract(shortcode_atts(array(
+		'form_style' => 'default',
+		// 'form_style' => 'groups',
+		'type' => 'both',
+		// 'context' => '',
+		'context' => array('groups','members'),
+		'action' => home_url( '/' ),
+		'el_id' => 'searchform',
+		'el_class' => 'search-form',
+		'input_id' => 'main-search',
+		'input_class' => 'header-search',
+		'input_name' => 's',
+		'input_placeholder' => __( 'Search', 'buddyapp' ),
+		'button_class' => 'header-search-button',
+		'hidden' => '',
+	), $atts));
+
+	$el_class .= ' kleo-search-wrap kleo-search-form ';
+
+	if ( is_array( $context ) ) {
+		$context = implode( ',', $context );
+	}
+
+	$ajax_results = 'yes';
+	$search_page = 'yes';
+
+	if ( $type == 'ajax' ) {
+		$search_page = 'no';
+	} elseif ( $type == 'form_submit' ) {
+		$ajax_results = 'no';
+	}
+
+	// if ( function_exists('bp_is_active') && $context == 'members' ) {
+	// 	//Buddypress members form link
+	// 	$action = bp_get_members_directory_permalink();
+
+	// } elseif ( function_exists( 'bp_is_active' ) && bp_is_active( 'groups' ) && $context == 'groups' ) {
+	// 	//Buddypress group directory link
+	// 	$action = bp_get_groups_directory_permalink();
+
+	// } 
+	// <h4>Testing intagration ajax_search</h4>
+
+	$output = '<div class="search">
+				<i> </i>
+	<div class="s-bar">
+	<form id="' . $el_id . '" class="' . $el_class . ' second-menu" method="get" ' . ( $search_page == 'no' ? ' onsubmit="return false;"' : '' ) . ' action="' . $action . '" data-context="' . $context  .'">';
+	$output .= '<input id="' . $input_id . '" class="' . $input_class . ' ajax_s" autocomplete="off" type="text" name="' . $input_name . '" onfocus="this.value = \'\';" onblur="if (this.value == \'\') {this.value = \'Search\';}" value="Search">';
+	 // value="" placeholder="' . $input_placeholder . '">';
+	// $output .= '<button type="submit" class="' . $button_class . '"></button>';
+	$output .= '<input type="submit" class="' . $button_class . '" value="Search" />';
+	if ( $ajax_results == 'yes' ) {
+		$output .= '<div class="kleo_ajax_results search-style-' . $form_style . '"></div>';
+	}
+	$output .= $hidden;
+	// $output .= '</form>'.$ajax_cont.'
+	$output .= '</form>
+	</div>
+	</div>';
+
+	return $output;
+}
+
+add_action("wp_head","alex_include_css_js",90);
+
+function alex_include_css_js(){
+	if( is_front_page() ){
+		echo '<link href="'.get_stylesheet_directory_uri().'/search-templ/css/style2.css" rel="stylesheet" type="text/css" media="all"/>';
+		echo '<link href="'.get_stylesheet_directory_uri().'/search-templ/css/style.css" rel="stylesheet" type="text/css" media="all"/>';
+	}
+
+	// echo "--output alex code--\r\n";
+	// /members/admin7/profile/edit/group/1/
+	// if it is profile view page
+	$url_s = $_SERVER['REQUEST_URI'];
+	$profile_view = preg_match("#^/members/[a-z0-9_]+/profile/$#i", $url_s);
+
+	// if(bp_has_profile() ){
+	if($profile_view){
+		
+		function alex_dequeue_default_css() {
+		  wp_dequeue_style('bootstrap');
+		  wp_deregister_style('bootstrap');
+		}
+		add_action('wp_enqueue_scripts','alex_dequeue_default_css',100);
+
+		echo '<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>';
+		echo '<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">';
+		echo '<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" media="all"/>';
+		echo '<link href="'.get_stylesheet_directory_uri().'/libs/jqtimeliner/css/jquery-timeliner.css" rel="stylesheet" type="text/css" media="all"/>';
+		echo '<link href="'.get_stylesheet_directory_uri().'/libs/alex/fix-style.css" rel="stylesheet" type="text/css" media="all"/>';
+	}
+}
+
+
+add_action("wp_footer", "alex_custom_scripts",100);
+
+function alex_custom_scripts()
+{
+
+	// if it is profile view page
+	$url_s = $_SERVER['REQUEST_URI'];
+	$profile_view = preg_match("#^/members/[a-z0-9_]+/profile/$#i", $url_s);
+	
+	// if(bp_has_profile() ){
+	if($profile_view){		
+		// echo '<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>';
+		echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>';
+		echo '<script type="text/javascript" src="'.get_stylesheet_directory_uri().'/libs/jqtimeliner/js/jquery-timeliner.js"></script>';
+	?>
+	<script type="text/javascript">
+    	// jQuery(function(){
+    	// 	var tl = jQuery('#timeliner').timeliner();
+    	// });
+
+		// jQuery( document ).ready(function() {
+		//     var tl = jQuery('#timeliner').timeliner({
+		//     	spineTpl:"ddddddddddd"
+		//     });
+		// });
+
+		jQuery( document ).ready(function() {
+		    var tl = jQuery('#timeliner').timeliner();
+		});
+
+	</script>
+	<?php
+	}
+}
+
+
+// add_action( 'wp_enqueue_scripts', 'my_scripts_method' );
+function my_scripts_method() {
+	// wp_enqueue_script('datepi', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js' );
+	// wp_enqueue_script('timel', get_stylesheet_directory_uri().'/libs/jqtimeliner/js/jquery-timeliner.js', array('jquery') );
+	// wp_enqueue_script('timel', get_stylesheet_directory_uri().'/libs/jqtimeliner/js/jquery-timeliner.js' );
+}
+
+// delete jquery-migrate for correct work Responsive Dynamic Timeline Plugin For jQuery - Timeliner
+add_filter( 'wp_default_scripts', 'remove_jquery_migrate' );
+
+function remove_jquery_migrate( &$scripts){
+    // if(!is_admin()){
+        $scripts->remove( 'jquery');
+        $scripts->add( 'jquery', false, array( 'jquery-core' ) );
+    // }
+}
+
+
+// add_filter( 'pre_user_login', function( $user )
+// {
+//     // var_dump( current_filter()." works fine" );
+//     var_dump($user);
+//     return $user;
+
+// } );
+
+// if (! is_admin()) {
+//     // alex code
+//     echo "<h1>test alex!</h1>";
+// }
+
+
+/* ************ additonal actions TEMP ************ */
+
+
+// учесть при создании новой группы добавить 5 полей для него (прицепиться к хуку создание группы)
+
+$s = "INSERT INTO `wp8k_posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES (NULL, '1', '2016-12-21 22:26:53', '2016-12-21 22:26:53', 'Test Group Test facebook', 'Facebook', 'text', 'publish', 'closed', 'closed', '', 'facebook', '', '', '2016-12-21 22:26:53', '2016-12-21 22:26:53', '', '1', 'http://dugoodr.dev/?bpge_gfields=hello-world/facebook', '0', 'bpge_gfields', '', '0')";
+
+
+// function glob_func(){
+// 	echo "------global func----";
+// }
+
+// add_action("wp_head", "alex_111");
+
+// function alex_111(){
+// 	glob_func();
+// }
+
+
+// add_action("bp_head", 'alex_test_function');
+// add_action( 'bp_before_group_body','alex_test_function');
+// add_action( 'bp_after_group_body','alex_test_function');
+// add_filter( 'bp_group_admin_form_action','alex_test_function');
+
+/* ************ additonal actions ************ */
