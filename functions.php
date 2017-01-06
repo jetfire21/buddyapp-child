@@ -424,7 +424,7 @@ function alex_include_css_js(){
 
 	// if(bp_has_profile() ){
 	if($profile_view){
-		
+
 		function alex_dequeue_default_css() {
 		  wp_dequeue_style('bootstrap');
 		  wp_deregister_style('bootstrap');
@@ -452,6 +452,7 @@ function alex_custom_scripts()
 	// if(bp_has_profile() ){
 	if($profile_view){		
 		// echo '<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>';
+		// echo '<script src="'.get_stylesheet_directory_uri().'/js/common.js"></script>';
 		echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>';
 		echo '<script type="text/javascript" src="'.get_stylesheet_directory_uri().'/libs/jqtimeliner/js/jquery-timeliner.js"></script>';
 	?>
@@ -466,8 +467,73 @@ function alex_custom_scripts()
 		//     });
 		// });
 
-		jQuery( document ).ready(function() {
-		    var tl = jQuery('#timeliner').timeliner();
+		jQuery( document ).ready(function($) {
+
+			function alex_onadd(_data){
+
+					console.log('alex onadd');
+					console.log(_data);
+					$( "#timeliner ul" ).each(function( index ) {
+					  // console.log( index + ": " + $( this ).text() );
+					  console.log(this);
+					  // may 2016
+					  var month = $(this).prev().text();
+					  console.log(month);
+					});
+					return false;
+					// $("#timeliner form").hide();
+					$("#timeliner form").parent().parent().hide();
+					// $("#timeliner").on("submit",".form",function(){
+					// 	alert('yes');
+					// 	console.log('on--');
+					// });
+
+
+					var data = {
+						'action': 'alex_add_timeline',
+						'date': _data.date,
+						'title': _data.title,
+						'content': _data.content,
+						'class': _data.class
+						// 'query': true_posts,
+					};
+
+					$.ajax({
+						url:ajaxurl, // обработчик
+						data:data, // данные
+						type:'POST', // тип запроса
+						success:function(data){
+							console.log("ajax response get success!");
+							if( data ) { 
+								console.log(data);
+
+							var html = '<li>\
+					          <div class="timeliner_element teal">\
+					              <div class="timeliner_title">\
+					                  <span class="timeliner_label">Event Title</span><span class="timeliner_date">03 Nov 2014</span>\
+					              </div>\
+					              <div class="content">after ajax request\
+					              </div>\
+					              <div class="readmore">\
+					                  <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>\
+					                  <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>\
+					                  <a href="#" class="btn btn-info">\
+					                      Read More <i class="fa fa-arrow-circle-right"></i>\
+					                  </a>\
+					              </div>\
+					          </div>\
+					      </li>';
+					      // $("#timeliner ul:nth-child(2)").append(html);
+					      $("#timeliner").append(html);
+					      // self.add(_item).render();
+							} else { console.log("data send with errors!");}
+						}
+
+					 });
+			}
+
+		    var tl = jQuery('#timeliner').timeliner({onAdd:alex_onadd});
+		    // var tl = jQuery('#timeliner').timeliner();
 		});
 
 	</script>
@@ -475,6 +541,31 @@ function alex_custom_scripts()
 	}
 }
 
+add_action('wp_ajax_alex_add_timeline', 'alex_add_timeline');
+
+function alex_add_timeline() {
+
+	$date = sanitize_text_field($_POST['date']);
+	$title = sanitize_text_field($_POST['title']);
+	$content = sanitize_text_field($_POST['content']);
+	$class = sanitize_text_field($_POST['class']);
+
+	global $wpdb;
+	$last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
+	// echo "==debug==<br>";
+	$user = wp_get_current_user();
+	$member_id = $user->ID;
+
+	$wpdb->insert(
+		$wpdb->posts,
+		array( 'ID' => $last_post_id+1, 'post_title' => $title, 'post_name' => $class , 'post_content'=> $content, 'post_excerpt'=>$date, 'post_type' => 'alex_timeline', 'post_parent'=> $member_id),
+		array( '%d','%s','%s','%s','%s','%s','%d' )
+	);
+
+	$res = "==".$title.$date.$content.$class;
+	echo $res;
+	exit;
+}
 
 // add_action( 'wp_enqueue_scripts', 'my_scripts_method' );
 function my_scripts_method() {

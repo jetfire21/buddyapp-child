@@ -20,44 +20,104 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 
 				<?php if(bp_get_the_profile_group_name() == "SOCIAL"): ?>
 					<h4>TIMELINE</h4>
-<div id="timeliner">
-  <ul class="columns">
-      <li>
-          <div class="timeliner_element teal">
-              <div class="timeliner_title">
-                  <span class="timeliner_label">Event Title</span><span class="timeliner_date">03 Nov 2014</span>
-              </div>
-              <div class="content">
-                  <b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-              </div>
-              <div class="readmore">
-                  <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>
-                  <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>
-                  <a href="#" class="btn btn-info">
-                      Read More <i class="fa fa-arrow-circle-right"></i>
-                  </a>
-              </div>
-          </div>
-      </li>
-      <li>
-          <div class="timeliner_element green">
-              <div class="timeliner_title">
-                  <span class="timeliner_label">Event Title</span><span class="timeliner_date">11 Nov 2014</span>
-              </div>
-              <div class="content">
-                  <b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-              </div>
-              <div class="readmore">
-                  <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>
-                  <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>
-                  <a href="#" class="btn btn-info">
-                      Read More <i class="fa fa-arrow-circle-right"></i>
-                  </a>
-              </div>
-          </div>
-      </li>
-  </ul>
-</div>
+					<div id="timeliner">
+					  <ul class="columns alex_timeline_wrap">
+					      <li>
+					          <div class="timeliner_element teal">
+					              <div class="timeliner_title">
+					                  <span class="timeliner_label">Event Title</span><span class="timeliner_date">03 Nov 2014</span>
+					              </div>
+					              <div class="content">
+					                  <b>1 Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+					              </div>
+					              <div class="readmore">
+					                  <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>
+					                  <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>
+					                  <a href="#" class="btn btn-info">
+					                      Read More <i class="fa fa-arrow-circle-right"></i>
+					                  </a>
+					              </div>
+					          </div>
+					      </li>
+					      <li>
+					          <div class="timeliner_element green">
+					              <div class="timeliner_title">
+					                  <span class="timeliner_label">Event Title</span><span class="timeliner_date">11 Nov 2014</span>
+					              </div>
+					              <div class="content">
+					                  <b>2 Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+					              </div>
+					              <div class="readmore">
+					                  <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>
+					                  <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>
+					                  <a href="#" class="btn btn-info">
+					                      Read More <i class="fa fa-arrow-circle-right"></i>
+					                  </a>
+					              </div>
+					          </div>
+					      </li>
+					      <?php
+							global $wpdb;
+							// echo "==debug==<br>";
+					 		$user = wp_get_current_user();
+							$member_id = $user->ID;
+
+							/* select timeline data */
+
+							$fields = $wpdb->get_results( $wpdb->prepare(
+								"SELECT ID, post_title, post_content, post_excerpt,post_name
+								FROM {$wpdb->posts}
+								WHERE post_parent = %d
+								    AND post_type = %s
+								ORDER BY ID ASC",
+								intval( $member_id ),
+								"alex_timeline"
+							) );
+
+							foreach ($fields as $field):?>
+							<?php //$post_name = trim($field->post_name); ?>
+						      <li>
+						          <div class="timeliner_element <?php echo !empty($field->post_name) ? $field->post_name : "teal"; ?>">
+						        
+						              <div class="timeliner_title">
+						                  <span class="timeliner_label"><?php echo $field->post_title;?></span><span class="timeliner_date"><?php echo $field->post_excerpt;?></span>
+						              </div>
+						              <div class="content">
+						              	  <?php echo $field->post_content;?>
+						              </div>
+						              <div class="readmore">
+						                  <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>
+						                  <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>
+						                  <a href="#" class="btn btn-info">
+						                      Read More <i class="fa fa-arrow-circle-right"></i>
+						                  </a>
+						              </div>
+						          </div>
+						      </li>
+					      <?php endforeach;?>
+					  </ul>
+					</div>
+
+					<?php
+
+						// echo "<pre>";
+						// print_r($fields);
+						// echo "</pre>";
+						// $last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
+						// echo $last_post_id;
+
+						// $wpdb->insert(
+						// 	$wpdb->posts,
+							// array( 'ID' => $last_post_id+1, 'post_title' => 'Title', 'post_type' => 'alex_timeline', 'post_parent'=> $member_id),
+						// 	array( '%d','%s','%s','%d' )
+						// );
+
+						 // if (current_user_can('administrator')){
+						 //   echo "<pre>";
+						 //   print_r($wpdb->queries);
+						 //   echo "</pre>";
+						 // }
+					?>
 
 				<?php endif;  ?>
 

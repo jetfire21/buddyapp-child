@@ -153,6 +153,7 @@
                     e.preventDefault();
                     var item = fetchFormItem(e, this, self.config);
                     self.config.onAdd(item, function(_item){
+                        console.log("onadd..submit event");
                         self.add(_item).render();
                     });
                 });
@@ -418,6 +419,9 @@
     /* Events and call backs
     /* -------------------------------------------------- */
     var onAdd = function(_data, _callback){
+        // console.log("onadd");
+        // ();
+
         _data['id'] = _data.title.concat("-")
                     .concat(_data.date)
                     .replace(/[^a-z0-9-]/gi, '-')
