@@ -471,18 +471,45 @@ function alex_custom_scripts()
 
 			function alex_onadd(_data){
 
-					console.log('alex onadd');
-					console.log(_data);
-					$( "#timeliner ul" ).each(function( index ) {
-					  // console.log( index + ": " + $( this ).text() );
-					  console.log(this);
-					  // may 2016
-					  var month = $(this).prev().text();
-					  console.log(month);
-					});
-					return false;
+					// console.log('alex onadd');
+					// console.log(_data);
+
+					// var total_ul = $( "#timeliner ul").length;
+					// console.log("t_u"+total_ul);
+					// $( "#timeliner ul" ).each(function( index ) {
+					//   // console.log( index + ": " + $( this ).text() );
+					//   console.log(this);
+					//   // may 2016
+					//   var sec_date = $(this).prev().text();
+					//   // cur_a 01 Nov 2017 sec_d=January 2017
+					//   console.log('cur_a'+_data.date+' sec_d='+sec_date);
+					//  var add_month = sec_date.slice(0,3);
+					//  var add_year = sec_date.slice(-4);
+					//  var add_date = add_month+add_year;
+					//  console.log(add_date);
+				 //  	var cur_year = _data.date.slice(-4);
+					// var cur_month = _data.date.slice(3,6);
+					//  var cur_date = cur_month+cur_year;
+					//  console.log(cur_date);
+					//  if(cur_date == add_date) {
+					//  	$(this).append(cur_date);
+					//  	console.log('equal');
+					//  	var match_date = true;
+					//  }
+					//  else console.log('no_equal');
+					//  console.log(index);
+
+					//  if(index == total_ul-1 && !match_date) { 
+					//  	var html = '<ul><li>'+cur_date+'</li></ul>';$(".timeliner ul").eq(1).prepend(html); }
+					//  // undefined
+					//  console.log("m_d=".match_date+" t_u="+total_ul);
+
+
+					// });
+					// return false;
+
 					// $("#timeliner form").hide();
-					$("#timeliner form").parent().parent().hide();
+					// $("#timeliner form").parent().parent().hide();
 					// $("#timeliner").on("submit",".form",function(){
 					// 	alert('yes');
 					// 	console.log('on--');
@@ -505,7 +532,7 @@ function alex_custom_scripts()
 						success:function(data){
 							console.log("ajax response get success!");
 							if( data ) { 
-								console.log(data);
+								// console.log(data);
 
 							var html = '<li>\
 					          <div class="timeliner_element teal">\
@@ -524,8 +551,9 @@ function alex_custom_scripts()
 					          </div>\
 					      </li>';
 					      // $("#timeliner ul:nth-child(2)").append(html);
-					      $("#timeliner").append(html);
+					      // $("#timeliner").append(html);
 					      // self.add(_item).render();
+					      location.reload();
 							} else { console.log("data send with errors!");}
 						}
 

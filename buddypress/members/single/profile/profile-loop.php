@@ -86,6 +86,7 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 						              	  <?php echo $field->post_content;?>
 						              </div>
 						              <div class="readmore">
+						              	  <span class="alex_item_id"><?php echo $field->ID;?></span>
 						                  <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>
 						                  <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>
 						                  <a href="#" class="btn btn-info">
@@ -97,7 +98,7 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 					      <?php endforeach;?>
 					  </ul>
 					</div>
-
+debug
 					<?php
 
 						// echo "<pre>";

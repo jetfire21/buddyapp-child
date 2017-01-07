@@ -254,6 +254,7 @@
         var fetchId = function(_obj, _options){
             var date  = fetchDefault(_obj, ".timeliner_date", _options);
             var title =  fetchDefault(_obj, ".timeliner_label", _options);
+            var alex_item_id =  fetchDefault(_obj, ".alex_item_id", _options);
 
             return title.concat("-")
                         .concat(date)
@@ -276,6 +277,7 @@
             'date'    : ".timeliner_date",
             'title'   : ".timeliner_label",
             'content' : ".content",
+            'alex_item_id' : ".alex_item_id",
         };
 
         // ietrate mapping and fetch things from html
@@ -475,6 +477,7 @@
                 </div>\
                 <div class="content">{{content}}</div>\
                 <div class="readmore">\
+                <span class="alex_item_id">{{alex_item_id}}</span>\
                     {{delete-button}} {{edit-button}}\
                     </a>\
                 </div>\
