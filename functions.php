@@ -560,13 +560,70 @@ function alex_custom_scripts()
 					 });
 			}
 
-		    var tl = jQuery('#timeliner').timeliner({onAdd:alex_onadd});
+			function alex_ondelete(_data){
+
+				console.log("alex_ondelete");
+
+		        if(confirm("Are you sure to delete ?")){
+    				console.log("confirm");
+    				console.log(_data);
+    				// id:"111111111-13-jan-2017"
+    				console.log(_data.$html);
+    				console.log(_data.id);
+    				console.log($(this));
+    				// var del = $("#qqqqqq-01-jan-2017-delete-btn").text();
+    				// console.log("del el "+del);
+    				$( "#timeliner" ).on( "click", ".readmore .btn-danger", function() {
+					   console.log('Dynamic!');
+					   var html = $(this).parents("li");
+					   var id = html.find(".alex_item_id").text();
+					   console.log("id="+id);
+					   console.log(html.html());
+					   html.hide();
+
+	   					var data = {
+							'action': 'alex_del_timeline',
+							'id':id
+						};
+
+						$.ajax({
+							url:ajaxurl, // обработчик
+							data:data, // данные
+							type:'POST', // тип запроса
+							success:function(data){
+								console.log("ajax response get success!");
+								if( data ) { 
+									console.log(data);
+						      		// location.reload();  		
+								} else { console.log("data send with errors!");}
+							}
+
+						 });
+						// end ajax
+					});
+		        }
+			}
+
+		    var tl = jQuery('#timeliner').timeliner({onAdd:alex_onadd, onDelete:alex_ondelete});
 		    // var tl = jQuery('#timeliner').timeliner();
 		});
 
 	</script>
 	<?php
 	}
+}
+
+add_action('wp_ajax_alex_del_timeline', 'alex_del_timeline');
+
+function alex_del_timeline(){
+	// $date = sanitize_text_field($_POST['date']);
+	$id = trim( (int)$_POST['id']);
+	if(!empty($id)){
+		global $wpdb;
+		$wpdb->delete( $wpdb->posts, array( 'ID' => $id ), array( '%d' ) ); 
+		echo $id;
+	}
+	exit;
 }
 
 add_action('wp_ajax_alex_add_timeline', 'alex_add_timeline');

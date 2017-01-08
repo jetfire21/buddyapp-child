@@ -477,7 +477,7 @@
                 </div>\
                 <div class="content">{{content}}</div>\
                 <div class="readmore">\
-                <span class="alex_item_id">{{alex_item_id}}</span>\
+                <span class="alex_item_id" style="display: none;">{{alex_item_id}}</span>\
                     {{delete-button}} {{edit-button}}\
                     </a>\
                 </div>\
