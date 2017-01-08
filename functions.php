@@ -644,7 +644,20 @@ function alex_custom_scripts()
 			}
 
 		    var tl = jQuery('#timeliner').timeliner({onAdd:alex_onadd, onDelete:alex_ondelete, onEdit:alex_onedit});
-		    
+
+		    <?php
+		 		$user = wp_get_current_user();
+		 		// var_dump($user);
+				$member_id = $user->ID;
+				global $bp;
+				$profile_id = $bp->displayed_user->id;
+
+				if($member_id < 1 or ($member_id != $profile_id) ){
+					echo '$("#timeliner .readmore").hide();';
+					echo '$("#timeliner .alex_btn_add_new").hide();';
+				}
+		    ?>
+
 		    <?php if( !is_user_logged_in()):?>
 				 $(document).scroll(function(){ 
 				 	// console.log("fired scroll");

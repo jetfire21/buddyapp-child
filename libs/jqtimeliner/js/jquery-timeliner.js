@@ -105,6 +105,7 @@
             if(self.config.addBtnTpl){
                 var btn = getHtml.call(self, 'addBtnTpl');
                 html += addAttr.call(self, btn, 'id', self.config.addBtnId);
+                // html += addAttr.call(self, btn, 'id', self.config.addBtnId);
             }
 
             // Adding add new form
@@ -538,7 +539,7 @@
         </li>';
     // Buttons Templates
     var addBtnTpl = 
-        '<div class="date_separator">\
+        '<div class="date_separator alex_btn_add_new">\
             <button class="btn btn-danger">\
                 <i class="fa fa-plus"></i> New\
             </button>\
@@ -577,6 +578,7 @@
         spineTpl                : spineTpl,
         sectionTpl              : sectionTpl,
         addBtnId                : undefined,
+        // addBtnId                : "bbbbbbbbbbb",
         addBtnTpl               : addBtnTpl,
         addFrmId                : undefined,
         editBtnTpl              : editBtnTpl,

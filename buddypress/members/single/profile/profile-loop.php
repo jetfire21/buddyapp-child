@@ -3,6 +3,22 @@
 /** This action is documented in bp-templates/bp-legacy/buddypress/members/single/profile/profile-wp.php */
 do_action( 'bp_before_profile_loop_content' ); ?>
 
+<h3>==Maintenance Mode==</h3>
+<hr>
+
+<?php 
+	$user = wp_get_current_user();
+	echo $member_id = $user->ID;
+	// var_dump($member_id);
+	global $bp;
+	// echo "<hr>";
+	// var_dump($bp->version);
+	// echo "<hr>";
+	echo $bp->displayed_user->id;
+	// echo "<hr>";
+	// print_r($bp);
+?>
+
 <?php if ( bp_has_profile() ) : ?>
 
 	<?php $i=0; while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
@@ -44,7 +60,7 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 						 */
 						do_action( 'bp_profile_field_item' ); ?>
 
-					<?php endwhile; $i++;?>
+					<?php endwhile;?>
 
 				</table>
 
@@ -52,7 +68,7 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 
 				<?php //if(bp_get_the_profile_group_name() == "SOCIAL"): ?>
 				<?php //if(bp_get_the_profile_group_name() == "2. Timeline"): ?>
-				<?php if($i == 3): ?>
+				<?php if($i < 1): ?>
 					<!-- <h4>TIMELINE</h4> -->
 					<div id="timeliner">
 					  <ul class="columns alex_timeline_wrap">
@@ -95,7 +111,12 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 							global $wpdb;
 							// echo "==debug==<br>";
 					 		$user = wp_get_current_user();
+					 		// var_dump($user);
 							$member_id = $user->ID;
+							if($member_id < 1){
+								global $bp;
+								$member_id = $bp->displayed_user->id;
+							}
 
 							/* select timeline data */
 
@@ -155,7 +176,8 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 						 // }
 					?>
 
-				<?php endif;  ?>
+				<?php endif;  ?> 
+				<!-- end timeline -->
 
 
 			</div>
