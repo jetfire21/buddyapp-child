@@ -56,7 +56,7 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 					<!-- <h4>TIMELINE</h4> -->
 					<div id="timeliner">
 					  <ul class="columns alex_timeline_wrap">
-					      <li>
+ <!-- 					      <li>
 					          <div class="timeliner_element teal">
 					              <div class="timeliner_title">
 					                  <span class="timeliner_label">Event Title</span><span class="timeliner_date">03 Nov 2014</span>
@@ -73,7 +73,7 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 					              </div>
 					          </div>
 					      </li>
-<!-- 					      <li>
+ --><!-- 					      <li>
 					          <div class="timeliner_element green">
 					              <div class="timeliner_title">
 					                  <span class="timeliner_label">Event Title</span><span class="timeliner_date">11 Nov 2014</span>
@@ -90,7 +90,8 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 					              </div>
 					          </div>
 					      </li>
- -->					      <?php
+					-->
+					      <?php
 							global $wpdb;
 							// echo "==debug==<br>";
 					 		$user = wp_get_current_user();
@@ -130,7 +131,7 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 						          </div>
 						      </li>
 					      <?php endforeach;?>
-					  </ul>
+					   </ul> 
 					</div>
 <!-- debug -->
 					<?php

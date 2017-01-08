@@ -530,30 +530,30 @@ function alex_custom_scripts()
 						data:data, // данные
 						type:'POST', // тип запроса
 						success:function(data){
-							console.log("ajax response get success!");
+							// console.log("ajax response get success-add!");
 							if( data ) { 
 								// console.log(data);
 
-							var html = '<li>\
-					          <div class="timeliner_element teal">\
-					              <div class="timeliner_title">\
-					                  <span class="timeliner_label">Event Title</span><span class="timeliner_date">03 Nov 2014</span>\
-					              </div>\
-					              <div class="content">after ajax request\
-					              </div>\
-					              <div class="readmore">\
-					                  <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>\
-					                  <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>\
-					                  <a href="#" class="btn btn-info">\
-					                      Read More <i class="fa fa-arrow-circle-right"></i>\
-					                  </a>\
-					              </div>\
-					          </div>\
-					      </li>';
-					      // $("#timeliner ul:nth-child(2)").append(html);
-					      // $("#timeliner").append(html);
-					      // self.add(_item).render();
-					      location.reload();
+								// var html = '<li>\
+							  //         <div class="timeliner_element teal">\
+							  //             <div class="timeliner_title">\
+							  //                 <span class="timeliner_label">Event Title</span><span class="timeliner_date">03 Nov 2014</span>\
+							  //             </div>\
+							  //             <div class="content">after ajax request\
+							  //             </div>\
+							  //             <div class="readmore">\
+							  //                 <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>\
+							  //                 <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>\
+							  //                 <a href="#" class="btn btn-info">\
+							  //                     Read More <i class="fa fa-arrow-circle-right"></i>\
+							  //                 </a>\
+							  //             </div>\
+							  //         </div>\
+							  //     </li>';
+						      // $("#timeliner ul:nth-child(2)").append(html);
+						      // $("#timeliner").append(html);
+						      // self.add(_item).render();
+						      location.reload();
 							} else { console.log("data send with errors!");}
 						}
 
@@ -565,20 +565,20 @@ function alex_custom_scripts()
 				console.log("alex_ondelete");
 
 		        if(confirm("Are you sure to delete ?")){
-    				console.log("confirm");
-    				console.log(_data);
+    				// console.log("confirm");
+    				// console.log(_data);
     				// id:"111111111-13-jan-2017"
-    				console.log(_data.$html);
-    				console.log(_data.id);
-    				console.log($(this));
+    				// console.log(_data.$html);
+    				// console.log(_data.id);
+    				// console.log($(this));
     				// var del = $("#qqqqqq-01-jan-2017-delete-btn").text();
     				// console.log("del el "+del);
     				$( "#timeliner" ).on( "click", ".readmore .btn-danger", function() {
-					   console.log('Dynamic!');
+					   // console.log('Dynamic!');
 					   var html = $(this).parents("li");
 					   var id = html.find(".alex_item_id").text();
-					   console.log("id="+id);
-					   console.log(html.html());
+					   // console.log("id="+id);
+					   // console.log(html.html());
 					   html.hide();
 
 	   					var data = {
@@ -591,10 +591,9 @@ function alex_custom_scripts()
 							data:data, // данные
 							type:'POST', // тип запроса
 							success:function(data){
-								console.log("ajax response get success!");
+								// console.log("ajax response get success!");
 								if( data ) { 
-									console.log(data);
-						      		// location.reload();  		
+									// console.log(data);
 								} else { console.log("data send with errors!");}
 							}
 
@@ -604,8 +603,55 @@ function alex_custom_scripts()
 		        }
 			}
 
-		    var tl = jQuery('#timeliner').timeliner({onAdd:alex_onadd, onDelete:alex_ondelete});
-		    // var tl = jQuery('#timeliner').timeliner();
+			function alex_onedit(_data){
+
+			   // console.log("alex_ondedit");
+			   // console.log(_data);
+			   // console.log(html.html());
+
+				// $( "#timeliner" ).on( "submit", ".btn-primary", function() {
+				// 	console.log("btn-primary");
+				// });
+				// return false;
+
+
+				var data = {
+					'action': 'alex_edit_timeline',
+					'id': _data.id_alex,
+					'date': _data.date,
+					'title': _data.title,
+					'content': _data.content,
+					'class': _data.class
+				};
+
+				$.ajax({
+					url:ajaxurl, // обработчик
+					data:data, // данные
+					type:'POST', // тип запроса
+					success:function(data){
+						console.log("ajax response get success!");
+						if( data ) { 
+							// console.log(data);
+				      		location.reload();  		
+						} else { console.log("data send with errors!");}
+					}
+
+				 });
+				// end ajax
+			    // $("#dddddddddd-edit-12-jan-2017-edit-frm").render();
+    		    // jQuery('#timeliner').timeliner({onAdd:alex_onadd, onDelete:alex_ondelete, onEdit:alex_onedit});
+
+			}
+
+		    var tl = jQuery('#timeliner').timeliner({onAdd:alex_onadd, onDelete:alex_ondelete, onEdit:alex_onedit});
+		    
+		    <?php if( !is_user_logged_in()):?>
+				 $(document).scroll(function(){ 
+				 	// console.log("fired scroll");
+				 	// $("#timeliner .date_separator").hide();
+	 			 });
+		    <?php endif;?>
+
 		});
 
 	</script>
@@ -621,7 +667,8 @@ function alex_del_timeline(){
 	if(!empty($id)){
 		global $wpdb;
 		$wpdb->delete( $wpdb->posts, array( 'ID' => $id ), array( '%d' ) ); 
-		echo $id;
+		// echo $id;
+		echo true;
 	}
 	exit;
 }
@@ -647,7 +694,34 @@ function alex_add_timeline() {
 		array( '%d','%s','%s','%s','%s','%s','%d' )
 	);
 
-	$res = "==".$title.$date.$content.$class;
+	// $res = "==".$title.$date.$content.$class;
+	$res = true;
+	// $res = "user id=".$member_id;
+	echo $res;
+	exit;
+}
+
+add_action('wp_ajax_alex_edit_timeline', 'alex_edit_timeline');
+
+function alex_edit_timeline() {
+
+	$id = (int)($_POST['id']);
+	$date = sanitize_text_field($_POST['date']);
+	$title = sanitize_text_field($_POST['title']);
+	$content = sanitize_text_field($_POST['content']);
+	$class = sanitize_text_field($_POST['class']);
+
+	if($id > 0){
+		global $wpdb;
+		$wpdb->update( $wpdb->posts,
+			array( 'post_title' => $title, 'post_name' => $class , 'post_content'=> $content, 'post_excerpt'=>$date),
+			array( 'ID' => $id ),
+			array( '%s', '%s', '%s', '%s' ),
+			array( '%d' )
+		);
+	}
+	// $res = "==".$title.$date.$content.$class;
+	$res = true;
 	echo $res;
 	exit;
 }

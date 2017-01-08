@@ -264,6 +264,12 @@
                         .toLowerCase();
         };
 
+        var fetchAlexId = function(_obj, _options){
+            var id  = fetchDefault(_obj, ".alex_item_id", _options);
+            return id;
+        };
+
+
         // Fetching Class function
         var fetchClass = function(_obj, _options){
             var klass = $(_obj).attr("class").replace("timeliner_element", "");
@@ -274,6 +280,7 @@
         var mapping = {
             'id'      : fetchId,
             'class'   : fetchClass,
+            'id_alex': fetchAlexId,
             'date'    : ".timeliner_date",
             'title'   : ".timeliner_label",
             'content' : ".content",
@@ -500,6 +507,7 @@
                         <label class="col-sm-2 control-label" for="form-field-1"> Title </label>\
                         <div class="col-sm-9">\
                             <input type="text" placeholder="News Title" name="title" class="form-control" required="required">\
+                            <input type="hidden" placeholder="News Title" name="id_alex" class="form-control" required="required">\
                         </div>\
                     </div>\
                     <div class="form-group">\
