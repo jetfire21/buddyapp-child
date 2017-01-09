@@ -7,14 +7,14 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 <hr>
 
 <?php 
-	$user = wp_get_current_user();
-	echo $member_id = $user->ID;
+	// $user = wp_get_current_user();
+	// echo $member_id = $user->ID;
 	// var_dump($member_id);
-	global $bp;
+	// global $bp;
 	// echo "<hr>";
 	// var_dump($bp->version);
 	// echo "<hr>";
-	echo $bp->displayed_user->id;
+	// echo $bp->displayed_user->id;
 	// echo "<hr>";
 	// print_r($bp);
 ?>

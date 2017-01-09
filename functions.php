@@ -756,6 +756,65 @@ function remove_jquery_migrate( &$scripts){
     // }
 }
 
+/* Simple theme specific login form - OVERRIDE STANDARD FORM */
+// add_shortcode( 'sq_login_form', 'sq_login_form_func' );
+add_shortcode( 'alex_sq_login_form', 'alex_sq_login_form_func' );
+
+/**
+ * Return login form for shortcode
+ * @param $atts
+ * @param null $content
+ * @return string
+ */
+function alex_sq_login_form_func( $atts, $content = null ) {
+	echo "debug_a".var_dump(is_front_page());
+
+
+	if( !is_user_logged_in()){
+
+		$output = $style = $disable_modal = '';
+
+		extract( shortcode_atts( array(
+				'style' => 'white',
+				'before_input' => '',
+				'disable_modal' => ''
+		), $atts) );
+
+		$output .= '<div class="login-page-wrap">';
+		ob_start();
+		kleo_get_template_part( 'page-parts/login-form', null, compact( 'style', 'before_input' ) );
+		$output .= ob_get_clean();
+		$output .= '</div>';
+
+		if ( $disable_modal == '' ) {
+			add_filter( "get_template_part_page-parts/login-form", '__return_false');
+		}
+
+		$output .= "<a class='show_home_form' href='#'>Sign in</a>";
+
+		add_action("wp_footer", "alex_custom_scripts_login_form",110);
+
+		function alex_custom_scripts_login_form(){
+			?>
+			<script type="text/javascript">
+				jQuery( document ).ready(function($) {
+					$(".home-page .home_form_close").click(function(){
+						$(".home-page .login-page-wrap").hide();
+						$(".home-page .show_home_form").css({"display":"block"});
+					});
+					$(".home-page .show_home_form").click(function(){
+						$(".home-page .login-page-wrap").show();
+						$(".home-page .show_home_form").hide();
+					});
+				});
+			</script>
+			<?php
+		}
+
+		return $output;
+	}
+}
+
 
 // add_filter( 'pre_user_login', function( $user )
 // {
