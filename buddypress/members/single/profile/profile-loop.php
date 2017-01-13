@@ -32,21 +32,34 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 
 			<div class="bp-widget <?php bp_the_profile_group_slug(); ?>">
 
+			<?php
+			 //$group_name = "Social"; 			
+			// $group_name = mb_strtolower($group_name); 
+			// echo "<h4>debug</h4> ";
+			?>
+			<?php 
+			$group_name = bp_get_the_profile_group_name(); 
+			$group_name = preg_match("#social#i", $group_name);
+			if($group_name) $group_name = "social"; else $group_name = "d";
+ 
+			// echo "debug ".$group_name;
+			if( $group_name != "social") : ?>
 
 				<h4><?php bp_the_profile_group_name(); ?></h4>
+
 
 				<table class="profile-fields">
 
 					<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 
-						<?php if ( bp_field_has_data() ) : ?>
+						<?php if ( bp_field_has_data() && $group_name != "social" ): ?>
 
 							<tr<?php bp_field_css_class(); ?>>
 
 								<td class="label"><?php bp_the_profile_field_name(); ?></td>
 
 								<td class="data"><?php bp_the_profile_field_value(); ?></td>
-
+	
 							</tr>
 
 						<?php endif; ?>
@@ -63,6 +76,9 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 					<?php endwhile;?>
 
 				</table>
+
+			<?php endif; // if not SOCIAL ?>
+
 
 				<!--<h4><?php echo bp_get_the_profile_group_name();?></h4>-->
 
