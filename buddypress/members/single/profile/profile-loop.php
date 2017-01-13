@@ -3,9 +3,9 @@
 /** This action is documented in bp-templates/bp-legacy/buddypress/members/single/profile/profile-wp.php */
 do_action( 'bp_before_profile_loop_content' ); ?>
 
-<h3>==Maintenance Mode==</h3>
+<!-- <h3>==Maintenance Mode==</h3>
 <hr>
-
+ -->
 <?php 
 	// $user = wp_get_current_user();
 	// echo $member_id = $user->ID;

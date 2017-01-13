@@ -1,3 +1,4 @@
+
 /*
 Theme Name:     BuddyApp Child
 Theme URI:
@@ -39,14 +40,14 @@ License URI: license.txt
 	background: url(search-templ/images/5.jpg) !important;
     background-size: cover;
 }
-.register #content{background: none !important; }
+.register #content, .register .main-content{background: none !important; }
 .register .kleo-login-wrap .login-shadow-wrapper{ background: #fff; }
 
 .home_form_close{ display: none; }
 .home-page .home_form_close{ 
 	text-align: right;
     float: right;
-    margin: -35px -30px 0 0;
+    margin: -15px -40px 0 0;
     padding: 0;
     background: none;
     color: #333;
@@ -61,5 +62,147 @@ License URI: license.txt
     color: #fff;
 }
 
+
+/* add backgruound for fields */
+#buddypress .standard-form textarea, #buddypress .standard-form input[type=text], #buddypress .standard-form input[type=color], #buddypress .standard-form input[type=date], #buddypress .standard-form input[type=datetime], #buddypress .standard-form input[type=datetime-local], #buddypress .standard-form input[type=email], #buddypress .standard-form input[type=month], #buddypress .standard-form input[type=number], #buddypress .standard-form input[type=range], #buddypress .standard-form input[type=search], #buddypress .standard-form input[type=tel], #buddypress .standard-form input[type=time], #buddypress .standard-form input[type=url], #buddypress .standard-form input[type=week], #buddypress .standard-form select, #buddypress .standard-form input[type=password], #buddypress .dir-search input[type=search], #buddypress .dir-search input[type=text], #buddypress .groups-members-search input[type=search], #buddypress .groups-members-search input[type=text],    
+#buddypress form#whats-new-form textarea, 
+#buddypress input[type=text], #invite-anyone-by-email textarea,#invite-anyone-by-email input[type=text]{
+    background-color: rgba(0,0,0,.05) !important;
+}
+
+
+
+
+
+
+
+
+
+/* customize styles on mobile for group header */
+
+/*.no-sidemenu #header-wrap .logo {
+    flex-grow: initial;
+}
+.second-menu {
+    right: 0;
+    width: 100%;
+    height: 200px;
+    background: #ccc;
+}
+
+.header-icons>li {
+    float: left;
+    height: 60px;
+    line-height: 60px;
+}
+.header-icons>li span{
+    display: none;
+}
+
+.header-menu {
+    order: 4;
+    flex-shrink: 1;
+}
+.second-menu .search-form-wrapper {
+    right:0;
+}
+*/
+/* customize mobile groups */
+
+
+
+/*
+.group-home #item-header-wrap {
+    width: 100%;
+    position: absolute;
+    height: 400px;
+}
+
+.group-home #header-wrap .logo {
+    display: block;
+}
+  .hover-menu #header-wrap {
+    overflow: hidden;
+    overflow: visible;
+
+  }
+
+  #header-wrap .logo {
+    display: none;
+  }
+
+.no-sidemenu #header-wrap .logo {
+  display: block;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+*/
+
+
+
+
+
+/*.second-menu .second-menu-main {
+  position: relative;
+  flex-grow: 1;
+}
+.second-menu .second-menu-main .second-menu-inner {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+.second-menu .second-menu-main .second-menu-section {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.second-menu .second-menu-main .scroll-container-wrapper .scroll-container {
+  height: 100%;
+}
+
+.second-menu .second-menu-main .scroll-container-wrapper .scroll-container > div:not(.second-menu-section) {
+  display: -moz-box;
+  display: -webkit-box;
+  display: box;
+}
+.second-menu .search-form-wrapper {
+  flex-grow: 1;
+  line-height: 58px;
+  order: 1;
+  position: fixed;
+  top: 0;
+  right: -85%;
+  z-index: 200;
+  width: 85%;
+}
+
+.second-menu .search-form-wrapper .search-form {
+  min-width: 160px;
+  width: 100%;
+}
+
+.second-menu .search-form-wrapper .search-form input.header-search {
+  display: inline-block;
+  margin: 0;
+  padding: 0 20px;
+  border: none;
+  line-height: normal;
+  width: 100%;
+  background: #0f0f1d;
+  font-size: 0.813em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  border-radius: 0;
+  color: white;
+}*/
+
+
+
 /* temp */
-/*#item-header-wrap, .profile-cover-inner, #buddypress div#item-nav{ background: none !important; }*/
+/*#item-header-wrap, .profile-cover-inner, #buddypress div#item-nav{ background: none !important; }

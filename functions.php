@@ -416,20 +416,47 @@ function alex_include_css_js(){
 		echo '<link href="'.get_stylesheet_directory_uri().'/search-templ/css/style.css" rel="stylesheet" type="text/css" media="all"/>';
 	}
 
+	if( !bp_has_profile() ) return;
+
+	// get user_id for logged user
+	$user = wp_get_current_user();
+	$user_id_islogin = $user->ID;
+	// get user_id for notlogged user
+	global $bp;
+	$user_id_isnotlogin = $bp->displayed_user->id;
+
+	if(!$user_id_islogin){ $user_id_islogin = $user_id_isnotlogin; }
+
+    // $member_name = bp_core_get_username($user_id_islogin);
+    $member_name = bp_core_get_username($user_id_isnotlogin);
+
+    // echo "profile= "; var_dump(bp_has_profile());
+
 	// echo "--output alex code--\r\n";
 	// /members/admin7/profile/edit/group/1/
 	// if it is profile view page
 	$url_s = $_SERVER['REQUEST_URI'];
 	$profile_view = preg_match("#^/members/[a-z0-9_]+/profile/$#i", $url_s);
 
+    // full path = http://dugoodr.com/members/admin7/profile/
+    // short path, insted activity set profile http://dugoodr.dev/members/admin7/
+	$url_s = $_SERVER['REQUEST_URI'];
+	$profile_view_notdefault = preg_match("#^/members/".$member_name."/$#i", $url_s);
+
+	// http://dugoodr.dev/members/admin7/
+
 	// if(bp_has_profile() ){
-	if($profile_view){
+	if($profile_view or $profile_view_notdefault){
+
+		/* *** disable standart wordpress style ***** */
 
 		function alex_dequeue_default_css() {
 		  wp_dequeue_style('bootstrap');
 		  wp_deregister_style('bootstrap');
 		}
 		add_action('wp_enqueue_scripts','alex_dequeue_default_css',100);
+
+		/* *** disable standart wordpress style ***** */
 
 		echo '<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>';
 		echo '<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">';
@@ -442,15 +469,81 @@ function alex_include_css_js(){
 
 add_action("wp_footer", "alex_custom_scripts",100);
 
+// only for debug
+// add_action("wp_footer","wp_get_name_page_template");
+
+function wp_get_name_page_template(){
+
+    global $template,$bp;
+    // echo basename($template);
+    // полный путь с названием шаблона страницы
+    // print_r($bp);
+
+	// get user_id for logged user
+	$user = wp_get_current_user();
+	$user_id_islogin = $user->ID;
+	// get user_id for notlogged user
+	global $bp;
+	$user_id_isnotlogin = $bp->displayed_user->id;
+
+	if(!$user_id_islogin){ $user_id_islogin = $user_id_isnotlogin; }
+
+    // $member_name = bp_core_get_username($user_id_islogin);
+    // echo "profile= "; var_dump(bp_has_profile());
+
+    // full path = http://dugoodr.com/members/admin7/profile/
+    // short path, insted activity set profile http://dugoodr.dev/members/admin7/
+	$url_s = $_SERVER['REQUEST_URI'];
+	$profile_view_notdefault = preg_match("#^/members/".$member_name."/$#i", $url_s);
+
+	echo "has page profile= "; var_dump(bp_has_profile());
+
+    echo "1- ".$template;
+	echo "<br>2- ".$page_template = get_page_template_slug( get_queried_object_id() )." | ";
+	// echo $template = get_post_meta( $post->ID, '_wp_page_template', true );
+	// echo $template = get_post_meta( get_queried_object_id(), '_wp_page_template', true );
+	// echo "id= ".get_queried_object_id();
+	echo "<br>3- ".$_SERVER['PHP_SELF'];
+	echo "<br>4- ".__FILE__;
+	echo "<br>5- ".$_SERVER["SCRIPT_NAME"];
+	echo "<br>6- ".$_SERVER['DOCUMENT_ROOT'];
+	print_r($_SERVER);
+}
+
 function alex_custom_scripts()
 {
 
+	if( !bp_has_profile() ) return;
+
+	// get user_id for logged user
+	$user = wp_get_current_user();
+	$user_id_islogin = $user->ID;
+	// get user_id for notlogged user
+	global $bp;
+	// print_r($bp);
+	$user_id_isnotlogin = $bp->displayed_user->id;
+
+	if(!$user_id_islogin){ $user_id_islogin = $user_id_isnotlogin; }
+
+    // $member_name = bp_core_get_username($user_id_islogin);
+    $member_name = bp_core_get_username($user_id_isnotlogin);
+    // echo "profile= "; var_dump(bp_has_profile());
+
+	// echo "--output alex code--\r\n";
+	// /members/admin7/profile/edit/group/1/
 	// if it is profile view page
 	$url_s = $_SERVER['REQUEST_URI'];
 	$profile_view = preg_match("#^/members/[a-z0-9_]+/profile/$#i", $url_s);
-	
+
+    // full path = http://dugoodr.com/members/admin7/profile/
+    // short path, insted activity set profile http://dugoodr.dev/members/admin7/
+	$url_s = $_SERVER['REQUEST_URI'];
+	$profile_view_notdefault = preg_match("#^/members/".$member_name."/$#i", $url_s);
+
+	// http://dugoodr.dev/members/admin7/
+
 	// if(bp_has_profile() ){
-	if($profile_view){		
+	if($profile_view or $profile_view_notdefault){
 		// echo '<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>';
 		// echo '<script src="'.get_stylesheet_directory_uri().'/js/common.js"></script>';
 		echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>';
@@ -646,9 +739,10 @@ function alex_custom_scripts()
 		    var tl = jQuery('#timeliner').timeliner({onAdd:alex_onadd, onDelete:alex_ondelete, onEdit:alex_onedit});
 
 		    <?php
+		    	// get user_id for logged user
 		 		$user = wp_get_current_user();
-		 		// var_dump($user);
 				$member_id = $user->ID;
+				// get user_id for notlogged user
 				global $bp;
 				$profile_id = $bp->displayed_user->id;
 
@@ -767,8 +861,6 @@ add_shortcode( 'alex_sq_login_form', 'alex_sq_login_form_func' );
  * @return string
  */
 function alex_sq_login_form_func( $atts, $content = null ) {
-	echo "debug_a".var_dump(is_front_page());
-
 
 	if( !is_user_logged_in()){
 
