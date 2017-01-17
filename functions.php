@@ -409,6 +409,69 @@ function alex_search_form( $atts = array(), $content = null ) {
 }
 
 
+add_shortcode( 'alex_nothome_search_form', 'alex_nothome_search_form' );
+function alex_nothome_search_form( $atts = array(), $content = null ) {
+
+	$form_style = $type = $placeholder = $context = $hidden = $el_class = '';
+	extract(shortcode_atts(array(
+		'form_style' => 'default',
+		'type' => 'both',
+		'context' => array('groups','members'),
+		'action' => home_url( '/' )."members",
+		'el_id' => 'searchform',
+		'el_class' => 'search-form',
+		'input_id' => 'main-search',
+		'input_class' => 'header-search',
+		'input_name' => 's',
+		'input_placeholder' => __( 'Search', 'buddyapp' ),
+		'button_class' => 'header-search-button',
+		'hidden' => '',
+	), $atts));
+
+	$el_class .= ' kleo-search-wrap kleo-search-form ';
+
+	if ( is_array( $context ) ) {
+		$context = implode( ',', $context );
+	}
+
+	$ajax_results = 'yes';
+	$search_page = 'yes';
+
+	if ( $type == 'ajax' ) {
+		$search_page = 'no';
+	} elseif ( $type == 'form_submit' ) {
+		$ajax_results = 'no';
+	}
+
+	if ( function_exists('bp_is_active') && $context == 'members' ) {
+		//Buddypress members form link
+		$action = bp_get_members_directory_permalink();
+
+	} elseif ( function_exists( 'bp_is_active' ) && bp_is_active( 'groups' ) && $context == 'groups' ) {
+		//Buddypress group directory link
+		$action = bp_get_groups_directory_permalink();
+
+	} elseif ( class_exists('bbPress') && $context == 'forum' ) {
+		$action = bbp_get_search_url();
+		$input_name = 'bbp_search';
+
+	} elseif ( $context == 'product' ) {
+		$hidden .= '<input type="hidden" name="post_type" value="product">';
+	}
+
+	$output = '<form id="' . $el_id . '" class="' . $el_class . '" method="get" ' . ( $search_page == 'no' ? ' onsubmit="return false;"' : '' ) . ' action="' . $action . '" data-context="' . $context  .'">';
+	$output .= '<input id="' . $input_id . '" class="' . $input_class . ' ajax_s" autocomplete="off" type="text" name="' . $input_name . '" value="" placeholder="' . $input_placeholder . '">';
+	$output .= '<button type="submit" class="' . $button_class . '"></button>';
+	if ( $ajax_results == 'yes' ) {
+		$output .= '<div class="kleo_ajax_results search-style-' . $form_style . '"></div>';
+	}
+	$output .= $hidden;
+	$output .= '</form>';
+
+	return $output;
+}
+
+
 // all $args value show buddypress function bp_has_members()
 // show first 20 exists members if value serach empty for click search button 
 function my_bp_loop_querystring( $query_string, $object ) {
@@ -426,9 +489,10 @@ function my_bp_loop_querystring( $query_string, $object ) {
 }
 add_action( 'bp_legacy_theme_ajax_querystring', 'my_bp_loop_querystring', 100, 2 );
 
-
+/* вывод системных данных в форматированном виде */
 function alex_debug ( $show_text = false, $is_arr = false, $title = false, $var, $sep = "| "){
 
+	// Example: alex_debug(1,0,'s',$search);
 	$debug_text = "<br>========Debug MODE==========<br>";
 	if( boolval($show_text) ) echo $debug_text;
 	if( boolval($is_arr) ){
@@ -440,6 +504,7 @@ function alex_debug ( $show_text = false, $is_arr = false, $title = false, $var,
 	} else echo $title."-".$var;
 	if($sep == "l") echo "<hr>"; else echo $sep;
 }
+/* вывод системных данных в форматированном виде */
 
 
 add_action("wp_head","alex_include_css_js",90);

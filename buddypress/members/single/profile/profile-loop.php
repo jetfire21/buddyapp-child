@@ -125,14 +125,13 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 					-->
 					      <?php
 							global $wpdb;
-							// echo "==debug==<br>";
 					 		$user = wp_get_current_user();
 					 		// var_dump($user);
-							$member_id = $user->ID;
-							if($member_id < 1){
-								global $bp;
-								$member_id = $bp->displayed_user->id;
-							}
+							// $member_id = $user->ID;
+							// alex_debug(1,0,'loggedin user',$member_id);
+							global $bp;
+							$quest_id = $bp->displayed_user->id;
+							// alex_debug(1,0,'quest',$quest_id);
 
 							/* select timeline data */
 
@@ -142,7 +141,7 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 								WHERE post_parent = %d
 								    AND post_type = %s
 								ORDER BY ID ASC",
-								intval( $member_id ),
+								intval( $quest_id ),
 								"alex_timeline"
 							) );
 

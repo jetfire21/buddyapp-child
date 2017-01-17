@@ -102,7 +102,10 @@ if ( sq_option( 'menu_dropdown', 'hover', true ) == 'hover' )  {
                                         <div class="search-form-wrapper">
                                             <?php
                                             $context = sq_option( 'search_context', '' );
-                                            echo kleo_search_form(array('context' => $context)); ?>
+                                            // echo kleo_search_form(array('context' => $context));
+                                            echo alex_nothome_search_form(array('context' => $context));
+                                            // echo alex_search_form(array('context' => $context)); 
+                                            ?>
                                         </div>
 
                                     <?php endif; ?>
