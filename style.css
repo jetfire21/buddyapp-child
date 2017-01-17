@@ -66,17 +66,133 @@ License URI: license.txt
 /* add backgruound for fields */
 #buddypress .standard-form textarea, #buddypress .standard-form input[type=text], #buddypress .standard-form input[type=color], #buddypress .standard-form input[type=date], #buddypress .standard-form input[type=datetime], #buddypress .standard-form input[type=datetime-local], #buddypress .standard-form input[type=email], #buddypress .standard-form input[type=month], #buddypress .standard-form input[type=number], #buddypress .standard-form input[type=range], #buddypress .standard-form input[type=search], #buddypress .standard-form input[type=tel], #buddypress .standard-form input[type=time], #buddypress .standard-form input[type=url], #buddypress .standard-form input[type=week], #buddypress .standard-form select, #buddypress .standard-form input[type=password], #buddypress .dir-search input[type=search], #buddypress .dir-search input[type=text], #buddypress .groups-members-search input[type=search], #buddypress .groups-members-search input[type=text],    
 #buddypress form#whats-new-form textarea, 
-#buddypress input[type=text], #invite-anyone-by-email textarea,#invite-anyone-by-email input[type=text]{
+#buddypress input[type=text], #invite-anyone-by-email textarea,#invite-anyone-by-email input[type=text], .bp-users-reviews-list{
     background-color: rgba(0,0,0,.05) !important;
 }
+.bp-users-reviews-list{ padding-left: 8px; }
+
+/* 767px to 861px - fix broken groups header */
+
+/* @media only screen and (min-width: 768px) */
+@media only screen and (max-width: 991px){
+  .second-menu .second-menu-main .scroll-container-wrapper .scroll-container {
+     padding-top: 0; 
+  }
+
+  .header-icons>li { padding:0 8px; }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px){
+
+  .basic-menu .has-submenu .submenu {
+      position: absolute;
+      /*position: relative;*/
+      min-width: 250px;    
+      max-height: calc( 31vh - 96px );
+      background: #fff;
+      overflow: auto;
+      top:60px;
+
+  }
+    .basic-menu .has-submenu .menu-arrow, .basic-menu .has-submenu .menu-arrow:before {
+       display: none;
+  }
+  .basic-menu> li >a { padding: 0 5px; }
+/*  .second-menu .search-form-wrapper .search-form input.header-search { background: #000; color:#000; display: none;}
+  .second-menu .search-form-wrapper .search-form:hover input.header-search,
+  .second-menu .search-form-wrapper .search-form input.header-search:focus
+   { background: none; }
+   .second-nenu .search-form placeholder { color:#000; }
+   .header-icons > li > a > i:before, .second-menu .search-form-wrapper .search-form .header-search-button:before { color:#000; }
+  .search-form .header-search::-webkit-input-placeholder,
+  .search-form .header-search::-moz-placeholder         ,
+  .search-form .header-search:-moz-placeholder          ,
+  .search-form .header-search:-ms-input-placeholder,
+  .search-form .header-search:placeholder     { color:#000 !important; }
+*/  .basic-menu > .has-submenu > .submenu > li ol.todolist li p { color:#000; }
+  .header-icons>li{
+      min-height: auto;
+      overflow: visible;
+    }
+    .second-menu .second-menu-main .second-menu-section{ flex-direction: row; }
+  .second-menu {
+      position: static;
+      overflow: visible;
+      flex-grow: 1;
+      order: 2;
+  }
+
+  .second-menu .second-menu-main {
+      position: relative;
+      flex-grow: 1;
+  }
+  .second-menu .second-menu-main .scroll-container-wrapper {
+      position: static;
+      display: block;
+      height: auto;
+  }
+  .scroll-container-wrapper .scroll-container { position: static; }
+  .scroll-container-wrapper .scroll-container {overflow-y:hidden;}
+  .basic-menu{background: none;}
+
+}  
+
+/* custom style for groups */
+
+/*#buddypress div#item-header {
+    overflow: hidden;
+    position: relative;
+    padding: 40px 30px 20px 20px; 
+    text-align: center;
+}
+*/
+
+ .groups  #item-header-wrap{
+    position: static !important;
+    width:100% !important;
+  }
+
+@media only screen and (min-width: 767px){
+
+  .groups .main-content{ padding-top: 0 !important; }
+
+ .groups #buddypress div#object-nav.item-list-tabs {
+      overflow: hidden;
+      background: transparent;
+      float: left;
+      display: inline-block;
+      width: 100%;
+      white-space: nowrap;
+      min-height: 45px;
+  }
+
+  .groups #buddypress div#object-nav {
+      position: relative;
+  }
+
+  .groups #buddypress div#object-nav.item-list-tabs ul li{
+      display: inline-block;
+    } 
+
+  .groups .buddypress.bp-is-single .main-content { padding: 0; }
+
+  .groups #buddypress div#item-nav { padding: 0;}
+
+  .groups #item-body {margin-left: 0; }
+  .groups #buddypress #item-header-wrap div.item-list-tabs ul li a > span{position: static;}
+
+}
+
+/* custom style for groups */
 
 
-
-
-
-
-
-
+/*
+@media only screen and (min-width: 768px){
+.basic-menu>.has-submenu>.submenu {
+  min-width: 250px;       
+}
+}
+*/
 
 /* customize styles on mobile for group header */
 
@@ -85,9 +201,10 @@ License URI: license.txt
 }
 .second-menu {
     right: 0;
-    width: 100%;
-    height: 200px;
-    background: #ccc;
+    width: 74%;
+    height: 60px;
+    background: #fff;
+    overflow: visible;
 }
 
 .header-icons>li {
@@ -106,6 +223,7 @@ License URI: license.txt
 .second-menu .search-form-wrapper {
     right:0;
 }
+
 */
 /* customize mobile groups */
 

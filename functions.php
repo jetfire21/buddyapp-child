@@ -351,7 +351,7 @@ function alex_search_form( $atts = array(), $content = null ) {
 		'type' => 'both',
 		// 'context' => '',
 		'context' => array('groups','members'),
-		'action' => home_url( '/' ),
+		'action' => home_url( '/' )."members",
 		'el_id' => 'searchform',
 		'el_class' => 'search-form',
 		'input_id' => 'main-search',
@@ -407,6 +407,40 @@ function alex_search_form( $atts = array(), $content = null ) {
 
 	return $output;
 }
+
+
+// all $args value show buddypress function bp_has_members()
+// show first 20 exists members if value serach empty for click search button 
+function my_bp_loop_querystring( $query_string, $object ) {
+
+	$search = mb_strtolower( strip_tags( trim($_REQUEST['s']) ) );
+	// alex_debug(1,0,'s',$search);
+    if ( ! empty( $search ) and ($search == 'search') ) {
+	    // $query_string .= '&search_terms=admin';
+	    // $query_string .= '&search_terms=cdean';
+	    $query_string .= '&search_terms=';
+	    $query_string .= '&user_ids=1,2,3,4,5,6,7,8,9.10,11,12,13,14,15,16,17,18,19,20';
+    }
+ 
+    return $query_string;
+}
+add_action( 'bp_legacy_theme_ajax_querystring', 'my_bp_loop_querystring', 100, 2 );
+
+
+function alex_debug ( $show_text = false, $is_arr = false, $title = false, $var, $sep = "| "){
+
+	$debug_text = "<br>========Debug MODE==========<br>";
+	if( boolval($show_text) ) echo $debug_text;
+	if( boolval($is_arr) ){
+		echo $title."-";
+		echo "<pre>";
+		print_r($var);
+		echo "</pre>";
+		echo "<hr>";
+	} else echo $title."-".$var;
+	if($sep == "l") echo "<hr>"; else echo $sep;
+}
+
 
 add_action("wp_head","alex_include_css_js",90);
 
