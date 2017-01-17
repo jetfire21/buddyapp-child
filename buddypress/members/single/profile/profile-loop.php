@@ -17,7 +17,40 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 	// echo $bp->displayed_user->id;
 	// echo "<hr>";
 	// print_r($bp);
+alex_debug(1,0,"has_groups",bp_has_groups());
+global $groups_template;
+alex_debug(0,1,"groups_template",$groups_template);
+foreach ($groups_template->groups as $group) {
+	echo "global gr-templ ".$group->id."-".$group->name."<br>";
+	// $grs[$group->id] = $group->name;
+	// var user = '{ "name": "Вася", "age": 35, "isAdmin": false, "friends": [0,1,2,3] }';
+	// $grs .= '"'.$group->id.'":"'.$group->name.',';
+	$grs .= $group->id.':"'.$group->name.'",';
+}
+$grs = substr($grs,0,-1);
+$grs = "{".$grs."}";
+alex_debug(0,0,"grs",$grs);
+// var arr = [ 1, 'Имя', { name: 'Петя' }, true ];
+echo "<script>var grs = $grs;</script>";
+$user_id_gr = bp_displayed_user_id();
+alex_debug(0,0,"user_id",$user_id_gr);
+
+$group_ids =  groups_get_user_groups( bp_loggedin_user_id() ); 	
+var_dump( $group_ids["groups"] );
+alex_debug(0,1,"get_groups",groups_get_group(array("load_users"=>1)));
+// var_dump(groups_get_group(1));
+// <h3>my heading</h3>
+// pip while ( bp_groups() ) : bp_the_group();
+// pip if( 'public' == bp_get_group_status() ) {
+// <input type=checkbox name="groups[]" value=" pip bp_group_id(); " pip bp_group_name();
 ?>
+<?php echo "standard templ loop"; while ( bp_groups("&user_id=1") ) : bp_the_group(); ?>
+	<a href="<?php bp_group_permalink(); ?>"><?php bp_group_name(); ?></a><br>
+<?php endwhile; ?>
+
+
+
+<?php /* -------------------- */ ?>
 
 <?php if ( bp_has_profile() ) : ?>
 
@@ -136,7 +169,7 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 							/* select timeline data */
 
 							$fields = $wpdb->get_results( $wpdb->prepare(
-								"SELECT ID, post_title, post_content, post_excerpt,post_name
+								"SELECT ID, post_title, post_content, post_excerpt,post_name,menu_order
 								FROM {$wpdb->posts}
 								WHERE post_parent = %d
 								    AND post_type = %s
@@ -146,7 +179,19 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 							) );
 
 							foreach ($fields as $field):?>
-							<?php //$post_name = trim($field->post_name); ?>
+							<?php //
+								// $post_name = trim($field->post_name);
+								$group = groups_get_group($field->menu_order);
+								alex_debug(0,1,"grccc",$group);
+								alex_debug(0,0,"gr",$group->name);
+								// echo $group_permalink = trailingslash( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/' );
+								$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
+								$avatar_options = array ( 'item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'avatar_dir' => 'group-avatars', 'alt' => 'Group avatar', 'css_id' => 1234, 'class' => 'avatar', 'width' => 50, 'height' => 50, 'html' => false );
+								$gr_avatar = bp_core_fetch_avatar($avatar_options);
+								alex_debug(0,0,"link",$group_permalink);
+								alex_debug(0,0,"avatar",$gr_avatar);
+
+							 ?>
 						      <li>
 						          <div class="timeliner_element <?php echo !empty($field->post_name) ? $field->post_name : "teal"; ?>">
 						        
@@ -157,6 +202,7 @@ do_action( 'bp_before_profile_loop_content' ); ?>
 						              	  <?php echo $field->post_content;?>
 						              </div>
 						              <div class="readmore">
+						              	  <?php if($gr_avatar):?> <a id="alex_show_group"><?php echo $gr_avatar;?></a><?php endif;?>
 						              	  <span class="alex_item_id"><?php echo $field->ID;?></span>
 						                  <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>
 						                  <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>

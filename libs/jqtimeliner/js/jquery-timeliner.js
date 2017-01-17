@@ -256,6 +256,7 @@
             var date  = fetchDefault(_obj, ".timeliner_date", _options);
             var title =  fetchDefault(_obj, ".timeliner_label", _options);
             var alex_item_id =  fetchDefault(_obj, ".alex_item_id", _options);
+            // var alex_show_group =  fetchDefault(_obj, ".alex_show_group", _options);
 
             return title.concat("-")
                         .concat(date)
@@ -276,16 +277,35 @@
             var klass = $(_obj).attr("class").replace("timeliner_element", "");
             return $.trim(klass);
         };
+        var fetchAlexShowGroup = function(_obj, _options){
+            // var gr = $(_obj).attr("alex_show_group");
+            // // alex code 
+            // console.log("obj=");
+            // var html_each = _obj.context;
+            // console.log(html_each);
+            // // var title = html_each.match(/alex_show_group[^a]+/i);
+            var alex =  fetchDefault(_obj, "#alex_show_group", _options);
+            if(alex != "") alex = "<img src='"+alex+"' />";
+            console.log(alex);
+            // console.log(gr);
+            // return false;
+            return $.trim(alex);
+            // return alex.replace(/http/i,'----------');
+        };
 
         // mapping for html to object
         var mapping = {
             'id'      : fetchId,
             'class'   : fetchClass,
+            // 'gr_id'   : fetchGroup,
             'id_alex': fetchAlexId,
             'date'    : ".timeliner_date",
             'title'   : ".timeliner_label",
             'content' : ".content",
             'alex_item_id' : ".alex_item_id",
+            // 'alex_show_group' : fetchAlexShowGroup,
+            'gr_id' : fetchAlexShowGroup,
+            // 'gr_id' : ".alex_show_group",
         };
 
         // ietrate mapping and fetch things from html
@@ -474,6 +494,17 @@
     /* -------------------------------------------------- */
     /* Bootstrap Tpls 
     /* -------------------------------------------------- */
+
+    // console.log("grs"+ JSON.parse(grs) );
+    var grs_html = "";
+    for (var key in grs) {
+         console.log( "Ключ: " + key + " значение: " + grs[key] );
+         var grs_html = grs_html + '<option value="'+key+'">'+grs[key]+'</option>\
+         ';
+    }
+    console.log(grs_html);
+    // console.log(alex_show_group);
+
     var spineTpl = '<div class="timeliner"><div class="spine"></div>{{data}}</div>';
     var pointTpl = '<div class="date_separator"><span>{{data}}</span></div>';
     var sectionTpl = '<ul class="columns">{{data}}</ul>';
@@ -485,6 +516,7 @@
                 </div>\
                 <div class="content">{{content}}</div>\
                 <div class="readmore">\
+                <a id="alex_show_group">{{gr_id}}</a>\
                 <span class="alex_item_id" style="display: none;">{{alex_item_id}}</span>\
                     {{delete-button}} {{edit-button}}\
                     </a>\
@@ -515,6 +547,15 @@
                         <label class="col-sm-2 control-label" for="form-field-12"> Content </label>\
                         <div class="col-sm-9">\
                             <textarea placeholder="Description Content" name="content" class="form-control" required="required"></textarea>\
+                        </div>\
+                    </div>\
+                    <div class="form-group">\
+                        <label class="col-sm-2 control-label" for="form-field-12"> Group </label>\
+                        <div class="col-sm-9">\
+                            <select class="form-control" name="gr_id" >\
+                                <option value="" seleted="selected">None</option>'+
+                                grs_html+
+                            '</select>\
                         </div>\
                     </div>\
                     <div class="form-group">\

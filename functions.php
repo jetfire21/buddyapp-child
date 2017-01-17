@@ -569,7 +569,7 @@ function alex_include_css_js(){
 add_action("wp_footer", "alex_custom_scripts",100);
 
 // only for debug
-// add_action("wp_footer","wp_get_name_page_template");
+add_action("wp_footer","wp_get_name_page_template");
 
 function wp_get_name_page_template(){
 
@@ -664,7 +664,8 @@ function alex_custom_scripts()
 			function alex_onadd(_data){
 
 					// console.log('alex onadd');
-					// console.log(_data);
+					console.log(_data);
+					// return false;
 
 					// var total_ul = $( "#timeliner ul").length;
 					// console.log("t_u"+total_ul);
@@ -713,7 +714,8 @@ function alex_custom_scripts()
 						'date': _data.date,
 						'title': _data.title,
 						'content': _data.content,
-						'class': _data.class
+						'class': _data.class,
+						'gr_id': _data.gr_id
 						// 'query': true_posts,
 					};
 
@@ -887,6 +889,7 @@ function alex_add_timeline() {
 	$title = sanitize_text_field($_POST['title']);
 	$content = sanitize_text_field($_POST['content']);
 	$class = sanitize_text_field($_POST['class']);
+	$gr_id = (int)($_POST['gr_id']);
 
 	global $wpdb;
 	$last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
@@ -896,8 +899,8 @@ function alex_add_timeline() {
 
 	$wpdb->insert(
 		$wpdb->posts,
-		array( 'ID' => $last_post_id+1, 'post_title' => $title, 'post_name' => $class , 'post_content'=> $content, 'post_excerpt'=>$date, 'post_type' => 'alex_timeline', 'post_parent'=> $member_id),
-		array( '%d','%s','%s','%s','%s','%s','%d' )
+		array( 'ID' => $last_post_id+1, 'post_title' => $title, 'post_name' => $class , 'post_content'=> $content, 'post_excerpt'=>$date, 'post_type' => 'alex_timeline', 'post_parent'=> $member_id, 'menu_order'=>$gr_id),
+		array( '%d','%s','%s','%s','%s','%s','%d','%d' )
 	);
 
 	// $res = "==".$title.$date.$content.$class;
