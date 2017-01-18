@@ -154,7 +154,7 @@
                     e.preventDefault();
                     var item = fetchFormItem(e, this, self.config);
                     self.config.onAdd(item, function(_item){
-                        console.log("onadd..submit event");
+                        // console.log("onadd..submit event");
                         self.add(_item).render();
                     });
                 });
@@ -178,15 +178,91 @@
 
                             // Making form for the item clicked
                             var frm = getHtml.call(self, 'formTpl');
+                            // console.log(frm);
                             frm = addAttr.call(self, frm, 'id', _item.$edtFrmId);
-                            $(this).parents('li:first').replaceWith(frm);
+                             $(this).parents('li:first').replaceWith(frm);
 
                             // Filling form inputs data
                             frm = $("#" + _item.$edtFrmId);
+
+                            /* ***** alex code ******* */
+
+                           // console.log(frm[0].getElementById("alex_get_elem"));
+                            // var get_select = $("#cccccccccccc-11-jan-2017-edit-frm h3");
+
+                            // ======== WORK ===========
+                            // var h3 = $("#" + _item.$edtFrmId+" h3");
+                            // h3.html("<div class='zzz'>"+_item.alex_tl_grp_id+"</div>");
+                            // h3.html("<div class='zzz'>"+_item.alex_gr_name_select+"</div>");
+                            // var sel_gr = $("#" + _item.$edtFrmId+" .select-group [value='19']");
+                            // console.log("sel_gr= "+sel_gr.html());
+                            // sel_gr.attr("selected", "selected");
+                            // sel_gr.prop("selected", true);
+                            // $("#" + _item.$edtFrmId+" .select-group").prepend('<option value="0">zero</option>');
+                              // var my = '<div class="form-group">\
+                              //           <label class="col-sm-2 control-label" for="form-field-12"> Background </label>\
+                              //           <div class="col-sm-9">\
+                              //               <select class="form-control" name="alex_gr_name_select" >\
+                              //                   <option value="" seleted="selected">None</option>\
+                              //                   <option value="1">1</option>\
+                              //                   <option value="3">3</option>\
+                              //                   <option value="19">19</option>\
+                              //                   <option value="Linux">aaa</option>\
+                              //               </select>\
+                              //           </div>\
+                              //       </div>';
+                            // h3.html(my);
+                            // console.log(h3.html());
+                            // ======== WORK ===========
+
+                            // get_select.attr("selected", "selected");
+                            // get_select.text("ccccccccccccccccc");
+                            // console.log("EDIT======== html---------\r\n ");
+                            // весь html плагина от #timeliner
+                            // console.log(html);
+                            // console.log("----------frm---------\r\n");
+                            // весь html плагина от #timeliner
+                            // console.log(frm);
+                            // console.log("----------this---------\r\n");
+                            // html кнопки
+                            // console.log(this);
+                            // console.log("----------self---------\r\n");
+                            // прототип обьект Timeliner
+                            // console.log(self);
+                            // console.log("----------self.config---------\r\n");
+                            // обьект с конфиг данными
+                            // console.log(self.config);
+                            // console.log("----------item---------\r\n");
+                            // важный обьект со всеми данными сгенерирова плагином
+                            // console.log(_item);
+                            // html переменной itemTpl
+                            // html.$html = alex_t;
+                            // frm.$html = alex_t;
+                             // console.log("----------_item.$edtFrmId--------\r\n"+_item.$edtFrmId);
+                            // alex_t = addAttr.call(self, alex_t, 'id', "alex_777");
+                            // var alex_t = getHtml.call(self, 'formTpl');
+                            // console.log("----------alex_t---------\r\n"+alex_t);
+                            // alex_t.replace('{{test_text}}', "Привет ВАся");
+                           // var a = html.html();
+                            // alex_t.replace('{{test_text}}', 'edtBtn');
+                            // _item.$html = alex_t;
+
+                            // html = html.replace('{{edit-button}}', edtBtn);
+                            // html = html.replace('{{delete-button}}', delBtn);
+                            // _obj.$html = html;
+
+                            /* ***** alex code ******* */
+ 
                             $.each(_item, function(_key, _value){
                                 if(_key[0] !== "$"){
                                     frm.find('[name="'+_key+'"]').val(_value);
+                                    // alex_code
+                                    // console.log(key + " == "+_value);
                                 }
+                                //alex code
+                                // $("#" + _item.$edtBtnId).click(function(e){
+                                // console.log("method render="+ $(this));
+                                // console.log("method render="+ self);
                             });
 
                             // Submit button event handling
@@ -219,6 +295,10 @@
                 });
             }
 
+            //alex code 
+            // console.log(this);
+            // console.log(self.config.formTpl);
+
             return this;
         },
         delete: function(_id){
@@ -250,6 +330,12 @@
             var el = $(_obj).find(_selector);
             return $.trim(el.val() || el.text());
         };
+        // alex code
+        // var fetchAttr = function(_obj, _attr, _options){
+        //     var el = $(_obj).attr(_attr);
+        //     console.log("el="+el);
+        //     return $.trim(el);
+        // };
 
         // Fetching ID function
         var fetchId = function(_obj, _options){
@@ -274,9 +360,18 @@
 
         // Fetching Class function
         var fetchClass = function(_obj, _options){
+            // console.log($(_obj).attr("class"));
             var klass = $(_obj).attr("class").replace("timeliner_element", "");
+            // console.log("klass="+klass);
             return $.trim(klass);
         };
+
+        // var fetchClass2 = function(_obj, _options){
+        //     var klass = $(_obj).attr("class2").replace("timeliner_element2", "");
+        //     console.log("klass="+klass);
+        //     return $.trim(klass);
+        // };
+
         var fetchAlexShowGroup = function(_obj, _options){
             // var gr = $(_obj).attr("alex_show_group");
             // // alex code 
@@ -284,12 +379,18 @@
             // var html_each = _obj.context;
             // console.log(html_each);
             // // var title = html_each.match(/alex_show_group[^a]+/i);
-            var alex =  fetchDefault(_obj, "#alex_show_group", _options);
-            if(alex != "") alex = "<img src='"+alex+"' />";
-            console.log(alex);
+            // var g = $(_obj).attr("gr_id");
+            // console.log(g);
+            var user_group =  fetchDefault(_obj, "#alex_gr_avatar", _options);
+            var gr_link =  fetchDefault(_obj, "#alex_gr_link", _options);
+            // var gr_link =  fetchDefault(_obj, "data-link", _options);
+            // var gr_link =  fetchAttr(_obj, "data-link", _options);
+            if(user_group != "") user_group = '<a href="'+gr_link+'"><img src="'+user_group+'" /></a>';
+            // console.log("user-group "+user_group);
+            // console.log(gr_link);
             // console.log(gr);
             // return false;
-            return $.trim(alex);
+            return $.trim(user_group);
             // return alex.replace(/http/i,'----------');
         };
 
@@ -297,15 +398,16 @@
         var mapping = {
             'id'      : fetchId,
             'class'   : fetchClass,
-            // 'gr_id'   : fetchGroup,
             'id_alex': fetchAlexId,
             'date'    : ".timeliner_date",
             'title'   : ".timeliner_label",
             'content' : ".content",
             'alex_item_id' : ".alex_item_id",
-            // 'alex_show_group' : fetchAlexShowGroup,
-            'gr_id' : fetchAlexShowGroup,
-            // 'gr_id' : ".alex_show_group",
+            'alex_tl_grp_id' : fetchAlexShowGroup,
+            'alex_gr_name_select': '#alex_gr_name_select'
+            // 'gr_link' : "#alex_gr_link",
+            // 'gr_name' : "#alex_gr_name"
+            // 'gr_id' : "#alex_show_group",
         };
 
         // ietrate mapping and fetch things from html
@@ -329,6 +431,9 @@
         $.each(inputs, function(_key, _value){
             var el = $(_value);
             item[el.attr('name')] = $.trim(el.val() || el.text());
+            // alex code
+            // item[el.attr('gr_id')] = $.trim(el.val() || el.text());
+
         });
         return item;
     }
@@ -495,15 +600,27 @@
     /* Bootstrap Tpls 
     /* -------------------------------------------------- */
 
+    /* ***** alex code ******* */
+
     // console.log("grs"+ JSON.parse(grs) );
     var grs_html = "";
+    // var cur_group  = fetchDefault(_obj, "#alex_show_group", _options);
+    // console.log(_element);
+    // console.log("form=");
+    // console.log(_options);
+    // var gr_name = '{{alex_tl_grp_id}}';
+    // console.log("gr_name= "+gr_name);
+
+   // grs from php
     for (var key in grs) {
-         console.log( "Ключ: " + key + " значение: " + grs[key] );
-         var grs_html = grs_html + '<option value="'+key+'">'+grs[key]+'</option>\
-         ';
+        // value должен быть обязательно названием группы,иначе select не будет работать 
+         // grs_html = grs_html + '<option selected="selected" value="'+key+'">'+grs[key]+'</option>\
+         grs_html = grs_html + '<option value="'+grs[key]+'">'+grs[key]+'</option>';
     }
-    console.log(grs_html);
+    // console.log(grs_html);
     // console.log(alex_show_group);
+
+    /* ***** alex code ******* */
 
     var spineTpl = '<div class="timeliner"><div class="spine"></div>{{data}}</div>';
     var pointTpl = '<div class="date_separator"><span>{{data}}</span></div>';
@@ -516,7 +633,7 @@
                 </div>\
                 <div class="content">{{content}}</div>\
                 <div class="readmore">\
-                <a id="alex_show_group">{{gr_id}}</a>\
+                <div id="alex_tl_grp_id">{{alex_tl_grp_id}}</div>\
                 <span class="alex_item_id" style="display: none;">{{alex_item_id}}</span>\
                     {{delete-button}} {{edit-button}}\
                     </a>\
@@ -550,15 +667,6 @@
                         </div>\
                     </div>\
                     <div class="form-group">\
-                        <label class="col-sm-2 control-label" for="form-field-12"> Group </label>\
-                        <div class="col-sm-9">\
-                            <select class="form-control" name="gr_id" >\
-                                <option value="" seleted="selected">None</option>'+
-                                grs_html+
-                            '</select>\
-                        </div>\
-                    </div>\
-                    <div class="form-group">\
                         <label class="col-sm-2 control-label" for="form-field-12"> Background </label>\
                         <div class="col-sm-9">\
                             <select class="form-control" name="class" >\
@@ -568,6 +676,15 @@
                                 <option value="purple">Purple</option>\
                                 <option value="teal">Teal</option>\
                             </select>\
+                        </div>\
+                    </div>\
+                    <div class="form-group">\
+                        <label class="col-sm-2 control-label" for="form-field-12"> Group </label>\
+                        <div class="col-sm-9">\
+                            <select class="form-control select-group" name="alex_gr_name_select">\
+                                <option value="" seleted="selected">None</option>\
+                                '+grs_html+
+                            '</select>\
                         </div>\
                     </div>\
                 </div>\

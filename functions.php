@@ -569,11 +569,14 @@ function alex_include_css_js(){
 add_action("wp_footer", "alex_custom_scripts",100);
 
 // only for debug
-add_action("wp_footer","wp_get_name_page_template");
+// add_action("wp_footer","wp_get_name_page_template");
 
 function wp_get_name_page_template(){
 
     global $template,$bp;
+ //    global $groups_template;
+	// alex_debug(0,1,"groups_template",$groups_template);
+
     // echo basename($template);
     // полный путь с названием шаблона страницы
     // print_r($bp);
@@ -664,7 +667,13 @@ function alex_custom_scripts()
 			function alex_onadd(_data){
 
 					// console.log('alex onadd');
-					console.log(_data);
+					// console.log(_data);
+					// console.log(grs);
+					var alex_tl_grp_id = false;
+				    for (var key in grs) {
+				    	if(grs[key] == _data.alex_gr_name_select) alex_tl_grp_id = key;
+				    }
+				    // console.log("id= "+alex_tl_grp_id);
 					// return false;
 
 					// var total_ul = $( "#timeliner ul").length;
@@ -715,7 +724,7 @@ function alex_custom_scripts()
 						'title': _data.title,
 						'content': _data.content,
 						'class': _data.class,
-						'gr_id': _data.gr_id
+						'alex_tl_grp_id': alex_tl_grp_id
 						// 'query': true_posts,
 					};
 
@@ -807,7 +816,10 @@ function alex_custom_scripts()
 				// 	console.log("btn-primary");
 				// });
 				// return false;
-
+				var alex_tl_grp_id = false;
+			    for (var key in grs) {
+			    	if(grs[key] == _data.alex_gr_name_select) alex_tl_grp_id = key;
+			    }
 
 				var data = {
 					'action': 'alex_edit_timeline',
@@ -815,7 +827,9 @@ function alex_custom_scripts()
 					'date': _data.date,
 					'title': _data.title,
 					'content': _data.content,
-					'class': _data.class
+					'class': _data.class,
+					'alex_tl_grp_id': alex_tl_grp_id
+
 				};
 
 				$.ajax({
@@ -889,7 +903,7 @@ function alex_add_timeline() {
 	$title = sanitize_text_field($_POST['title']);
 	$content = sanitize_text_field($_POST['content']);
 	$class = sanitize_text_field($_POST['class']);
-	$gr_id = (int)($_POST['gr_id']);
+	$alex_tl_grp_id = (int)($_POST['alex_tl_grp_id']);
 
 	global $wpdb;
 	$last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
@@ -899,7 +913,7 @@ function alex_add_timeline() {
 
 	$wpdb->insert(
 		$wpdb->posts,
-		array( 'ID' => $last_post_id+1, 'post_title' => $title, 'post_name' => $class , 'post_content'=> $content, 'post_excerpt'=>$date, 'post_type' => 'alex_timeline', 'post_parent'=> $member_id, 'menu_order'=>$gr_id),
+		array( 'ID' => $last_post_id+1, 'post_title' => $title, 'post_name' => $class , 'post_content'=> $content, 'post_excerpt'=>$date, 'post_type' => 'alex_timeline', 'post_parent'=> $member_id, 'menu_order'=>$alex_tl_grp_id),
 		array( '%d','%s','%s','%s','%s','%s','%d','%d' )
 	);
 
@@ -919,13 +933,15 @@ function alex_edit_timeline() {
 	$title = sanitize_text_field($_POST['title']);
 	$content = sanitize_text_field($_POST['content']);
 	$class = sanitize_text_field($_POST['class']);
+	$alex_tl_grp_id = (int)($_POST['alex_tl_grp_id']);
+
 
 	if($id > 0){
 		global $wpdb;
 		$wpdb->update( $wpdb->posts,
-			array( 'post_title' => $title, 'post_name' => $class , 'post_content'=> $content, 'post_excerpt'=>$date),
+			array( 'post_title' => $title, 'post_name' => $class , 'post_content'=> $content, 'post_excerpt'=>$date,'menu_order'=>$alex_tl_grp_id ),
 			array( 'ID' => $id ),
-			array( '%s', '%s', '%s', '%s' ),
+			array( '%s', '%s', '%s', '%s','%d' ),
 			array( '%d' )
 		);
 	}

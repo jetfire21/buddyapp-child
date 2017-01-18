@@ -62,8 +62,8 @@ License URI: license.txt
     color: #fff;
 }
 
-#alex_show_group{float: left;}
-#alex_show_group img{height: 34px;}
+#alex_tl_grp_id{float: left;}
+#alex_tl_grp_id img{height: 34px;}
 
 /* add backgruound for fields */
 #buddypress .standard-form textarea, #buddypress .standard-form input[type=text], #buddypress .standard-form input[type=color], #buddypress .standard-form input[type=date], #buddypress .standard-form input[type=datetime], #buddypress .standard-form input[type=datetime-local], #buddypress .standard-form input[type=email], #buddypress .standard-form input[type=month], #buddypress .standard-form input[type=number], #buddypress .standard-form input[type=range], #buddypress .standard-form input[type=search], #buddypress .standard-form input[type=tel], #buddypress .standard-form input[type=time], #buddypress .standard-form input[type=url], #buddypress .standard-form input[type=week], #buddypress .standard-form select, #buddypress .standard-form input[type=password], #buddypress .dir-search input[type=search], #buddypress .dir-search input[type=text], #buddypress .groups-members-search input[type=search], #buddypress .groups-members-search input[type=text],    
@@ -71,6 +71,12 @@ License URI: license.txt
 #buddypress input[type=text], #invite-anyone-by-email textarea,#invite-anyone-by-email input[type=text], .bp-users-reviews-list{
     background-color: rgba(0,0,0,.05) !important;
 }
+
+ #timeliner input[type=text], #timeliner textarea, #timeliner select{ 
+    /*background: none !important; */
+    background-color: rgba(0,0,0,.05) !important;
+
+ }
 .bp-users-reviews-list{ padding-left: 8px; }
 
 /* 767px to 861px - fix broken groups header */
