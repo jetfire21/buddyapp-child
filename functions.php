@@ -569,7 +569,7 @@ function alex_include_css_js(){
 add_action("wp_footer", "alex_custom_scripts",100);
 
 // only for debug
-// add_action("wp_footer","wp_get_name_page_template");
+add_action("wp_footer","wp_get_name_page_template");
 
 function wp_get_name_page_template(){
 
@@ -609,7 +609,7 @@ function wp_get_name_page_template(){
 	echo "<br>4- ".__FILE__;
 	echo "<br>5- ".$_SERVER["SCRIPT_NAME"];
 	echo "<br>6- ".$_SERVER['DOCUMENT_ROOT'];
-	print_r($_SERVER);
+	alex_debug(1,1,0,$_SERVER);
 }
 
 function alex_custom_scripts()

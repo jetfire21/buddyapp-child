@@ -163,7 +163,7 @@ License URI: license.txt
 
 @media only screen and (min-width: 1200px){
    .single-item.groups #buddypress div.item-list-tabs ul li.last#group_members-order-select { margin:0 auto !important; }
-   .single-item.groups div#subnav.item-list-tabs ul, #group-create-tabs.item-list-tabs ul { margin-bottom: 0 !important; }
+   /*.single-item.groups div#subnav.item-list-tabs ul, #group-create-tabs.item-list-tabs ul { margin-bottom: 0 !important; }*/
 }
 
 @media only screen and (min-width: 767px){
@@ -194,9 +194,15 @@ License URI: license.txt
 
   .single-item.groups #item-body {margin-left: 0; }
   .single-item.groups #buddypress #item-header-wrap div.item-list-tabs ul li a > span{position: static;}
-  .single-item.groups .bp-page-title, .single-item.groups #buddypress .item-list-tabs .groups-members-search {margin-top: 25px !important;}
+  .single-item.groups .bp-page-title {margin-top: 25px !important; }
+  .single-item.groups.group-members div#subnav.item-list-tabs {   width:auto !important; }
+  .single-item.groups div#subnav.item-list-tabs {
+    margin-top: 25px !important;
+   }
 
 }
+
+.single-item.groups #buddypress .item-list-tabs .groups-members-search{display: none !important;}
 
 /* custom style for groups */
 
