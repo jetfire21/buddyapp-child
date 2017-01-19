@@ -569,7 +569,7 @@ function alex_include_css_js(){
 add_action("wp_footer", "alex_custom_scripts",100);
 
 // only for debug
-add_action("wp_footer","wp_get_name_page_template");
+// add_action("wp_footer","wp_get_name_page_template");
 
 function wp_get_name_page_template(){
 
