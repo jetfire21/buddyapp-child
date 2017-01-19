@@ -63,7 +63,8 @@ License URI: license.txt
 }
 
 #alex_tl_grp_id{float: left;}
-#alex_tl_grp_id img{height: 34px;}
+#alex_tl_grp_id img{height: 30px;}
+#alex_tl_grp_id span{padding-left: 6px;}
 
 /* add backgruound for fields */
 #buddypress .standard-form textarea, #buddypress .standard-form input[type=text], #buddypress .standard-form input[type=color], #buddypress .standard-form input[type=date], #buddypress .standard-form input[type=datetime], #buddypress .standard-form input[type=datetime-local], #buddypress .standard-form input[type=email], #buddypress .standard-form input[type=month], #buddypress .standard-form input[type=number], #buddypress .standard-form input[type=range], #buddypress .standard-form input[type=search], #buddypress .standard-form input[type=tel], #buddypress .standard-form input[type=time], #buddypress .standard-form input[type=url], #buddypress .standard-form input[type=week], #buddypress .standard-form select, #buddypress .standard-form input[type=password], #buddypress .dir-search input[type=search], #buddypress .dir-search input[type=text], #buddypress .groups-members-search input[type=search], #buddypress .groups-members-search input[type=text],    
@@ -155,16 +156,21 @@ License URI: license.txt
 }
 */
 
- .groups  #item-header-wrap{
+ .single-item.groups  #item-header-wrap{
     position: static !important;
     width:100% !important;
   }
 
+@media only screen and (min-width: 1200px){
+   .single-item.groups #buddypress div.item-list-tabs ul li.last#group_members-order-select { margin:0 auto !important; }
+   .single-item.groups div#subnav.item-list-tabs ul, #group-create-tabs.item-list-tabs ul { margin-bottom: 0 !important; }
+}
+
 @media only screen and (min-width: 767px){
 
-  .groups .main-content{ padding-top: 0 !important; }
+  .single-item.groups .main-content{ padding-top: 0 !important; }
 
- .groups #buddypress div#object-nav.item-list-tabs {
+ .single-item.groups #buddypress div#object-nav.item-list-tabs {
       overflow: hidden;
       background: transparent;
       float: left;
@@ -174,20 +180,21 @@ License URI: license.txt
       min-height: 45px;
   }
 
-  .groups #buddypress div#object-nav {
+  .single-item.groups #buddypress div#object-nav {
       position: relative;
   }
 
-  .groups #buddypress div#object-nav.item-list-tabs ul li{
+  .single-item.groups #buddypress div#object-nav.item-list-tabs ul li{
       display: inline-block;
     } 
 
-  .groups .buddypress.bp-is-single .main-content { padding: 0; }
+  .single-item.groups .buddypress.bp-is-single .main-content { padding: 0; }
 
-  .groups #buddypress div#item-nav { padding: 0;}
+  .single-item.groups #buddypress div#item-nav { padding: 0;}
 
-  .groups #item-body {margin-left: 0; }
-  .groups #buddypress #item-header-wrap div.item-list-tabs ul li a > span{position: static;}
+  .single-item.groups #item-body {margin-left: 0; }
+  .single-item.groups #buddypress #item-header-wrap div.item-list-tabs ul li a > span{position: static;}
+  .single-item.groups .bp-page-title, .single-item.groups #buddypress .item-list-tabs .groups-members-search {margin-top: 25px !important;}
 
 }
 

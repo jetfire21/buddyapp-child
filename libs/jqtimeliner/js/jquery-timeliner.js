@@ -383,9 +383,10 @@
             // console.log(g);
             var user_group =  fetchDefault(_obj, "#alex_gr_avatar", _options);
             var gr_link =  fetchDefault(_obj, "#alex_gr_link", _options);
+            var gr_name =  fetchDefault(_obj, "#alex_gr_name_select", _options);
             // var gr_link =  fetchDefault(_obj, "data-link", _options);
             // var gr_link =  fetchAttr(_obj, "data-link", _options);
-            if(user_group != "") user_group = '<a href="'+gr_link+'"><img src="'+user_group+'" /></a>';
+            if(user_group != "") user_group = '<a href="'+gr_link+'"><img src="'+user_group+'" /></a><span>'+gr_name+'</span>';
             // console.log("user-group "+user_group);
             // console.log(gr_link);
             // console.log(gr);
@@ -612,10 +613,12 @@
     // console.log("gr_name= "+gr_name);
 
    // grs from php
-    for (var key in grs) {
-        // value должен быть обязательно названием группы,иначе select не будет работать 
-         // grs_html = grs_html + '<option selected="selected" value="'+key+'">'+grs[key]+'</option>\
-         grs_html = grs_html + '<option value="'+grs[key]+'">'+grs[key]+'</option>';
+   if(grs){
+        for (var key in grs) {
+            // value должен быть обязательно названием группы,иначе select не будет работать 
+             // grs_html = grs_html + '<option selected="selected" value="'+key+'">'+grs[key]+'</option>\
+             grs_html = grs_html + '<option value="'+grs[key]+'">'+grs[key]+'</option>';
+        }
     }
     // console.log(grs_html);
     // console.log(alex_show_group);
