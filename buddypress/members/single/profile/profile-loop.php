@@ -65,6 +65,30 @@ $user_id_gr = bp_displayed_user_id();
 
 <?php if ( bp_has_profile() ) : ?>
 
+	<?php
+		function groups_user(){
+			global $bp;
+			$quest_id = $bp->displayed_user->id;
+			// groups for auth and noauth user
+			$user_groups =  groups_get_user_groups( $quest_id ); 
+			$html = "<h4>Causes</h4>";	
+			$html .= '<div class="bp-widget">';
+			foreach($user_groups["groups"] as $group_id) { 
+				$group = groups_get_group(array( 'group_id' => $group_id ));
+				$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
+				$avatar_options = array ( 'item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'avatar_dir' => 'group-avatars', 'alt' => 'Group avatar', 'css_id' => 1234, 'class' => 'avatar', 'width' => 50, 'height' => 50, 'html' => false );
+				$gr_avatar = bp_core_fetch_avatar($avatar_options);
+				$html .='<div id="alex_groups_user">
+							<a href="'.$group_permalink.'"><img src="'.$gr_avatar.'"/></a>
+							<a href="'.$group_permalink.'">'.$group->name.'</a>
+					  	</div>';
+			}
+			$html .="</div>";
+			// alex_debug(1,1,"grs",$grs_notimeline);
+			echo $html;
+		}
+	?>
+
 	<?php $i=0; while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
 
 		<?php if ( bp_profile_group_has_fields() ) : ?>
@@ -82,22 +106,27 @@ $user_id_gr = bp_displayed_user_id();
 			// echo "<h4>debug</h4> ";
 			?>
 			<?php 
-			$group_name = bp_get_the_profile_group_name(); 
-			$group_name = preg_match("#social#i", $group_name);
-			if($group_name) $group_name = "social"; else $group_name = "d";
+			$gr_name = bp_get_the_profile_group_name(); 
+			// return 0 or 1
+			$gr_social = preg_match("#social#i", $gr_name);
+			// var_dump($gr_social);
+			$gr_basic_info = preg_match("#info#i", $gr_name);
+			// if($gr_social) $gr_social = "social"; else $gr_social = false;
+			// if($gr_basic_info) $gr_basic_info = "social"; else $gr_basic_info = false;
  
 			// echo "debug ".$group_name;
-			if( $group_name != "social") : ?>
+			//if( $gr_social != "social") : 
+			if( (bool)$gr_social == false) : ?>
 
 				<h4><?php bp_the_profile_group_name(); ?></h4>
-
-
+				
 				<table class="profile-fields">
 
 					<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
-
-						<?php if ( bp_field_has_data() && $group_name != "social" ): ?>
-
+							<?php //echo $gr_basic_info;?>
+						<?php //if ( bp_field_has_data() && $gr_social != "social" ): ?>
+						<?php if ( bp_field_has_data() && (bool)$gr_social == false ): ?>
+								
 							<tr<?php bp_field_css_class(); ?>>
 
 								<td class="label"><?php bp_the_profile_field_name(); ?></td>
@@ -118,55 +147,20 @@ $user_id_gr = bp_displayed_user_id();
 						do_action( 'bp_profile_field_item' ); ?>
 
 					<?php endwhile;?>
-
 				</table>
 
 			<?php endif; // if not SOCIAL ?>
+			<?php if( (bool)$gr_basic_info == true) groups_user(); ?>
 
 
 				<!--<h4><?php echo bp_get_the_profile_group_name();?></h4>-->
 
 				<?php //if(bp_get_the_profile_group_name() == "SOCIAL"): ?>
 				<?php //if(bp_get_the_profile_group_name() == "2. Timeline"): ?>
-				<?php if($i < 1): ?>
+				<?php if($i == 4): ?>
 					<h4>Timeline</h4>
 					<div id="timeliner">
 					  <ul class="columns alex_timeline_wrap">
- <!-- 					      <li>
-					          <div class="timeliner_element teal">
-					              <div class="timeliner_title">
-					                  <span class="timeliner_label">Event Title</span><span class="timeliner_date">03 Nov 2014</span>
-					              </div>
-					              <div class="content">
-					                  <b>1 Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-					              </div>
-					              <div class="readmore">
-					                  <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>
-					                  <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>
-					                  <a href="#" class="btn btn-info">
-					                      Read More <i class="fa fa-arrow-circle-right"></i>
-					                  </a>
-					              </div>
-					          </div>
-					      </li>
- --><!-- 					      <li>
-					          <div class="timeliner_element green">
-					              <div class="timeliner_title">
-					                  <span class="timeliner_label">Event Title</span><span class="timeliner_date">11 Nov 2014</span>
-					              </div>
-					              <div class="content">
-					                  <b>2 Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-					              </div>
-					              <div class="readmore">
-					                  <a class="btn btn-primary" href="javascript:void(0);" ><i class="fa fa-pencil fa fa-white"></i></a>
-					                  <a class="btn btn-bricky" href="javascript:void(0);" ><i class="fa fa-trash fa fa-white"></i></a>
-					                  <a href="#" class="btn btn-info">
-					                      Read More <i class="fa fa-arrow-circle-right"></i>
-					                  </a>
-					              </div>
-					          </div>
-					      </li>
-					-->
 					      <?php
 							global $wpdb;
 					 		$user = wp_get_current_user();

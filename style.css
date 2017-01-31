@@ -64,9 +64,11 @@ License URI: license.txt
     color: #fff;
 }
 
-#alex_tl_grp_id{float: left;}
-#alex_tl_grp_id img{height: 30px;}
-#alex_tl_grp_id span{padding-left: 6px;}
+#alex_tl_grp_id, #alex_groups_user{float: left;}
+#alex_tl_grp_id img,#alex_groups_user img{height: 30px; border-radius: 50%;}
+#alex_tl_grp_id span,#alex_groups_user span{padding-left: 6px;}
+#alex_groups_user{     margin: 0 20px 13px 0; }
+#alex_groups_user a{ color:#656565 !important;}
 
 /* add backgruound for fields */
 #buddypress .standard-form textarea, #buddypress .standard-form input[type=text], #buddypress .standard-form input[type=color], #buddypress .standard-form input[type=date], #buddypress .standard-form input[type=datetime], #buddypress .standard-form input[type=datetime-local], #buddypress .standard-form input[type=email], #buddypress .standard-form input[type=month], #buddypress .standard-form input[type=number], #buddypress .standard-form input[type=range], #buddypress .standard-form input[type=search], #buddypress .standard-form input[type=tel], #buddypress .standard-form input[type=time], #buddypress .standard-form input[type=url], #buddypress .standard-form input[type=week], #buddypress .standard-form select, #buddypress .standard-form input[type=password], #buddypress .dir-search input[type=search], #buddypress .dir-search input[type=text], #buddypress .groups-members-search input[type=search], #buddypress .groups-members-search input[type=text],    
