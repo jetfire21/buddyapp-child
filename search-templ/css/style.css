@@ -30,15 +30,18 @@ img{max-width:100%;}
 /*end reset*/
 /*--login form start here--*/ 
 body {
+  /* for no zoom background, currently image 655px, need min height size 1080px for no repeat */
+   background:url(../images/5.jpg) no-repeat !important; 
+   background-size: contain; !important;
    /*background:url(../images/5.jpg)no-repeat !important; */
-   background:url(../images/5.jpg) !important; 
-   background-size: cover;
+   /*background-size: cover !important;*/
+   background-color: #000 !important;
    font-family: 'Open Sans', sans-serif;
    font-size: 100%;
 }
 .search {
   text-align: center;
-  margin: 22em 0em 0em 0em;
+  margin: 3em 0em 0em 0em;
   position: relative;
 }
 .s-bar {
@@ -50,7 +53,7 @@ body {
   font-size: 1em;
   font-weight: 600;
   color: #fff;
-  padding: 1.3em 1em 1.3em 1.5em;
+  padding: 1.2em 1em 1.3em 1.5em;
   width: 70%;
  text-shadow: rgba(80, 80, 80, 0.08) 1px 1px, 
                rgba(80, 80, 80, 0.07) 2px 2px, 
@@ -200,7 +203,7 @@ body {
   margin: 21em 0em 7.2em 0em;
 }
 .search {
-  margin: 22em 0em 0em 0em;
+  margin: 3em 0em 0em 0em;
 }
 .s-bar {
   width: 58%;
@@ -281,7 +284,7 @@ body {
   font-size: 0.8em;
 }
 .search {
-  margin: 11.25em 0em 0em 0em;
+  margin: 2.25em 0em 0em 0em;
 }
 .s-bar {
   width: 100%;
@@ -309,7 +312,7 @@ body {
 /* alex code */
 
 .search{
-  margin: 8em 0em 3em 0em;
+  margin: 3em 0em 3em 0em;
 }
 
 .search form{ position: relative; }

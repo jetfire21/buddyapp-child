@@ -33,7 +33,6 @@ function member_social_extend(){
 		$user = wp_get_current_user();
 		$dmember_id = $user->ID;
 
-		$website_info = xprofile_get_field_data('Website', $dmember_id);
 		$fb_info = xprofile_get_field_data('Facebook Profile', $dmember_id);
 		$google_info = xprofile_get_field_data('Google+', $dmember_id);
 		$instagram_info = xprofile_get_field_data('Instagram', $dmember_id);
@@ -41,19 +40,10 @@ function member_social_extend(){
 		$linkedin_info = xprofile_get_field_data('LinkedIn Profile', $dmember_id);
 		echo '<div class="member-social">';
 		// echo 'test';
-		// if($website_info||$fb_info||$google_info||$twitch_info||$twitter_info){
+		// if($fb_info||$google_info||$twitch_info||$twitter_info){
 		// 	echo 'My Social: ';
 		// }
 
-		if ($website_info) {
-		?>
-		<span class="fb-info">
-		<?php
-		$img = '<img src="http://'.$_SERVER["HTTP_HOST"].'/wp-content/themes/buddyapp-child/images/website.png" />';
-		 echo $res = preg_replace("/>[^<]+/i", " target='blank'>$img", $website_info); ?>
-		</span>
-	<?php
-	}
 		if ($fb_info) {
 		?>
 		<span class="fb-info">
@@ -147,9 +137,6 @@ function alex_display_social_groups() {
         	// echo "data= ".$data;
 
         	switch ($field->post_title) {
-        		case 'Website':
-					$img = '<img src="'.$home.'/wp-content/themes/buddyapp-child/images/website.png" />';
-        			break;  		
         		case 'Facebook':
 					$img = '<img src="'.$home.'/wp-content/themes/buddyapp-child/images/fb.png" />';
         			break;  		
@@ -250,7 +237,7 @@ add_action( 'groups_group_details_edited', 'alex_edit_group_fields_save' );
 function alex_get_postid_and_fields( $wpdb = false){
 
 	$last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
-	$fields  = array("Website","Facebook","Twitter","Instagram","Google+","Linkedin");
+	$fields  = array("Facebook", "Twitter","Instagram","Google+","Linkedin");
 	$id = $last_post_id+1;
 	$id_and_fields = array($id,$fields);
 
@@ -283,7 +270,7 @@ function alex_add_soclinks_all_groups_db(){
 	$fields = $postid_and_fields[1];
 
 	// $last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
-	// $fields  = ["Website","Facebook","Twitter","Instagram","Google+","Linkedin"];
+	// $fields  = ["Facebook", "Twitter","Instagram","Google+","Linkedin"];
 	$g = 0;
 	$total_group = count($gid);
 	for( $i=0; $i < $total_group; $i++){
