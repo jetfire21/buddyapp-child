@@ -1243,6 +1243,18 @@ function wp_get_name_page_template(){
 	alex_debug(1,1,0,$_SERVER);
 }
 
+function register_widgets_for_groups_pages(){
+	register_sidebar( array(
+		'name' => "Groups sidebar",
+		'id' => 'right-sidebar-for-group',
+		'description' => 'Right sidebar for widgets',
+		'before_title' => '<h4>',
+		'after_title' => '</h4>',
+		'before_widget' =>  '<div id="%1$s" class="widget %2$s">',
+		'after_widget' =>  '</div>',
+	) );
+}
+add_action( 'widgets_init', 'register_widgets_for_groups_pages' );
 
 // add_filter( 'pre_user_login', function( $user )
 // {

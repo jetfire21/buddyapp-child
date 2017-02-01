@@ -245,7 +245,32 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 
   /* compress header on Groups for full screen *** */
 
+  /* styles for group widgets */
+
+  /*.single-item.groups #buddypress ul.item-list,.single-item.groups #buddypress form#whats-new-form,*/
+  .single-item.groups #buddypress #item-body { 
+    width: calc(100% - 250px); float: left; }
+  .single-item.groups #buddypress .gr-wrap-widget .widget{padding-left: 0;}
+  .single-item.groups #buddypress .gr-wrap-widget {
+   width: 250px; float:left;margin-top: 28px;
+   /*padding-right: 40px; */
+   background: #ddddef;
+ }
+  .single-item.groups #buddypress .sidebar {
+    float: left; margin-top: 28px; border-top:0; width:250px;
+ }
+   .single-item.groups #buddypress .sidebar .widget{clear: both; overflow: hidden;}
+  /*.single-item.groups #buddypress .sidebar ul * {float: none; clear: both;}*/
+
+  /* styles for group widgets */
+
 }
+
+  .single-item.groups #buddypress .sidebar ul.item-list#members-list li{ width:100%; padding: 0 !important; text-align: left;}
+  .single-item.groups #buddypress .sidebar ul.item-list#members-list li .item{ padding: 0 !important;}
+  .single-item.groups #buddypress .sidebar div.item-meta{ display: block !important; }
+  .single-item.groups #buddypress .sidebar span.activity{ display: inline-block !important; }
+
 
 @media only screen and (max-width: 766px){
   .single-item.groups #buddypress .wrap-custom-grp{display: none;}
