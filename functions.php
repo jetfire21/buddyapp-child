@@ -258,7 +258,7 @@ function alex_get_postid_and_fields( $wpdb = false){
 
 }
 
-function alex_add_soclinks_all_groups_db(){
+function alex_add_soclinks_for_all_groups_db(){
 
 	global $wpdb;
 	// $last_post_id = $wpdb->query( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
@@ -270,7 +270,6 @@ function alex_add_soclinks_all_groups_db(){
 	// var_dump($last_post_id);
 
 	$groups = groups_get_groups();
-	// print_r($groups);
 	$k = 0;
 	foreach ($groups['groups'] as $gr) {
 		// echo $gr->id;s
@@ -281,6 +280,9 @@ function alex_add_soclinks_all_groups_db(){
 	$postid_and_fields = alex_get_postid_and_fields($wpdb);
 	$postid = $postid_and_fields[0]+1;
 	$fields = $postid_and_fields[1];
+
+	alex_debug(0,0,"postid=",$postid);
+	alex_debug(0,1,"fields=",$fields);
 
 	// $last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
 	// $fields  = ["Website","Facebook","Twitter","Instagram","Google+","Linkedin"];
@@ -299,32 +301,65 @@ function alex_add_soclinks_all_groups_db(){
 	}
 	// echo "<script>console.log('Fields for groups has been successfully imported! Total group: ".$total_group."');</script>";
 	echo "Fields for groups has been successfully imported! Total group: ".$total_group;
+
 }
 
-// execute only 1 time !!! add all fields for groups in db
-// add_action("wp_head","alex_add_soclinks_all_groups_db");
+// IMPORTANT !!! execute only 1 time !!! add all fields social links for groups in data base
+// add_action("wp_head","alex_add_soclinks_for_all_groups_db");
+// add_action( 'bp_before_group_body','alex_add_soclinks_for_all_groups_db');
 
-// Fires after the group has been successfully created.
-add_action( 'groups_group_create_complete', "alex_case_creation_new_group" );
+function add_soclinks_only_for_one_group_db(){
 
-function alex_case_creation_new_group(){
-	global $wpdb,$bp;
-
-	$gid = $bp->groups->new_group_id;
-	// echo 'add new group '.$gid;
-	// exit;
+	global $wpdb;
+	$gr_last_id = $wpdb->get_row("SELECT id FROM `{$wpdb->prefix}bp_groups` ORDER BY date_created DESC");
+	// alex_debug(0,1,"last_gr",$gr);
 	$postid_and_fields = alex_get_postid_and_fields($wpdb);
-	// $postid = $postid_and_fields[0];
+	$postid = $postid_and_fields[0]+1;
 	$fields = $postid_and_fields[1];
+
+	// $wpdb->insert(
+	// 	$wpdb->posts,
+	// 	array( 'ID' => $postid, 'post_title' => 'ne', 'post_type' => 'alex_gfilds777', 'post_parent'=>$gr_last_id->id),
+	// 	array( '%d','%s','%s','%d' )
+	// );
+	// alex_debug(1,1,"field",$fields);
+	// exit;
 	foreach ($fields as $field_name) {
 		$wpdb->insert(
 			$wpdb->posts,
-			array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gid),
+			array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gr_last_id->id),
 			array( '%d','%s','%s','%d' )
 		);
 		$postid++; 
-	}
+	} 
 }
+// Fires after the group has been successfully created (variation 1)
+add_action( 'groups_group_create_complete','add_soclinks_only_for_one_group_db');
+// for debug on group page
+// add_action( 'bp_after_create_group_page','add_soclinks_only_for_one_group_db');
+
+
+// Fires after the group has been successfully created (variation 2)
+// add_action( 'groups_group_create_complete', "alex_case_creation_new_group" );
+
+// function alex_case_creation_new_group(){
+// 	global $wpdb,$bp;
+
+// 	$gid = $bp->groups->new_group_id;
+// 	// echo 'add new group '.$gid;
+// 	// exit;
+// 	$postid_and_fields = alex_get_postid_and_fields($wpdb);
+// 	// $postid = $postid_and_fields[0];
+// 	$fields = $postid_and_fields[1];
+// 	foreach ($fields as $field_name) {
+// 		$wpdb->insert(
+// 			$wpdb->posts,
+// 			array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gid),
+// 			array( '%d','%s','%s','%d' )
+// 		);
+// 		$postid++; 
+// 	}
+// }
 
 
 function buddyapp_search_shortcode() {
@@ -512,7 +547,7 @@ function alex_debug ( $show_text = false, $is_arr = false, $title = false, $var,
 	$debug_text = "<br>========Debug MODE==========<br>";
 	if( boolval($show_text) ) echo $debug_text;
 	if( boolval($is_arr) ){
-		echo $title."-";
+		echo "<br>".$title."-";
 		echo "<pre>";
 		print_r($var);
 		echo "</pre>";

@@ -250,13 +250,12 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
   /*.single-item.groups #buddypress ul.item-list,.single-item.groups #buddypress form#whats-new-form,*/
   .single-item.groups #buddypress #item-body { 
     width: calc(100% - 250px); float: left; }
-  .single-item.groups #buddypress .gr-wrap-widget .widget{padding-left: 0;}
+/*  .single-item.groups #buddypress .gr-wrap-widget .widget{padding-left: 0;}
   .single-item.groups #buddypress .gr-wrap-widget {
    width: 250px; float:left;margin-top: 28px;
-   /*padding-right: 40px; */
    background: #ddddef;
  }
-  .single-item.groups #buddypress .sidebar {
+*/  .single-item.groups #buddypress .sidebar {
     float: left; margin-top: 28px; border-top:0; width:250px;
  }
    .single-item.groups #buddypress .sidebar .widget{clear: both; overflow: hidden;}
