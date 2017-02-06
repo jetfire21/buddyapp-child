@@ -308,6 +308,30 @@ function alex_add_soclinks_for_all_groups_db(){
 // add_action("wp_head","alex_add_soclinks_for_all_groups_db");
 // add_action( 'bp_before_group_body','alex_add_soclinks_for_all_groups_db');
 
+/* *********** */
+
+// add fields for group Ottawa Humane Society (id-6 fac goog)
+// add_action( 'bp_before_group_body','alex_add_soclinks_for_gr');
+// function alex_add_soclinks_for_gr(){
+// 	global $bp,$wpdb;
+// 	// echo $gid = $bp->groups->current_group->id;
+// 	$postid_and_fields = alex_get_postid_and_fields($wpdb);
+// 	$postid = $postid_and_fields[0]+1;
+// 	$fields = $postid_and_fields[1];
+// 	unset($fields[1]);
+// 	unset($fields[4]);
+// 	// print_r($fields);
+
+// 	foreach ($fields as $field_name) {
+// 		$wpdb->insert(
+// 			$wpdb->posts,
+// 			array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>6),
+// 			array( '%d','%s','%s','%d' )
+// 		);
+// 		$postid++; 
+// 	} 
+// }
+
 function add_soclinks_only_for_one_group_db(){
 
 	global $wpdb;

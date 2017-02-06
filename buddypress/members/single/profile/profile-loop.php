@@ -61,7 +61,17 @@ $user_id_gr = bp_displayed_user_id();
 
 
 
-<?php /* -------------------- */ ?>
+<?php /* -------------------- */
+
+global $bp;
+$user_id = $bp->displayed_user->id;
+ $verify_user = xprofile_get_field_data('Active security check', $user_id);
+ // alex_debug(0,1,"dd",$verify_user);
+ // echo "<br>";var_dump($b);echo "<br>";echo $b;
+ // var_dump( xprofile_get_field_id_from_name('Active security check') );
+// if($verify_user[0] == 'NO') echo "<img src='".get_stylesheet_directory_uri()."/images/user_not_verified.png' />";
+// else echo "<img src='".get_stylesheet_directory_uri()."/images/user_verified.png' />";
+?>
 
 <?php if ( bp_has_profile() ) : ?>
 
@@ -71,7 +81,8 @@ $user_id_gr = bp_displayed_user_id();
 			$quest_id = $bp->displayed_user->id;
 			// groups for auth and noauth user
 			$user_groups =  groups_get_user_groups( $quest_id ); 
-			$html = "<h4>Causes</h4>";	
+			$html = '<div class="bp-widget">';
+			$html .= "<span class='field-name'>Causes</span>";	
 			$html .= '<div class="bp-widget">';
 			foreach($user_groups["groups"] as $group_id) { 
 				$group = groups_get_group(array( 'group_id' => $group_id ));
@@ -83,22 +94,25 @@ $user_id_gr = bp_displayed_user_id();
 							<a href="'.$group_permalink.'">'.$group->name.'</a>
 					  	</div>';
 			}
-			$html .="</div>";
+			$html .="</div>
+			</div>";
 			// alex_debug(1,1,"grs",$grs_notimeline);
 			echo $html;
 		}
 	?>
 
-	<?php $i=0; while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
+	<?php $i=0; $bi=0;$det=0; while ( bp_profile_groups() ) : bp_the_profile_group(); ?>
 
 		<?php if ( bp_profile_group_has_fields() ) : ?>
 
 			<?php
 
+			$prof_name = trim( strtolower(preg_replace("#^[0-9]+\.#i", "", bp_get_the_profile_group_name()) ));
+
 			/** This action is documented in bp-templates/bp-legacy/buddypress/members/single/profile/profile-wp.php */
 			do_action( 'bp_before_profile_field_content' ); ?>
 
-			<div class="bp-widget <?php bp_the_profile_group_slug(); ?>">
+			<div class="bp-widget <?php bp_the_profile_group_slug(); if($prof_name=="basic info") echo " info "; if($prof_name=="details") echo " details ";  ?>">
 
 			<?php
 			 //$group_name = "Social"; 			
@@ -116,24 +130,50 @@ $user_id_gr = bp_displayed_user_id();
  
 			// echo "debug ".$group_name;
 			//if( $gr_social != "social") : 
-			if( (bool)$gr_social == false) : ?>
+			if( (bool)$gr_social == false && $prof_name != "security") : ?>
 
-				<h4><?php bp_the_profile_group_name(); ?></h4>
+				<!-- <h4><?php bp_the_profile_group_name(); ?></h4> -->
+				<?php if($prof_name == "interests"):?>
+				<span class="field-name"><?php echo $prof_name;?></span>
+				<?php endif;?>
 				
-				<table class="profile-fields">
 
 					<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
-							<?php //echo $gr_basic_info;?>
+						<?php //echo $prof_name; ?>
 						<?php //if ( bp_field_has_data() && $gr_social != "social" ): ?>
 						<?php if ( bp_field_has_data() && (bool)$gr_social == false ): ?>
-								
-							<tr<?php bp_field_css_class(); ?>>
-
-								<td class="label"><?php bp_the_profile_field_name(); ?></td>
-
+							
+							<?php if($prof_name == "mission"):?>	
+								<table class="profile-fields mission">
+								<tr<?php bp_field_css_class(); ?>>
 								<td class="data"><?php bp_the_profile_field_value(); ?></td>
-	
-							</tr>
+								</tr>
+								</table>
+							<?php elseif($prof_name == "basic info"):?>
+								<?php if($bi < 1):?>
+									<table class=" field-avail">
+									<tr<?php bp_field_css_class(); ?>>
+									<td class="data"><?php bp_the_profile_field_value(); ?></td>
+								<td class="verify">
+								<?php
+								if($verify_user[0] == 'YES') echo "<img src='".get_stylesheet_directory_uri()."/images/user_verified.png' />";
+								else echo "<img src='".get_stylesheet_directory_uri()."/images/user_not_verified.png' />";
+								?>
+								</td>
+									</tr>
+									</table>
+								<?php endif;?>
+								<?php $bi++; ?>								
+							<?php elseif($prof_name=="details"):?>
+								<?php if($det == 0):?>
+									<h2><?php bp_the_profile_field_value(); ?></h2>
+								<?php else:?>
+									<h3><?php bp_the_profile_field_value(); ?></h3>
+								<?php endif;?>
+								<?php $det++; ?>								
+							<?php else:?>
+								<p class="data"><?php bp_the_profile_field_value(); ?></p>
+							<?php endif;?>
 
 						<?php endif; ?>
 
@@ -150,7 +190,12 @@ $user_id_gr = bp_displayed_user_id();
 				</table>
 
 			<?php endif; // if not SOCIAL ?>
-			<?php if( (bool)$gr_basic_info == true) groups_user(); ?>
+
+			</div>
+			<!-- end .bp-widget -->
+
+			<?php //if( (bool)$gr_basic_info == true) groups_user(); ?>
+			<?php if($i==4) groups_user(); ?>
 
 
 				<!--<h4><?php echo bp_get_the_profile_group_name();?></h4>-->
@@ -158,7 +203,8 @@ $user_id_gr = bp_displayed_user_id();
 				<?php //if(bp_get_the_profile_group_name() == "SOCIAL"): ?>
 				<?php //if(bp_get_the_profile_group_name() == "2. Timeline"): ?>
 				<?php if($i == 4): ?>
-					<h4>Timeline</h4>
+					<div class="bp-widget">
+					<span class='field-name'>Timeline</span>
 					<div id="timeliner">
 					  <ul class="columns alex_timeline_wrap">
 					      <?php
@@ -226,6 +272,7 @@ $user_id_gr = bp_displayed_user_id();
 					      <?php endforeach;?>
 					   </ul> 
 					</div>
+					</div>
 <!-- debug -->
 					<?php
 
@@ -251,9 +298,6 @@ $user_id_gr = bp_displayed_user_id();
 				<?php endif;  ?> 
 				<!-- end timeline -->
 
-
-			</div>
-
 			<?php
 
 			/** This action is documented in bp-templates/bp-legacy/buddypress/members/single/profile/profile-wp.php */
@@ -261,7 +305,7 @@ $user_id_gr = bp_displayed_user_id();
 
 		<?php endif; ?>
 
-	<?php  $i++; endwhile; ?>
+	<?php $i++; endwhile; ?>
 
 	<?php
 
