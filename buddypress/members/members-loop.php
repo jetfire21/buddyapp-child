@@ -21,16 +21,6 @@
 
 do_action( 'bp_before_members_loop' ); 
 
-// var_dump(bp_get_current_member_type());
-// $a = bp_has_members('search_terms=admin');
-// var_dump($a);
-// "search_terms=admin"
-// $bp_core = bp_core_get_component_search_query_arg( 'members' );
-// $bp_ajax_s = bp_ajax_querystring( 'members' );
-// $bp_has_m = bp_has_members( bp_ajax_querystring( 'members' ) );
-// alex_debug(0,0,'bp_core',$bp_has_m);
-// alex_debug(0,0,'bp_ajax_s',$bp_has_m);
-// alex_debug(0,0,'bp_has_m',$bp_has_m);
 ?>
 
 

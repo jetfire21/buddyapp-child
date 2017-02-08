@@ -3,74 +3,25 @@
 /** This action is documented in bp-templates/bp-legacy/buddypress/members/single/profile/profile-wp.php */
 do_action( 'bp_before_profile_loop_content' ); ?>
 
-<!-- <h3>==Maintenance Mode==</h3>
-<hr>
- -->
 <?php 
-	// $user = wp_get_current_user();
-	// echo $member_id = $user->ID;
-	// var_dump($member_id);
-	// global $bp;
-	// echo "<hr>";
-	// var_dump($bp->version);
-	// echo "<hr>";
-	// echo $bp->displayed_user->id;
-	// echo "<hr>";
-	// print_r($bp);
-// alex_debug(1,0,"has_groups",bp_has_groups());
-//  выводится только на странице групп
-// global $groups_template;
-// var_dump($groups_template);
-// alex_debug(0,1,"groups_template",$groups_template);
 $group_ids =  groups_get_user_groups( bp_loggedin_user_id() ); 	
-// alex_debug(0,1,"grs",$group_ids["groups"] );
 foreach($group_ids["groups"] as $group_id) { 
 	$group = groups_get_group(array( 'group_id' => $group_id ));
 	$grs .= $group->id.':"'.$group->name.'",';
 }
 
-// foreach ($groups_template->groups as $group) {
-// 	// echo "global gr-templ ".$group->id."-".$group->name."<br>";
-// 	// $grs[$group->id] = $group->name;
-// 	// var user = '{ "name": "Вася", "age": 35, "isAdmin": false, "friends": [0,1,2,3] }';
-// 	// $grs .= '"'.$group->id.'":"'.$group->name.',';
-// 	$grs .= $group->id.':"'.$group->name.'",';
-// }
 
 $grs = substr($grs,0,-1);
 $grs = "{".$grs."}";
 
-// alex_debug(0,0,"grs",$grs);
 
 // move groups ids and name in javascript timeliner
 echo "<script>var grs = $grs;</script>";
 $user_id_gr = bp_displayed_user_id();
 
-// alex_debug(0,0,"user_id",$user_id_gr);
-
-// alex_debug(0,1,"get_groups",groups_get_group(array("load_users"=>1)));
-// var_dump(groups_get_group(1));
-// <h3>my heading</h3>
-// pip while ( bp_groups() ) : bp_the_group();
-// pip if( 'public' == bp_get_group_status() ) {
-// <input type=checkbox name="groups[]" value=" pip bp_group_id(); " pip bp_group_name();
-?>
-<?php /*  echo "standard templ loop"; while ( bp_groups("&user_id=1") ) : bp_the_group();   */ ?>
-	<!-- <a href="<?php // bp_group_permalink(); ?>"><?php //bp_group_name(); ?></a><br> -->
-<?php  //endwhile; ?>
-
-
-
-<?php /* -------------------- */
-
 global $bp;
 $user_id = $bp->displayed_user->id;
  $verify_user = xprofile_get_field_data('Active security check', $user_id);
- // alex_debug(0,1,"dd",$verify_user);
- // echo "<br>";var_dump($b);echo "<br>";echo $b;
- // var_dump( xprofile_get_field_id_from_name('Active security check') );
-// if($verify_user[0] == 'NO') echo "<img src='".get_stylesheet_directory_uri()."/images/user_not_verified.png' />";
-// else echo "<img src='".get_stylesheet_directory_uri()."/images/user_verified.png' />";
 ?>
 
 <?php if ( bp_has_profile() ) : ?>
@@ -115,9 +66,6 @@ $user_id = $bp->displayed_user->id;
 			<div class="bp-widget <?php bp_the_profile_group_slug(); if($prof_name=="basic info") echo " info "; if($prof_name=="details") echo " details ";  ?>">
 
 			<?php
-			 //$group_name = "Social"; 			
-			// $group_name = mb_strtolower($group_name); 
-			// echo "<h4>debug</h4> ";
 			?>
 			<?php 
 			$gr_name = bp_get_the_profile_group_name(); 
@@ -125,11 +73,6 @@ $user_id = $bp->displayed_user->id;
 			$gr_social = preg_match("#social#i", $gr_name);
 			// var_dump($gr_social);
 			$gr_basic_info = preg_match("#info#i", $gr_name);
-			// if($gr_social) $gr_social = "social"; else $gr_social = false;
-			// if($gr_basic_info) $gr_basic_info = "social"; else $gr_basic_info = false;
- 
-			// echo "debug ".$group_name;
-			//if( $gr_social != "social") : 
 			if( (bool)$gr_social == false && $prof_name != "security") : ?>
 
 				<!-- <h4><?php bp_the_profile_group_name(); ?></h4> -->
@@ -194,14 +137,11 @@ $user_id = $bp->displayed_user->id;
 			</div>
 			<!-- end .bp-widget -->
 
-			<?php //if( (bool)$gr_basic_info == true) groups_user(); ?>
 			<?php if($i==4) groups_user(); ?>
 
 
 				<!--<h4><?php echo bp_get_the_profile_group_name();?></h4>-->
 
-				<?php //if(bp_get_the_profile_group_name() == "SOCIAL"): ?>
-				<?php //if(bp_get_the_profile_group_name() == "2. Timeline"): ?>
 				<?php if($i == 4): ?>
 					<div class="bp-widget">
 					<span class='field-name'>Timeline</span>
@@ -210,12 +150,8 @@ $user_id = $bp->displayed_user->id;
 					      <?php
 							global $wpdb;
 					 		$user = wp_get_current_user();
-					 		// var_dump($user);
-							// $member_id = $user->ID;
-							// alex_debug(1,0,'loggedin user',$member_id);
 							global $bp;
 							$quest_id = $bp->displayed_user->id;
-							// alex_debug(1,0,'quest',$quest_id);
 
 							/* select timeline data */
 
@@ -231,16 +167,10 @@ $user_id = $bp->displayed_user->id;
 
 							foreach ($fields as $field):?>
 							<?php //
-								// $post_name = trim($field->post_name);
 								$group = groups_get_group($field->menu_order);
-								// alex_debug(0,1,"grccc",$group);
-								// alex_debug(0,0,"gr",$group->name);
-								// echo $group_permalink = trailingslash( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/' );
 								$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
 								$avatar_options = array ( 'item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'avatar_dir' => 'group-avatars', 'alt' => 'Group avatar', 'css_id' => 1234, 'class' => 'avatar', 'width' => 50, 'height' => 50, 'html' => false );
 								$gr_avatar = bp_core_fetch_avatar($avatar_options);
-								// alex_debug(0,0,"link",$group_permalink);
-								// alex_debug(0,0,"avatar",$gr_avatar);
 
 							 ?>
 						      <li>
@@ -273,27 +203,6 @@ $user_id = $bp->displayed_user->id;
 					   </ul> 
 					</div>
 					</div>
-<!-- debug -->
-					<?php
-
-						// echo "<pre>";
-						// print_r($fields);
-						// echo "</pre>";
-						// $last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
-						// echo $last_post_id;
-
-						// $wpdb->insert(
-						// 	$wpdb->posts,
-							// array( 'ID' => $last_post_id+1, 'post_title' => 'Title', 'post_type' => 'alex_timeline', 'post_parent'=> $member_id),
-						// 	array( '%d','%s','%s','%d' )
-						// );
-
-						 // if (current_user_can('administrator')){
-						 //   echo "<pre>";
-						 //   print_r($wpdb->queries);
-						 //   echo "</pre>";
-						 // }
-					?>
 
 				<?php endif;  ?> 
 				<!-- end timeline -->
