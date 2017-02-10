@@ -1013,6 +1013,45 @@ function register_widgets_for_groups_pages(){
 }
 add_action( 'widgets_init', 'register_widgets_for_groups_pages' );
 
+
+/* for work with bp group revies on header group */
+remove_action( 'bp_group_header_meta', 'bpgr_render_review' );
+
+add_action("bp_group_header_meta","alex_add_rating_header_group");
+function alex_add_rating_header_group(){
+
+	// echo "<p>test rating</p>";
+	global $bp;
+
+	// Don't show for groups that have reviews turned off
+	if ( !BP_Group_Reviews::current_group_is_available() )
+		return;
+
+	// Rendering the full span so you can avoid editing your group-header.php template
+	// If you don't like it you can call bpgr_review_html() yourself and unhook this function ;)
+
+	$gid = bp_get_group_id();
+	$group = groups_get_group($gid);
+	$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
+	$rating_score  = isset( $bp->groups->current_group->rating_avg_score ) ? $bp->groups->current_group->rating_avg_score : '';
+	$rating_number = isset( $bp->groups->current_group->rating_number ) ? $bp->groups->current_group->rating_number : '';
+
+	?>
+	<span class="rating" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+    <span itemprop="ratingValue"  content="<?php echo $rating_score;?>"></span>
+    <span itemprop="bestRating"   content="5"></span>
+    <span itemprop="ratingCount"  content="<?php echo $rating_number;?>"></span>
+    <span itemprop="itemReviewed" content="Group"></span>
+    <span itemprop="name" content="<?php echo $group->slug;?>"></span>
+    <span itemprop="url" content="<?php echo $group_permalink;?>"></span>
+	<?php echo bpgr_review_html() ?>
+	</span>
+<?php
+}
+/* for work with bp group revies on header group */
+
+
+
 /* ************ DW actions ************ */
 
 add_filter('bp_get_send_public_message_button', '__return_false');
