@@ -1021,35 +1021,58 @@ add_action("bp_group_header_meta","alex_add_rating_header_group");
 function alex_add_rating_header_group(){
 
 	// echo "<p>test rating</p>";
-	global $bp;
+	if(class_exists('BP_Group_Reviews')){
+		global $bp;
 
-	// Don't show for groups that have reviews turned off
-	if ( !BP_Group_Reviews::current_group_is_available() )
-		return;
+		// Don't show for groups that have reviews turned off
+		if ( !BP_Group_Reviews::current_group_is_available() )
+			return;
 
-	// Rendering the full span so you can avoid editing your group-header.php template
-	// If you don't like it you can call bpgr_review_html() yourself and unhook this function ;)
+		// Rendering the full span so you can avoid editing your group-header.php template
+		// If you don't like it you can call bpgr_review_html() yourself and unhook this function ;)
 
-	$gid = bp_get_group_id();
-	$group = groups_get_group($gid);
-	$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
-	$rating_score  = isset( $bp->groups->current_group->rating_avg_score ) ? $bp->groups->current_group->rating_avg_score : '';
-	$rating_number = isset( $bp->groups->current_group->rating_number ) ? $bp->groups->current_group->rating_number : '';
+		$gid = bp_get_group_id();
+		$group = groups_get_group($gid);
+		$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
+		$rating_score  = isset( $bp->groups->current_group->rating_avg_score ) ? $bp->groups->current_group->rating_avg_score : '';
+		$rating_number = isset( $bp->groups->current_group->rating_number ) ? $bp->groups->current_group->rating_number : '';
 
-	?>
-	<span class="rating" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-    <span itemprop="ratingValue"  content="<?php echo $rating_score;?>"></span>
-    <span itemprop="bestRating"   content="5"></span>
-    <span itemprop="ratingCount"  content="<?php echo $rating_number;?>"></span>
-    <span itemprop="itemReviewed" content="Group"></span>
-    <span itemprop="name" content="<?php echo $group->slug;?>"></span>
-    <span itemprop="url" content="<?php echo $group_permalink;?>"></span>
-	<?php echo bpgr_review_html() ?>
-	</span>
+		?>
+		<span class="rating" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+	    <span itemprop="ratingValue"  content="<?php echo $rating_score;?>"></span>
+	    <span itemprop="bestRating"   content="5"></span>
+	    <span itemprop="ratingCount"  content="<?php echo $rating_number;?>"></span>
+	    <span itemprop="itemReviewed" content="Group"></span>
+	    <span itemprop="name" content="<?php echo $group->slug;?>"></span>
+	    <span itemprop="url" content="<?php echo $group_permalink;?>"></span>
+		<?php echo bpgr_review_html() ?>
+		</span>
+	<?php
+	}
+}
+
+// for schema.org on google (there was 1 error - missing url breadcrumb)
+// unhoock old function
+function alex_remove_junk() { remove_action( 'bp_before_group_body','kleo_bp_group_title', 1 ); }
+add_action( 'after_setup_theme', 'alex_remove_junk', 999 );
+
+add_action( 'bp_before_group_body','alex_kleo_bp_group_title',10);
+function alex_kleo_bp_group_title() {
+?>
+    <div class="bp-title-section">
+        <h1 class="bp-page-title"><?php echo kleo_bp_get_group_page_title();?></h1>
+        <?php 
+	        $gid = bp_get_group_id();
+			$group = groups_get_group($gid);
+			$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
+	        $breadcrumb = kleo_breadcrumb( array( 'container' => 'ul', 'separator' => '-', 'show_browse' => false, 'echo' => false ) );
+	        echo $bc_replace = str_replace('a href=""', 'a href="'.$group_permalink.'"', $breadcrumb);
+         ?>
+    </div>
 <?php
 }
-/* for work with bp group revies on header group */
 
+/* for work with bp group revies on header group */
 
 
 /* ************ DW actions ************ */

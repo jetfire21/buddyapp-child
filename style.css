@@ -251,6 +251,7 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 #buddypress .activity .rating img{display: inline; padding: 0;}
 
 /* for plugin bp group reviews */
+
 #buddypress .star-holder {display: table; margin:0 auto;}
 #buddypress span.rating-num { display: none !important; }
 .single-item.groups #buddypress #group-reviews form { clear: both; }
@@ -263,6 +264,8 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 .single-item.groups #buddypress .review-form .rtmedia-container {display: none;}
 #buddypress span.rating {  unicode-bidi: initial; direction: initial;}
 /*.single-item.groups #buddypress #group-reviews blockquote { margin-left: 0; }*/
+#buddypress .activity-content .activity-meta .acomment-reply span{color:#fff;}
+
 /* for plugin bp group reviews */
 
 .single-item.groups #buddypress .sidebar ul.item-list#members-list li{ width:100%; padding: 0 !important; text-align: left;}
