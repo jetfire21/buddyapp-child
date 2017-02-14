@@ -115,10 +115,6 @@ add_filter( 'bp_before_member_header_meta', 'member_social_extend' );
 function alex_display_social_groups() {
 
 	global $wpdb;
-
-	// echo "gr_alex";
-
-	// $group_id = 1;
 	$gid = bp_get_group_id();
 	$fields = $wpdb->get_results( $wpdb->prepare(
 		"SELECT ID, post_title, post_content
@@ -1079,7 +1075,6 @@ remove_action( 'bp_group_header_meta', 'bpgr_render_review' );
 add_action("bp_group_header_meta","alex_add_rating_header_group");
 function alex_add_rating_header_group(){
 
-	// echo "<p>test rating</p>";
 	if(class_exists('BP_Group_Reviews')){
 		global $bp;
 
@@ -1095,7 +1090,20 @@ function alex_add_rating_header_group(){
 		$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
 		$rating_score  = isset( $bp->groups->current_group->rating_avg_score ) ? $bp->groups->current_group->rating_avg_score : '';
 		$rating_number = isset( $bp->groups->current_group->rating_number ) ? $bp->groups->current_group->rating_number : '';
-
+	
+		global $wpdb;
+		$website = $wpdb->get_results( $wpdb->prepare(
+			"SELECT post_content
+			FROM {$wpdb->posts}
+			WHERE post_parent = %d
+			    AND post_type = %s
+			    AND post_title = %s
+			ORDER BY ID ASC",
+			intval( $gid ),
+			"alex_gfilds",
+			'Website'
+		) );
+		$ext_url = $website[0]->post_content;
 		?>
 		<span class="rating" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
 	    <span itemprop="ratingValue"  content="<?php echo $rating_score;?>"></span>
@@ -1104,6 +1112,9 @@ function alex_add_rating_header_group(){
 	    <span itemprop="itemReviewed" content="Group"></span>
 	    <span itemprop="name" content="<?php echo $group->slug;?>"></span>
 	    <span itemprop="url" content="<?php echo $group_permalink;?>"></span>
+	    <?php if( !empty($ext_url) ):?>
+	    <span itemprop="sameAs" content="<?php echo $ext_url;?>"></span>
+		<?php endif;?>
 		<?php echo bpgr_review_html() ?>
 		</span>
 	<?php
@@ -1132,7 +1143,6 @@ function alex_kleo_bp_group_title() {
 }
 
 /* for work with bp group revies on header group */
-
 
 
 /* ************ DW actions ************ */
