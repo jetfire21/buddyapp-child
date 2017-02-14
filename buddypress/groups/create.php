@@ -110,24 +110,6 @@ do_action( 'bp_before_create_group_page' ); ?>
 						<li><?php _e( 'Group content and activity will be visible to any site member.', 'buddypress' ); ?></li>
 					</ul>
 
-
-					<label for="group-status-private"><input type="radio" name="group-status" id="group-status-private" value="private"<?php if ( 'private' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> aria-describedby="private-group-description" /><strong><?php _e( 'This is a private group', 'buddypress' ); ?></strong></label>
-
-					<ul id="private-group-description">
-						<li><?php _e( 'Only users who request membership and are accepted can join the group.', 'buddypress' ); ?></li>
-						<li><?php _e( 'This group will be listed in the groups directory and in search results.', 'buddypress' ); ?></li>
-						<li><?php _e( 'Group content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
-					</ul>
-
-
-					<label for="group-status-hidden"><input type="radio" name="group-status" id="group-status-hidden" value="hidden"<?php if ( 'hidden' == bp_get_new_group_status() ) { ?> checked="checked"<?php } ?> aria-describedby="hidden-group-description" /><strong><?php _e('This is a hidden group', 'buddypress' ); ?></strong></label>
-
-					<ul id="hidden-group-description">
-						<li><?php _e( 'Only users who are invited can join the group.', 'buddypress' ); ?></li>
-						<li><?php _e( 'This group will not be listed in the groups directory or search results.', 'buddypress' ); ?></li>
-						<li><?php _e( 'Group content and activity will only be visible to members of the group.', 'buddypress' ); ?></li>
-					</ul>
-
 				</div>
 
 				<h4><?php _e( 'Group Invitations', 'buddypress' ); ?></h4>
