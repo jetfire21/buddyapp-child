@@ -228,11 +228,12 @@ add_action( 'groups_group_details_edited', 'alex_edit_group_fields_save' );
 function alex_get_postid_and_fields( $wpdb = false){
 
 	$last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
-	// $fields  = array("Website","Facebook","Twitter","Instagram","Google+","Linkedin");
-	$fields  = array("Website","Facebook","Twitter","Instagram","Google","Linkedin");
+	$fields  = array("Website","Facebook","Twitter","Instagram","Google+","Linkedin");
 	$id = $last_post_id+1;
 	$id_and_fields = array($id,$fields);
+
 	return $id_and_fields;
+
 }
 
 function alex_add_soclinks_for_all_groups_db(){
@@ -254,7 +255,6 @@ function alex_add_soclinks_for_all_groups_db(){
 	$total_group = count($gid);
 	for( $i=0; $i < $total_group; $i++){
 		foreach ($fields as $field_name) {
-			if(preg_match("#google#i", $field_name) === 1) $field_name = $field_name."+";
 			$wpdb->insert(
 				$wpdb->posts,
 				array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gid[$g]),
@@ -282,18 +282,19 @@ function add_soclinks_only_for_one_group_db(){
 	$postid = $postid_and_fields[0]+1;
 	$fields = $postid_and_fields[1];
 
-	alex_debug(0,1,"fie",$fields);
+	// foreach ($fields as $field_name) {
+	// 	$wpdb->insert(
+	// 		$wpdb->posts,
+	// 		array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gr_last_id->id),
+	// 		array( '%d','%s','%s','%d' )
+	// 	);
+	// 	$postid++; 
+	// } 
 
 	foreach ($fields as $field_name) {
-
-		if( !empty($_COOKIE['alex-'.$field_name]) ) {
-			echo $post_content = sanitize_text_field($_COOKIE['alex-'.$field_name]);
-		}
-		else $post_content = '';
-		if(preg_match("#google#i", $field_name) === 1) $field_name = $field_name."+";
-		
-		echo $field_name." - ";
-
+		echo " cook ".$_COOKIE['alex-'.$field_name]."<br>";
+		echo ' post-cont '.$post_content = $_COOKIE['alex-'.$field_name];
+		echo "<br>";
 		if( !empty($post_content)){
 			$wpdb->insert(
 				$wpdb->posts,
@@ -304,23 +305,80 @@ function add_soclinks_only_for_one_group_db(){
 		}
 	} 
 
+   echo "<h1>create complete</h1>";
+   echo "<pre>";
+   print_r($wpdb->queries);
+   echo "</pre>";
+   	echo "<b>last query:</b> ".$wpdb->last_query."<br>";
+	echo "<b>last result:</b> "; print_r($wpdb->last_result);
+	echo "<br><b>last error:</b> "; print_r($wpdb->last_error);
+
+   	alex_debug(0,1,"POST",$_POST);
+	alex_debug(0,1,"COOKIE",$_COOKIE);
+	echo "delete cookie";
+
 	foreach ($fields as $field_name) {
-		// unset($_COOKIE['alex-'.$field_name]);
-		// delete cookie
-		setcookie( 'alex-'.$field_name, false, time() - 1000, COOKIEPATH, COOKIE_DOMAIN, is_ssl() );
+		unset($_COOKIE['alex-'.$field_name]);
 	}
+
+	alex_debug(0,1,"COOKIE",$_COOKIE);
+   exit;
 }
 
 // Fires after the group has been successfully created (variation 1)
 add_action( 'groups_group_create_complete','add_soclinks_only_for_one_group_db');
+// for debug on group page
+// add_action( 'bp_after_create_group_page','add_soclinks_only_for_one_group_db');
 
-add_action( 'groups_create_group_step_save_group-details','alex_save_socialinks_cookies' );
-function alex_save_socialinks_cookies(){
+// add_action('bp_before_group_settings_creation_step','alex_step2');
+// function alex_step2(){
+// 	echo 'step 2';
+// 	echo "bp fucn: ";
+// 	var_dump($bp->groups->new_group_id);
+// 	echo "<hr>";
+// 	var_dump($bp->groups->groups_action_create_group);
+// 	echo "<hr>";
+// 	var_dump($bp->groups->current_create_step);
+// 	echo "req";
+// 	alex_debug(0,1,"$_REQUEST",$_REQUEST);
+// 	alex_debug(0,1,"$_POST",$_POST);
+
+// }
+
+// add_action( 'groups_create_group_step_save_group-cover-image','alex_gs' );
+function alex_gs(){
+	echo "<h1>group_cover_image</h1>";
+	echo "req";
+	alex_debug(0,1,"POST",$_POST);
+	alex_debug(0,1,"COOKIE",$_COOKIE);
+	// exit;
+}
+
+add_action( 'groups_create_group_step_save_group-details','alex_ggg' );
+function alex_ggg(){
 	foreach ($_POST as $k => $v) {
-		$k = str_replace("+", "", $k);
-		$v = sanitize_text_field($v);
-		if(  preg_match("#^alex-#i", $k) === 1) setcookie($k, $v,8 * DAYS_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN,is_ssl());	
+		if($k == "Google+") substr($k, 0,-1);
+		if(  preg_match("#^alex-#i", $k) === 1) setcookie($k, $v,8 * DAYS_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN);	
 	}
+	echo "<h1>group_details</h1>";
+	// echo "req";
+	alex_debug(0,1,"POST",$_POST);
+	alex_debug(0,1,"COOKIE",$_COOKIE);
+	// echo $_COOKIE['bp_new_group_id'];
+	 // exit;
+}
+
+
+// add_action( 'init', 'setting_my_first_cookie' );
+
+function setting_my_first_cookie() {
+  // setcookie( $v_username, $v_value, 30 * DAYS_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
+	  global $wpdb;
+		$table = $wpdb->prefix."bp_groups";
+		$last_gr_id = $wpdb->get_var( "SELECT MAX(`id`) FROM {$table}");
+		$new_gr_id = $last_gr_id + 1;
+		setcookie("alex_new_gr_id", $new_gr_id);
+
 }
 
 add_action( 'bp_after_group_details_creation_step',"alex_group_create_add_socialinks" );
@@ -328,23 +386,108 @@ add_action( 'bp_after_group_details_creation_step',"alex_group_create_add_social
 function alex_group_create_add_socialinks(){
 
 	global $bp,$wpdb;
+	// alex_debug(0,1,"bp",$bp);
+	// alex_debug(0,1,"bp",$bp->groups);
+	echo "bp fucn: ";
+	var_dump($bp->groups->new_group_id);
+	echo "<hr>";
+	var_dump($bp->groups->groups_action_create_group);
+	echo "<hr>";
+	var_dump($bp->groups->current_create_step);
+	echo "<hr>";
+	var_dump(bp_get_groups_current_create_step());
+	// $class = new BP_Groups_Group();
+	// alex_debug(0,1,'class',$class);
 
-	// get fields social links
+	// get new group id
+	// get id after first step
+	// $bp_gr_id = $_COOKIE['bp_new_group_id'];
+	// get id before first step
+	// $new_gr_id = $_COOKIE['alex_new_gr_id'];
+	// if( empty($_COOKIE['bp_new_group_id'])) $new_gr_id = $_COOKIE['alex_new_gr_id'];
+	// else $new_gr_id = $_COOKIE['bp_new_group_id'];
+	// echo "==gr_id===".$new_gr_id;
+
+	// if(!empty($_COOKIE['alex_new_gr_id'])){
+	// 	$check_fields = $wpdb->get_var( "SELECT id FROM {$wpdb->posts} WHERE post_parent='{$new_gr_id}' AND post_type='alex_gfilds'");
+	// 	// if group id not exist, then create fields for social links
+	// 	if( empty($check_fields) and $check_fields < 1){
+
+	// 		// get last post_id from table _posts and all fields social links
+	// 		$postid_and_fields = alex_get_postid_and_fields($wpdb);
+	// 		$postid = $postid_and_fields[0]+1;
+	// 		$fields = $postid_and_fields[1];
+
+	// 		// add new fields for only one new group
+	// 		foreach ($fields as $field_name) {
+	// 			$wpdb->insert(
+	// 				$wpdb->posts,
+	// 				array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$new_gr_id),
+	// 				array( '%d','%s','%s','%d' )
+	// 			);
+	// 			$postid++; 
+	// 			break;
+	// 		} 
+	// 	}
+
+	// 	// display html markup for social links
+	// 	// $fields = $wpdb->get_results( $wpdb->prepare(
+	// 	// 	"SELECT ID, post_title, post_content, post_excerpt
+	// 	// 	FROM {$wpdb->posts}
+	// 	// 	WHERE post_parent = %d
+	// 	// 	    AND post_type = %s
+	// 	// 	ORDER BY ID ASC",
+	// 	// 	intval( $new_gr_id ),
+	// 	// 	"alex_gfilds"
+	// 	// ) );
+	// 	// alex_debug(0,1,"fields mark",$fields);
+
+	// 	// foreach ($fields as $field) {
+
+	// 	// 	echo '<label class="" for="alex-'.$field->ID.'">'.$field->post_title.'</label>';
+	// 	// 	echo '<input id="alex-'.$field->ID.'" name="alex-'.$field->ID.'" type="text" value="' . esc_attr( $field->post_content ) . '" />';
+	// 	// }
+
+	// 	// unset($_COOKIE['alex_new_gr_id']);
+
+	// }
+	if( !empty($bp->groups->new_group_id)){
+
+		// $fields = $wpdb->get_results( $wpdb->prepare(
+		// 	"SELECT ID, post_title, post_content
+		// 	FROM {$wpdb->posts}
+		// 	WHERE post_parent = %d
+		// 	    AND post_type = %s
+		// 	ORDER BY ID ASC",
+		// 	intval( $gid ),
+		// 	"alex_gfilds"
+		// ) );
+		alex_debug(0,1,"from bd ",$fields);
+	}
+
 	$postid_and_fields = alex_get_postid_and_fields($wpdb);
 	$fields = $postid_and_fields[1];
 
 	foreach ($fields as $field) {
-
-		if( !empty($_COOKIE['alex-'.$field]) ) {
-			$user_fill = $_COOKIE['alex-'.$field];
-		}
-		else $user_fill = '';
-
-		if(preg_match("#google#i", $field) === 1) $field = $field."+";
-
+		if($field == "Google+") $user_fiil_field = $_COOKIE['alex-Google_'];
+		else $user_fiil_field = $_COOKIE['alex-'.$field];
 		echo '<label class="" for="alex-'.$field.'">'.$field.'</label>';
-		echo '<input id="alex-'.$field.'" name="alex-'.$field.'" type="text" value="'.$user_fill.'" />';
+		// echo '<input id="alex-'.$field.'" name="alex-'.$field.'" type="text" value="' . esc_attr() . '" />';
+		echo '<input id="alex-'.$field.'" name="alex-'.$field.'" type="text" value="'.$user_fiil_field.'" />';
 	}
+
+	alex_debug(1,1,"f",$fields);
+	alex_debug(0,1,"session",$_SESSION);
+	alex_debug(0,1,"cookie",$_COOKIE);
+
+
+	// echo "<b>last query:</b> ".$wpdb->last_query."<br>";
+	// echo "<b>last result:</b> "; print_r($wpdb->last_result);
+	// echo "<br><b>last error:</b> "; print_r($wpdb->last_error);
+
+   // echo "<pre>";
+   // print_r($wpdb->queries);
+   // echo "</pre>";
 }
 
 
