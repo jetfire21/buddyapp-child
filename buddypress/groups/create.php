@@ -71,6 +71,26 @@ do_action( 'bp_before_create_group_page' ); ?>
 					<label for="group-desc"><?php _e( 'Group Description (required)', 'buddypress' ); ?></label>
 					<textarea name="group-desc" id="group-desc" aria-required="true"><?php bp_new_group_description(); ?></textarea>
 				</div>
+				
+				<?php
+					global $bp,$wpdb;
+					$gid = $bp->groups->current_group->id;
+
+				    $table_grmeta = $wpdb->prefix."bp_groups_groupmeta";
+					$city = $wpdb->get_results( $wpdb->prepare(
+						"SELECT meta_value
+						FROM {$table_grmeta}
+						WHERE group_id = %d
+						    AND meta_key = %s
+						",
+						intval( $gid ),
+						"city_state"
+					) );
+				?>
+				<div>
+					<label for="city_state">City, Province/State</label>
+					<input type="text" name="city_state" id="city_state" value="<?php echo esc_attr($city[0]->meta_value);?>" />
+				</div>
 
 				<?php
 
@@ -109,6 +129,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 						<li><?php _e( 'This group will be listed in the groups directory and in search results.', 'buddypress' ); ?></li>
 						<li><?php _e( 'Group content and activity will be visible to any site member.', 'buddypress' ); ?></li>
 					</ul>
+
 
 				</div>
 

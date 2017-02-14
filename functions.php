@@ -162,6 +162,24 @@ function alex_display_social_groups() {
 
     }
     if(!empty($fields)) echo "</div>";
+
+    // display city/state on group page
+    $table_grmeta = $wpdb->prefix."bp_groups_groupmeta";
+	$city = $wpdb->get_results( $wpdb->prepare(
+		"SELECT meta_value
+		FROM {$table_grmeta}
+		WHERE group_id = %d
+		    AND meta_key = %s
+		",
+		intval( $gid ),
+		"city_state"
+	) );
+	if( !empty($city[0]->meta_value) ) {
+		$html = '<div class="city_state">';
+		$html .= $city[0]->meta_value;
+		$html .= '</div>';
+		echo $html;
+	}
 }
 
 add_action( 'bp_before_group_header_meta', 'alex_display_social_groups');
@@ -169,11 +187,27 @@ add_action( 'bp_before_group_header_meta', 'alex_display_social_groups');
 function alex_edit_group_fields(){
 
 	global $bp,$wpdb;
+	$gid = $bp->groups->current_group->id;
+
+	if( !bp_is_group_creation_step( 'group-details' ) ){
+	    $table_grmeta = $wpdb->prefix."bp_groups_groupmeta";
+		$city = $wpdb->get_results( $wpdb->prepare(
+			"SELECT meta_value
+			FROM {$table_grmeta}
+			WHERE group_id = %d
+			    AND meta_key = %s
+			",
+			intval( $gid ),
+			"city_state"
+		) );
+
+		echo '<label class="" for="city_state">City, Province/State</label>';
+		echo '<input id="city_state" name="city_state" type="text" value="' . esc_attr($city[0]->meta_value) . '" />';
+	}
 
 	// info about all groups
 	$groups = groups_get_groups();
 	$last_post_id = $wpdb->get_var( "SELECT MAX(`ID`) FROM {$wpdb->posts}");
-	$gid = $bp->groups->current_group->id;
 	// var_dump($a);
 	$fields = $wpdb->get_results( $wpdb->prepare(
 		"SELECT ID, post_title, post_content, post_excerpt
@@ -187,7 +221,7 @@ function alex_edit_group_fields(){
 	foreach ($fields as $field) {
 
 		echo '<label class="" for="alex-'.$field->ID.'">'.$field->post_title.'</label>';
-		echo '<input id="alex-'.$field->ID.'" name="alex-'.$field->ID.'" type="text" value="' . esc_attr( $field->post_content ) . '" />';
+		echo '<input id="alex-'.$field->ID.'" name="alex-'.$field->ID.'" type="url" value="' . esc_attr( $field->post_content ) . '" />';
 	}
 
 }
@@ -199,11 +233,12 @@ function alex_edit_group_fields_save(){
 
 		global $wpdb;
 		
-			foreach ( $_POST as $data => $value ) {
-				if ( substr( $data, 0, 5 ) === 'alex-' ) {
-					$to_save[ $data ] = $value;
-				}
+		foreach ( $_POST as $data => $value ) {
+			if ( substr( $data, 0, 5 ) === 'alex-' ) {
+				$to_save[ $data ] = $value;
 			}
+		}
+
 		foreach ( $to_save as $ID => $value ) {
 				$ID = substr( $ID, 5 );
 
@@ -217,7 +252,17 @@ function alex_edit_group_fields_save(){
 					array( '%d' )                   // where format
 				);
 		}
+		// update city for group page
+		$gid = (int)$_POST['group-id'];
+		$table_grmeta = $wpdb->prefix."bp_groups_groupmeta";
+		$wpdb->update($table_grmeta,array(
+				'meta_value' => sanitize_text_field($_POST['city_state']),    
+			),
+			array( 'meta_key' => 'city_state', 'group_id' => $gid),          
+			array('%s'), array('%s','%d')                   
+		);
 }
+
 add_action( 'groups_group_details_edited', 'alex_edit_group_fields_save' );
 
 // without hook,for reused code
@@ -290,14 +335,14 @@ function add_soclinks_only_for_one_group_db(){
 		
 		echo $field_name." - ";
 
-		if( !empty($post_content)){
+		// if( !empty($post_content)){
 			$wpdb->insert(
 				$wpdb->posts,
 				array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gr_last_id->id, 'post_content'=> $post_content),
 				array( '%d','%s','%s','%d', '%s' )
 			);
 			$postid++; 
-		}
+		// }
 	} 
 
 	foreach ($fields as $field_name) {
@@ -349,6 +394,17 @@ function alex_group_delete_fields_soclinks(){
 	global $wpdb;
 	$gid = (int)$_GET['gid'];
     $wpdb->delete( $wpdb->posts, array('post_type'=>'alex_gfilds','post_parent'=> $gid), array('%s','%d') );
+}
+
+add_action( 'groups_create_group_step_save_group-details','alex_add_city_for_group' );
+function alex_add_city_for_group(){
+	global $bp,$wpdb;
+	$city_state = sanitize_text_field($_POST['city_state']);
+	$wpdb->insert(
+		$wpdb->prefix."bp_groups_groupmeta",
+		array( 'group_id' => $bp->groups->new_group_id, 'meta_key' => 'city_state', 'meta_value'=> $city_state),
+		array( '%d','%s','%s' )
+	);
 }
 
 function buddyapp_search_shortcode() {
