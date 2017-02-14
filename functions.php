@@ -347,6 +347,13 @@ function alex_group_create_add_socialinks(){
 	}
 }
 
+// delete fields for social links when group deleted 
+add_action( 'groups_delete_group', 'alex_group_delete_fields_soclinks');
+function alex_group_delete_fields_soclinks(){
+	global $wpdb;
+	$gid = (int)$_GET['gid'];
+    $wpdb->delete( $wpdb->posts, array('post_type'=>'alex_gfilds','post_parent'=> $gid), array('%s','%d') );
+}
 
 function buddyapp_search_shortcode() {
     $context = sq_option( 'search_context', '' );
