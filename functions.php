@@ -182,6 +182,7 @@ function alex_display_social_groups() {
 	}
 }
 
+// add fields social links on page site.ru/causes/create/step/group-details/ and site.ru/causes/group_name/admin/edit-details/
 add_action( 'bp_before_group_header_meta', 'alex_display_social_groups');
 
 function alex_edit_group_fields(){
@@ -223,7 +224,6 @@ function alex_edit_group_fields(){
 		echo '<label class="" for="alex-'.$field->ID.'">'.$field->post_title.'</label>';
 		echo '<input id="alex-'.$field->ID.'" name="alex-'.$field->ID.'" type="url" value="' . esc_attr( $field->post_content ) . '" />';
 	}
-
 }
 
 // display all fields on page manage->details
@@ -364,6 +364,7 @@ function alex_save_socialinks_cookies(){
 	}
 }
 
+// add fieldss social links on page site.ru/causes/create/step/group-details/
 add_action( 'bp_after_group_details_creation_step',"alex_group_create_add_socialinks" );
 
 function alex_group_create_add_socialinks(){
@@ -384,7 +385,7 @@ function alex_group_create_add_socialinks(){
 		if(preg_match("#google#i", $field) === 1) $field = $field."+";
 
 		echo '<label class="" for="alex-'.$field.'">'.$field.'</label>';
-		echo '<input id="alex-'.$field.'" name="alex-'.$field.'" type="text" value="'.$user_fill.'" />';
+		echo '<input id="alex-'.$field.'" name="alex-'.$field.'" type="url" value="'.$user_fill.'" />';
 	}
 }
 
