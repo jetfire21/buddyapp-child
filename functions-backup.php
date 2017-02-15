@@ -123,8 +123,7 @@ function alex_display_social_groups() {
 		    AND post_type = %s
 		ORDER BY ID ASC",
 		intval( $gid ),
-		"alex_grsoclink"
-		// "alex_gfilds"
+		"alex_gfilds"
 	) );
 
 	if(!empty($fields)) echo "<div class='wrap_soclinks'>";
@@ -218,8 +217,7 @@ function alex_edit_group_fields(){
 		    AND post_type = %s
 		ORDER BY ID ASC",
 		intval( $gid ),
-		"alex_grsoclink"
-		// "alex_gfilds"
+		"alex_gfilds"
 	) );
 	foreach ($fields as $field) {
 
@@ -300,8 +298,7 @@ function alex_add_soclinks_for_all_groups_db(){
 			if(preg_match("#google#i", $field_name) === 1) $field_name = $field_name."+";
 			$wpdb->insert(
 				$wpdb->posts,
-				array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_grsoclink', 'post_parent'=>$gid[$g]),
-				// array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gid[$g]),
+				array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gid[$g]),
 				array( '%d','%s','%s','%d' )
 			);
 			$postid++; 
@@ -341,8 +338,7 @@ function add_soclinks_only_for_one_group_db(){
 		// if( !empty($post_content)){
 			$wpdb->insert(
 				$wpdb->posts,
-				array( 'ID'=>$postid, 'post_title'=>$field_name, 'post_type' => 'alex_grsoclink', 'post_parent'=>$gr_last_id->id, 'post_content'=> $post_content),
-				// array( 'ID'=>$postid, 'post_title'=>$field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gr_last_id->id, 'post_content'=> $post_content),
+				array( 'ID' => $postid, 'post_title' => $field_name, 'post_type' => 'alex_gfilds', 'post_parent'=>$gr_last_id->id, 'post_content'=> $post_content),
 				array( '%d','%s','%s','%d', '%s' )
 			);
 			$postid++; 
@@ -398,8 +394,7 @@ add_action( 'groups_delete_group', 'alex_group_delete_fields_soclinks');
 function alex_group_delete_fields_soclinks(){
 	global $wpdb;
 	$gid = (int)$_GET['gid'];
-    // $wpdb->delete( $wpdb->posts, array('post_type'=>'alex_gfilds','post_parent'=> $gid), array('%s','%d') );
-    $wpdb->delete( $wpdb->posts, array('post_type'=>'alex_grsoclink','post_parent'=> $gid), array('%s','%d') );
+    $wpdb->delete( $wpdb->posts, array('post_type'=>'alex_gfilds','post_parent'=> $gid), array('%s','%d') );
 }
 
 add_action( 'groups_create_group_step_save_group-details','alex_add_city_for_group' );
@@ -1162,8 +1157,7 @@ function alex_add_rating_header_group(){
 			    AND post_title = %s
 			ORDER BY ID ASC",
 			intval( $gid ),
-			// "alex_gfilds",
-			"alex_grsoclink",
+			"alex_gfilds",
 			'Website'
 		) );
 		$ext_url = $website[0]->post_content;
@@ -1219,3 +1213,18 @@ function remove_wp_adminbar_profile_link() {
 add_action( 'wp_before_admin_bar_render', 'remove_wp_adminbar_profile_link' );
 add_filter( 'bp_activity_can_favorite', '__return_false' );
 add_filter( 'bp_get_total_favorite_count_for_user', '__return_false' );
+
+
+add_action('wp_footer','alex_ccc1');
+function alex_ccc1(){
+	$groups = BP_Groups_Group::get(array(
+								'type'=>'alphabetical',
+								'per_page'=>999
+								));
+	// print_r($groups);
+	// отбирает только id и name группы
+	foreach ($groups['groups'] as $gr) {
+		echo $gr->id. " - ".$gr->name."<br>";
+	}
+	echo "---7171";
+}
