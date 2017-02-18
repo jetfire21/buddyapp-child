@@ -144,8 +144,9 @@
 		do_action( 'bp_after_group_body' ); ?>
 
 	</div><!-- #item-body -->
+
 	<!-- <div class="gr-wrap-widget"> -->
-	<div class="sidebar sidebar-colors">
+	<div class="sidebar sidebar-colors right-column-for-widgets">
 	<div class="inner-content widgets-container">
 		<?php if ( function_exists('dynamic_sidebar') ) dynamic_sidebar('right-sidebar-for-group');?>
 	</div>

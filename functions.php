@@ -1130,6 +1130,19 @@ function register_widgets_for_groups_pages(){
 }
 add_action( 'widgets_init', 'register_widgets_for_groups_pages' );
 
+function register_widgets_for_member_pages(){
+	register_sidebar( array(
+		'name' => "Member sidebar",
+		'id' => 'right-sidebar-for-member',
+		'description' => 'Right sidebar for widgets',
+		'before_title' => '<h4>',
+		'after_title' => '</h4>',
+		'before_widget' =>  '<div id="%1$s" class="widget %2$s">',
+		'after_widget' =>  '</div>',
+	) );
+}
+add_action( 'widgets_init', 'register_widgets_for_member_pages' );
+
 
 /* for work with bp group revies on header group */
 remove_action( 'bp_group_header_meta', 'bpgr_render_review' );

@@ -94,7 +94,14 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
   }
 
   .header-icons>li { padding:0 8px; }
+
+  .profile .right-column-for-widgets{ margin-left: 290px; margin-top: 0 !important;}
 }
+
+@media only screen and (max-width: 767px){
+  .profile .right-column-for-widgets {clear: both; margin-left: 0; }
+}
+
 
 @media only screen and (min-width: 768px) and (max-width: 991px){
 
@@ -152,6 +159,11 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 @media only screen and (min-width: 1200px){
    /*.single-item.groups #buddypress div.item-list-tabs ul li.last#group_members-order-select { margin:0 auto !important; }*/
    /*.single-item.groups div#subnav.item-list-tabs ul, #group-create-tabs.item-list-tabs ul { margin-bottom: 0 !important; }*/
+}
+
+@media only screen and (min-width: 992px){
+      .profile #buddypress #item-body {  width: calc(100% - 500px); float: left;}
+
 }
 
 @media only screen and (min-width: 767px){
@@ -231,18 +243,20 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 
     /* compress header on Groups for full screen *** */
 
-    /* styles for group widgets */
+    /* *****styles for group widgets in right sidebar***** */
 
     /*.single-item.groups #buddypress ul.item-list,.single-item.groups #buddypress form#whats-new-form,*/
-    .single-item.groups #buddypress #item-body { 
+    .single-item.groups #buddypress #item-body{ 
       width: calc(100% - 250px); float: left; }
-   .single-item.groups #buddypress .sidebar {
-      float: left; margin-top: 28px; border-top:0; width:250px;
+   /*.single-item.groups #buddypress .sidebar, .profile #buddypress .sidebar {*/
+    .right-column-for-widgets{
+          float: left; margin-top: 28px; border-top:0; width:250px;
    }
-     .single-item.groups #buddypress .sidebar .widget{clear: both; overflow: hidden;}
+     .single-item.groups #buddypress .sidebar .widget, .profile #buddypress .sidebar .widget
+     .right-column-for-widgets .widget {clear: both; overflow: hidden;}
     /*.single-item.groups #buddypress .sidebar ul * {float: none; clear: both;}*/
 
-    /* styles for group widgets */
+    /* *****styles for group widgets in right sidebar***** */
 
 }
 
@@ -271,10 +285,14 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 
 /* for plugin bp group reviews */
 
-.single-item.groups #buddypress .sidebar ul.item-list#members-list li{ width:100%; padding: 0 !important; text-align: left;}
-.single-item.groups #buddypress .sidebar ul.item-list#members-list li .item{ padding: 0 !important;}
-.single-item.groups #buddypress .sidebar div.item-meta{ display: block !important; }
-.single-item.groups #buddypress .sidebar span.activity{ display: inline-block !important; }
+/*.single-item.groups */
+#buddypress .sidebar ul.item-list#members-list li{ width:100%; padding: 0 !important; text-align: left;}
+/*.single-item.groups */
+#buddypress .sidebar ul.item-list#members-list li .item{ padding: 0 !important;}
+/*.single-item.groups */
+#buddypress .sidebar div.item-meta{ display: block !important; }
+/*.single-item.groups */
+#buddypress .sidebar span.activity{ display: inline-block !important; }
 
 
 @media only screen and (max-width: 766px){
