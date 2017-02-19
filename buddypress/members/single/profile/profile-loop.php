@@ -96,13 +96,32 @@ $user_id = $bp->displayed_user->id;
 								<?php if($bi < 1):?>
 									<table class=" field-avail">
 									<tr<?php bp_field_css_class(); ?>>
-									<td class="data"><?php bp_the_profile_field_value(); ?></td>
-								<td class="verify">
-								<?php
-								if($verify_user[0] == 'YES') echo "<img src='".get_stylesheet_directory_uri()."/images/user_verified.png' />";
-								else echo "<img src='".get_stylesheet_directory_uri()."/images/user_not_verified.png' />";
-								?>
-								</td>
+									<td class="data">
+									<?php
+										// check registration user from facebook login,if ok,then get field default from xProfile
+										$v_avail = xprofile_get_field_data('Volunteer Availability');
+										if( empty($v_avail)) {
+											global $wpdb;
+											$table = $wpdb->prefix."bp_xprofile_fields";
+											$option = $wpdb->get_results( $wpdb->prepare(
+												"SELECT name
+												FROM {$table}
+												WHERE group_id = %d
+												    AND parent_id = %d
+												    AND is_default_option = %d",
+												1,2,1
+											) );
+											echo "<p><a href='#'>".$option[0]->name."</a>";
+										}else{	bp_the_profile_field_value(); }
+									?>
+									</td>
+									<td class="verify">
+									<?php
+
+									if($verify_user[0] == 'YES') echo "<img src='".get_stylesheet_directory_uri()."/images/user_verified.png' />";
+									else echo "<img src='".get_stylesheet_directory_uri()."/images/user_not_verified.png' />";
+									?>
+									</td>
 									</tr>
 									</table>
 								<?php endif;?>
