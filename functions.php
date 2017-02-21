@@ -1221,6 +1221,23 @@ function alex_kleo_bp_group_title() {
 /* for work with bp group revies on header group */
 
 
+add_action('wp_footer',"group_pages_scroll_to_anchor");
+function group_pages_scroll_to_anchor(){
+	if(bp_has_groups()) {
+		// echo '===alex-gr===';
+		?>
+		<script type="text/javascript">
+	    jQuery(document).ready(function() {
+	    	var scroll = (jQuery('#item-nav').offset().top)-110;
+	    	jQuery(document.body).scrollTop(scroll);
+	    	// console.log(scroll);
+	    });
+		</script>
+		<?
+	}
+}
+
+
 /* ************ DW actions ************ */
 
 add_filter('bp_get_send_public_message_button', '__return_false');
