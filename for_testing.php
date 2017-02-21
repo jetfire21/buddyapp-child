@@ -219,3 +219,25 @@ function alex_test_1(){
 
 
 INSERT INTO `wp8k_posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES (NULL, '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'http://instagram.com0', 'Instagram', '', 'publish', 'open', 'open', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', '110', '', '0', 'alex_gfilds', '', '0')
+
+
+add_action('wp_footer',"group_pages_scroll_to_anchor");
+function group_pages_scroll_to_anchor(){
+	// echo '===alex-gr===';
+	echo bp_get_groups_slug();
+	var_dump( bp_current_component() );
+	var_dump( bp_is_groups_component() );
+	// if(bp_is_group_home()) {
+	// if page related group
+	if( bp_is_groups_component()) {
+		?>
+		<script type="text/javascript">
+	    jQuery(document).ready(function() {
+	    	var scroll = (jQuery('#item-nav').offset().top)-110;
+	    	jQuery(document.body).scrollTop(scroll);
+	    	// console.log(scroll);
+	    });
+		</script>
+		<?
+	}
+}

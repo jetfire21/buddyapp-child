@@ -1223,14 +1223,16 @@ function alex_kleo_bp_group_title() {
 
 add_action('wp_footer',"group_pages_scroll_to_anchor");
 function group_pages_scroll_to_anchor(){
-	if(bp_has_groups()) {
-		// echo '===alex-gr===';
+
+	// if page related group
+	if( bp_is_groups_component()) {
 		?>
 		<script type="text/javascript">
 	    jQuery(document).ready(function() {
 	    	var scroll = (jQuery('#item-nav').offset().top)-110;
 	    	jQuery(document.body).scrollTop(scroll);
 	    	// console.log(scroll);
+
 	    });
 		</script>
 		<?
