@@ -381,19 +381,15 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 .register .alex-simple-form { overflow: hidden;}
 .register .alex-simple-form .fancy-checkbox{ display: none;}
 .register .alex-simple-form *{ color: #00c5af !important;}
-/*.register .alex-simple-form .login-input-wrapper{ border-bottom: 1px solid #f6f0f0; }*/
-/*.register .alex-simple-form .login-input-wrapper:hover{ border-bottom: none; }*/
 .register .alex-simple-form button{ color:#fff !important; }
 .register .alex-simple-form .login-form-wrapper{
-     /*padding: 0 !important; padding-right: 40px !important;*/
      padding-top: 10px !important; padding-bottom: 30px !important;
 }
 .register .alex-simple-form .kleo-login-wrap{ margin:0 auto !important;}
-/*.register .alex-simple-form .has_account{ margin-top:40%; display:block; float: left; width: 50%; text-align: right;}*/
+.register #buddypress .alex-simple-form .kleo-form-signin input {  	background-color: rgba(0, 0, 0, 0.25) !important; }
 @media only screen and (min-width: 768px){
   .register .alex-simple-form .kleo-login-wrap {
     width:50%;
-   /*float:right;*/
  }
 }
 
