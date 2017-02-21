@@ -68,7 +68,8 @@ License URI: license.txt
 #alex_tl_grp_id img,#alex_groups_user img{height: 30px; border-radius: 50%;}
 #alex_tl_grp_id span,#alex_groups_user span{padding-left: 6px;}
 #alex_groups_user{     margin: 0 20px 13px 0; }
-#alex_groups_user a{ color:#656565 !important;}
+/*#alex_groups_user a{ color:#656565 !important;}*/
+#alex_groups_user a{ color:#656565;}
 
 /* add backgruound for fields */
 #buddypress .standard-form textarea, #buddypress .standard-form input[type=text], #buddypress .standard-form input[type=color], #buddypress .standard-form input[type=date], #buddypress .standard-form input[type=datetime], #buddypress .standard-form input[type=datetime-local], #buddypress .standard-form input[type=email], #buddypress .standard-form input[type=month], #buddypress .standard-form input[type=number], #buddypress .standard-form input[type=range], #buddypress .standard-form input[type=search], #buddypress .standard-form input[type=tel], #buddypress .standard-form input[type=time], #buddypress .standard-form input[type=url], #buddypress .standard-form input[type=week], #buddypress .standard-form select, #buddypress .standard-form input[type=password], #buddypress .dir-search input[type=search], #buddypress .dir-search input[type=text], #buddypress .groups-members-search input[type=search], #buddypress .groups-members-search input[type=text],    
@@ -348,7 +349,8 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 /* **custom member details** */
 #buddypress .profile .bp-widget .field-name {font-size: 18px; color: #00796b; text-transform: uppercase;}
 #buddypress .profile .bp-widget a { color:#656565;}
-#buddypress .profile .bp-widget a:hover, #buddypress .profile .bp-widget a:visited { color:#ff2a5b;}
+/*#buddypress .profile .bp-widget a:hover, #buddypress .profile .bp-widget a:visited { color:#ff2a5b;}*/
+#buddypress .profile .bp-widget a:hover { color:#ff2a5b !important;}
 #buddypress .profile table tr { background: #ccc;}
 #buddypress .profile table td p { font-size: 20px !important; text-align: center;}
 /*#buddypress .profile table.field-avail{border: 3px solid #ccc; width:80%;}*/

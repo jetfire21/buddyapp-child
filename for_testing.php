@@ -241,3 +241,70 @@ function group_pages_scroll_to_anchor(){
 		<?
 	}
 }
+
+add_action('wp_footer',"highlight_group_interest_links_on_profile_member");
+function highlight_group_interest_links_on_profile_member(){
+	echo '===alex-gr===';
+		?>
+		<script type="text/javascript">
+	    jQuery(document).ready(function(e) {
+	    	e.preventDefault();
+	    	var link = jQuery(".profile .bp-widget a");
+	    	console.log(link.text());
+	    });
+		</script>
+}
+
+
+<!-- ------- -->
+
+add_action('wp_footer',"highlight_group_interest_links_on_profile_member");
+function highlight_group_interest_links_on_profile_member(){
+	// echo '===alex-gr===';
+		?>
+		<script type="text/javascript">
+	    jQuery(document).ready(function() {
+
+	    	// console.log(document.cookie);
+	    	var link = jQuery(".profile .bp-widget a");
+	    	// var link = jQuery("a");
+
+			// возвращает cookie с именем name, если есть, если нет, то undefined
+			function getCookie(name) {
+			  var matches = document.cookie.match(new RegExp(
+			    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+			  ));
+			  return matches ? decodeURIComponent(matches[1]) : undefined;
+			}
+
+			link.each(function( i,item) {
+				var cur_link = jQuery(this).text();
+				if( getCookie( cur_link ) == 1) { jQuery(this).css({"color":"#ca0532"}); }
+				// console.log(i+"- cur link= "+cur_link);
+				// console.log("cookie = "+getCookie( "and" ) );
+				// console.log("cookie = "+getCookie( jQuery(this).text() ) );
+				// console.log("item = "+item );
+			});
+
+	    	jQuery(link).click(function(e){
+	    		// e.preventDefault();
+	    		var cur_link = jQuery(this);
+	    		// console.log(cur_link.text());
+				// var date = new Date(new Date().getTime() + 60 * 10000);
+				// document.cookie = cur_link.text()+"=1; path=/; expires=" + date.toUTCString();
+
+				// time no set,to delete cookie if close browser
+				document.cookie = cur_link.text()+"=1; path=/;";
+				// console.log( getCookie(cur_link.text()) );
+				// link.each(function( index ) {
+				// 	if( getCookie(cur_link.text() ) == 1) { cur_link.css({"color":"blue"}); }
+				// });
+				// if( getCookie(cur_link.text() ) == 1) { cur_link.css({"color":"#ca0532"}); }
+	    	});
+
+	    	window.onbeforeunload = function(){jQuery.cookie('enter', null);}
+
+	    });
+		</script>
+		<?php
+}

@@ -1239,6 +1239,39 @@ function group_pages_scroll_to_anchor(){
 	}
 }
 
+add_action('wp_footer',"highlight_group_interest_links_on_profile_member");
+function highlight_group_interest_links_on_profile_member(){
+	// echo '===alex-gr===';
+		?>
+		<script type="text/javascript">
+	    jQuery(document).ready(function() {
+
+	    	var link = jQuery(".profile .bp-widget a");
+
+			// возвращает cookie с именем name, если есть, если нет, то undefined
+			function getCookie(name) {
+			  var matches = document.cookie.match(new RegExp(
+			    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+			  ));
+			  return matches ? decodeURIComponent(matches[1]) : undefined;
+			}
+
+			link.each(function( i,item) {
+				var cur_link = jQuery(this).text();
+				if( getCookie( cur_link ) == 1) { jQuery(this).css({"color":"#ca0532"}); }
+			});
+
+	    	jQuery(link).click(function(e){
+	    		// e.preventDefault();
+	    		var cur_link = jQuery(this);
+				// time no set,to delete cookie if close browser
+				document.cookie = cur_link.text()+"=1; path=/;";
+	    	});
+	    });
+		</script>
+		<?php
+}
+
 
 /* ************ DW actions ************ */
 
