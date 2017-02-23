@@ -308,3 +308,108 @@ function highlight_group_interest_links_on_profile_member(){
 		</script>
 		<?php
 }
+
+
+############
+
+/* ********** Load modules ******** */
+
+$kleo_modules = array(
+    'new_facebook-login.php'
+);
+
+$kleo_modules = apply_filters( 'kleo_modules', $kleo_modules );
+// var_dump($kleo_modules);
+// var_dump(KLEO_LIB_DIR);
+// var_dump(THEME_DIR);
+// echo trailingslashit(get_stylesheet_directory_uri());
+// /* Sets the path to the theme library folder. */
+// define( 'KLEO_LIB_DIR', trailingslashit( THEME_DIR ) . 'lib' );
+// get absolute path /home/jetfire/www/dugoodr.dev/wp-content/themes/buddyapp
+ $theme_url = get_template_directory()."-child/";
+ // /home/jetfire/www/dugoodr.dev/wp-content/themes/buddyapp/kleo-framework/lib/function-core.php
+ include_once get_template_directory()."/kleo-framework/lib/function-core.php";
+// exit;
+
+foreach ( $kleo_modules as $module ) {
+    $file_path = $theme_url. 'lib/modules/' . $module;
+    include_once $file_path;
+}
+
+/* ********** Load modules ******** */
+
+
+        function fb_intialize(FB_response, token){
+            FB.api( '/me', 'GET', {
+                    fields : 'id,email,verified,name,cover,age_range,link,locale,picture,gender,first_name',
+                    // fields : 'id,email,verified,name',
+                    access_token : token
+                },
+                function(FB_userdata){
+                    console.log("====alex data=====");
+                    console.log("====user data=====");
+                    console.log(FB_userdata);
+                    console.log(FB_response);
+
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: fbAjaxUrl,
+                        data: {"action": "fb_intialize", "FB_userdata": FB_userdata, "FB_response": FB_response},
+                        success: function(user){
+                            
+                            console.log("========user ");
+                            console.log(user);
+
+                            if( user.error ) {
+                                alert( user.error );
+                            }
+                            // else if( user.loggedin ) {
+                            //     jQuery('.kleo-login-result').html(user.message);
+                            //     if( user.type === 'login' ) {
+                            //         if(window.location.href.indexOf("wp-login.php") > -1) {
+                            //             window.location = user.url;
+                            //         } else if (user.redirectType == 'reload') {
+                            //             window.location.reload();
+                            //         } else {
+                            //             window.location = user.url;
+                            //         }
+                            //     }
+                            //     else if( user.type === 'register' ) {
+                            //         window.location = user.url;
+                            //     }
+                            // }
+                        }
+                    });
+                }
+            );
+        }
+
+
+     #############
+
+
+            // alex
+    $FB_userdata = $_REQUEST['FB_userdata'];
+    echo "<h1>777_test</h1>";
+    print_r($FB_userdata);
+    echo "============";
+    $new_fb_data = array();
+    echo $new_fb_data["cover"] = $FB_userdata['cover']['source'];
+    echo $new_fb_data["name"] = $FB_userdata['name'];
+    echo "\r\n============";
+    $ser_fb_data = serialize($new_fb_data);
+    var_dump($ser_fb_data);
+    echo "\r\n============";
+    $b = unserialize($ser_fb_data);
+    print_r($b);
+    echo "\r\n============";
+
+    global $wpdb;
+    $wpdb->insert(
+        $wpdb->prefix."usermeta",
+        array( 'user_id' => 7777, 'meta_key'=>'_afbdata', 'meta_value'=>$ser_fb_data),
+        array( '%d','%s','%s' )
+    );
+
+    exit;
+    // alex

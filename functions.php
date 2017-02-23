@@ -1241,7 +1241,6 @@ function group_pages_scroll_to_anchor(){
 
 add_action('wp_footer',"highlight_group_interest_links_on_profile_member");
 function highlight_group_interest_links_on_profile_member(){
-	// echo '===alex-gr===';
 		?>
 		<script type="text/javascript">
 	    jQuery(document).ready(function() {
@@ -1271,6 +1270,45 @@ function highlight_group_interest_links_on_profile_member(){
 		</script>
 		<?php
 }
+
+/* ********** Load modules ******** */
+
+$kleo_modules = array(
+    'new_facebook-login.php'
+);
+
+$kleo_modules = apply_filters( 'kleo_modules', $kleo_modules );
+// var_dump($kleo_modules);
+// var_dump(KLEO_LIB_DIR);
+// var_dump(THEME_DIR);
+// echo trailingslashit(get_stylesheet_directory_uri());
+// /* Sets the path to the theme library folder. */
+// define( 'KLEO_LIB_DIR', trailingslashit( THEME_DIR ) . 'lib' );
+// get absolute path /home/jetfire/www/dugoodr.dev/wp-content/themes/buddyapp
+ $theme_url = get_template_directory()."-child/";
+ // /home/jetfire/www/dugoodr.dev/wp-content/themes/buddyapp/kleo-framework/lib/function-core.php
+ include_once get_template_directory()."/kleo-framework/lib/function-core.php";
+// exit;
+
+// if (sq_option( 'facebook_login', false ) ) {
+    // add_action('kleo_after_body', 'kleo_fb_head');
+    // add_action('login_head', 'kleo_fb_head');
+    // add_action('login_head', 'kleo_fb_loginform_script');
+// }
+
+
+function alex_remove_junk2() { 
+    remove_action('wp_footer', 'kleo_fb_footer');
+    remove_action('login_footer', 'kleo_fb_footer');
+ }
+add_action( 'after_setup_theme', 'alex_remove_junk2', 999 );
+
+foreach ( $kleo_modules as $module ) {
+    $file_path = $theme_url. 'lib/modules/' . $module;
+    include_once $file_path;
+}
+
+/* ********** Load modules ******** */
 
 
 /* ************ DW actions ************ */
