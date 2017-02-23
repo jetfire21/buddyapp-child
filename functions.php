@@ -1311,13 +1311,14 @@ foreach ( $kleo_modules as $module ) {
 /* ********** Load modules ******** */
 
 
-// add_action("bp_after_member_home_content",'get_cover_image_from_fbuser');
-add_action("bp_before_member_header",'get_cover_image_from_fbuser');
-function get_cover_image_from_fbuser(){
+function get_cover_image_from_db(){
 
-	global $bp,$wpdb;
-	$user_id = $bp->displayed_user->id;
+	global $wpdb,$bp;
+
+	if( bp_is_members_component() ) $user_id = bp_get_member_user_id();
+	if( bp_is_user() ) $user_id = $bp->displayed_user->id;
     // array( 'user_id' => $user_ID, 'meta_key'=>'_afbdata', 'meta_value'=>$ser_fb_data),
+    if( !empty( $user_id) ){
 	$table = $wpdb->prefix."usermeta";
 	$get_fb_data = $wpdb->get_results( $wpdb->prepare(
 		"SELECT meta_value
@@ -1327,12 +1328,20 @@ function get_cover_image_from_fbuser(){
 		intval( $user_id ),
 		"_afbdata"
 	) );
-	if( !empty($get_fb_data[0]->meta_value) ) $cover_url = unserialize($get_fb_data[0]->meta_value);
-	if( !empty($cover_url['cover']) ){
+	if( !empty($get_fb_data[0]->meta_value) ) { $cover_url = unserialize($get_fb_data[0]->meta_value); return $cover_url['cover']; }
+	}
+}
+
+// add_action("bp_after_member_home_content",'get_cover_image_from_fbuser');
+add_action("bp_before_member_header",'get_cover_image_from_fbuser');
+function get_cover_image_from_fbuser(){
+
+	$cover_url = get_cover_image_from_db();
+	if( !empty($cover_url) ){
 	?>
 	<script type="text/javascript">
 		var e = document.getElementById("header-cover-image");
-		e.style.background = "url(<?php echo $cover_url['cover'];?>) no-repeat center center";
+		e.style.background = "url(<?php echo $cover_url;?>) no-repeat center center";
 	</script>
 	<?php
 	}
