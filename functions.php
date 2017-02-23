@@ -1311,6 +1311,34 @@ foreach ( $kleo_modules as $module ) {
 /* ********** Load modules ******** */
 
 
+// add_action("bp_after_member_home_content",'get_cover_image_from_fbuser');
+add_action("bp_before_member_header",'get_cover_image_from_fbuser');
+function get_cover_image_from_fbuser(){
+
+	global $bp,$wpdb;
+	$user_id = $bp->displayed_user->id;
+    // array( 'user_id' => $user_ID, 'meta_key'=>'_afbdata', 'meta_value'=>$ser_fb_data),
+	$table = $wpdb->prefix."usermeta";
+	$get_fb_data = $wpdb->get_results( $wpdb->prepare(
+		"SELECT meta_value
+		FROM {$table}
+		WHERE user_id = %d
+		    AND meta_key = %s",
+		intval( $user_id ),
+		"_afbdata"
+	) );
+	if( !empty($get_fb_data[0]->meta_value) ) $cover_url = unserialize($get_fb_data[0]->meta_value);
+	if( !empty($cover_url['cover']) ){
+	?>
+	<script type="text/javascript">
+		var e = document.getElementById("header-cover-image");
+		e.style.background = "url(<?php echo $cover_url['cover'];?>) no-repeat center center";
+	</script>
+	<?php
+	}
+}
+
+
 /* ************ DW actions ************ */
 
 add_filter('bp_get_send_public_message_button', '__return_false');

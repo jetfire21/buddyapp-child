@@ -396,3 +396,5 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 }
 
 /* *****for login form on register page******* */
+
+#header-cover-image{ background-size: cover !important; }

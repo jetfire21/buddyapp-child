@@ -350,6 +350,7 @@ function kleo_fb_intialize1(){
             $ser_fb_data = serialize($new_fb_data);
 
             global $wpdb;
+            // add fields for fb user (cover,name and etc)
             $wpdb->insert(
                 $wpdb->prefix."usermeta",
                 array( 'user_id' => $user_ID, 'meta_key'=>'_afbdata', 'meta_value'=>$ser_fb_data),

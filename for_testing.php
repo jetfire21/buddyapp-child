@@ -413,3 +413,61 @@ foreach ( $kleo_modules as $module ) {
 
     exit;
     // alex
+
+#########
+
+// add_action("wp_head",'alex_t1',1);
+// add_action("bp_before_directory_members_page",'alex_t1',1);
+// add_action("bp_after_member_home_content",'get_cover_image_from_fbuser');
+add_action("bp_before_member_header",'get_cover_image_from_fbuser');
+function get_cover_image_from_fbuser(){
+	echo "is_page ==".is_page('new_members');
+	echo "is_page ==".is_page('members');
+	var_dump( bp_current_component() );
+	var_dump( bp_is_profile_component() );
+	echo"ddd";
+	// 1 - only one profile user page
+	// echo "-- ".bp_is_user_profile();
+	echo "--bp_is_members_directory() ".bp_is_members_directory();
+	echo "\r\nbp_is_profile_component() ==".bp_is_profile_component();
+	echo "\r\nbp_is_members_component() ==".bp_is_members_component();
+	echo "\r\nbp_is_root_component('members') ==".bp_is_root_component('members');
+
+	global $bp,$wpdb;
+	// get profile slug ( example: profile )
+	// echo "slug ".$bp->profile->slug;
+	// echo "s ".bp_get_profile_slug();
+	// echo "bp_is_directory() =".bp_is_directory();
+	echo "\r\n=====777user_id===".$user_id = $bp->displayed_user->id;
+    // array( 'user_id' => $user_ID, 'meta_key'=>'_afbdata', 'meta_value'=>$ser_fb_data),
+	$table = $wpdb->prefix."usermeta";
+	$get_fb_data = $wpdb->get_results( $wpdb->prepare(
+		"SELECT meta_value
+		FROM {$table}
+		WHERE user_id = %d
+		    AND meta_key = %s",
+		intval( $user_id ),
+		"_afbdata"
+	) );
+	// alex_debug(1,1,"fb",$get_fb_data);
+	if( !empty($get_fb_data[0]->meta_value) ) $cover_url = unserialize($get_fb_data[0]->meta_value);
+	// alex_debug(1,1,"fb",$cover_url);
+	// echo "<b>last query:</b> ".$wpdb->last_query."<br>";
+	// echo "<b>last result:</b> "; print_r($wpdb->last_result);
+	// echo "<br><b>last error:</b> "; print_r($wpdb->last_error);
+	if( !empty($cover_url['cover']) ){
+	?>
+	<script type="text/javascript">
+	// jQuery( document ).ready(function() {
+		// document.write("<style>body.buddypress div#item-header #header-cover-image {background-image: url(<?php echo $cover_url['cover'];?>); background-repeat: no-repeat; background-size: cover; background-position:center center;}</style>");
+		jQuery("body.buddypress div#item-header #header-cover-image").css({"background-image":"url(<?php echo $cover_url['cover'];?>)","background-repeat":"no-repeat","background-size":"cover","background-position":"center center"});
+		// jQuery("body.buddypress div#item-header #header-cover-image").hide();
+		var e = document.getElementById("header-cover-image");
+		console.log(e);
+		// e.style.background = "yellow";
+		e.style.background = "url(<?php echo $cover_url['cover'];?>) no-repeat center center";
+	// });
+	</script>
+	<?php
+	}
+}
