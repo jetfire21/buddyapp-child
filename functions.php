@@ -1221,23 +1221,45 @@ function alex_kleo_bp_group_title() {
 /* for work with bp group revies on header group */
 
 
-add_action('wp_footer',"group_pages_scroll_to_anchor");
+add_action('wp_footer',"group_pages_scroll_to_anchor",999);
 function group_pages_scroll_to_anchor(){
-
+	echo $d = "<div id='alex-s'>dddddddd</div>";
+	var_dump(bp_is_groups_component());
 	// if page related group
-	if( bp_is_groups_component()) {
+	if( bp_is_groups_component() && !bp_is_user() ) {
 		?>
 		<script type="text/javascript">
 	    jQuery(document).ready(function() {
 	    	var scroll = (jQuery('#item-nav').offset().top)-110;
-	    	jQuery(document.body).scrollTop(scroll);
-	    	// console.log(scroll);
-
+	    	// jQuery(document.body).scrollTop(scroll);
+	    	setTimeout(function(){ 
+		    	jQuery(document.body).scrollTop(scroll);
+	    	  	// window.scrollTo(0,1000);
+	    	}, 50);
+	    	console.log("width groups: "+jQuery(window).width());
+	    });
+		</script>
+		<?
+	}
+	if( bp_is_user() ) {
+		?>
+		<script type="text/javascript">
+	    jQuery(document).ready(function() {
+	    	if( jQuery(window).width() < 768 ){
+		    	var scroll = (jQuery('#item-nav').offset().top)-110;
+		    	// jQuery(document.body).scrollTop(scroll);
+		    	setTimeout(function(){ 
+			    	jQuery(document.body).scrollTop(scroll);
+		    	  	// window.scrollTo(0,1000);
+		    	}, 50);
+	    	}
+	    	console.log("width members: "+jQuery(window).width());
 	    });
 		</script>
 		<?
 	}
 }
+
 
 add_action('wp_footer',"highlight_group_interest_links_on_profile_member");
 function highlight_group_interest_links_on_profile_member(){

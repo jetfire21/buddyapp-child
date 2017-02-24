@@ -471,3 +471,33 @@ function get_cover_image_from_fbuser(){
 	<?php
 	}
 }
+
+#############
+
+
+
+add_action('wp_footer',"group_pages_scroll_to_anchor",999);
+function group_pages_scroll_to_anchor(){
+	echo $d = "<div id='alex-s'>dddddddd</div>";
+	var_dump(bp_is_groups_component());
+	// if page related group
+	if( bp_is_groups_component() ||  bp_is_user() ) {
+		?>
+		<script type="text/javascript">
+	    jQuery(document).ready(function() {
+	    	var scroll = (jQuery('#item-nav').offset().top)-110;
+	    	// jQuery(document.body).scrollTop(scroll);
+	    	setTimeout(function(){ 
+		    	// var scroll = (jQuery('#item-nav').offset().top)-110;
+		    	jQuery(document.body).scrollTop(scroll);
+	    		// jQuery("#alex-s").scroll(); 
+	    	  	// window.scrollTo(0,1000);
+	    	}, 50);
+	    	// console.log(jQuery(document.body).height());
+	    	console.log(scroll);
+	    	console.log(jQuery(window).width());
+	    });
+		</script>
+		<?
+	}
+}

@@ -398,3 +398,6 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 /* *****for login form on register page******* */
 
 #header-cover-image{ background-size: cover !important; }
+/*#user-reviews i:before, .icon-panorama-fisheye:before{  content: "\e902"; }
+#user-invite-anyone i:before{ content: "\e70e"; }*/
+/*#wpadminbar, #header,#item-header-wrap{display:none !important;}*/
