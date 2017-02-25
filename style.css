@@ -354,10 +354,24 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 #buddypress .profile table tr { background: #ccc;}
 #buddypress .profile table td p { font-size: 20px !important; text-align: center;}
 /*#buddypress .profile table.field-avail{border: 3px solid #ccc; width:80%;}*/
-#buddypress .profile table.field-avail{border:0 !important; background: transparent;}
-#buddypress .profile table.field-avail td.data{border: 3px solid #ccc; background: #fff; padding: 0;}
-#buddypress .profile table.field-avail td.data p{ line-height: 1; }
-#buddypress .profile table.field-avail td.verify{ border: none !important; padding: 0; width:65px; padding-left: 5px;}
+.wrap_field-avail{ position: relative; }
+#buddypress .profile table.field-avail{border:0 !important; background: transparent; }
+#buddypress .profile table.field-avail a{color: #656565 !important; font-size: 15px !important;}
+#buddypress .profile table.field-avail td.data{border: 3px solid #ccc; background: #fff; padding: 0; vertical-align: top;}
+#buddypress .profile table.field-avail td.data p{ line-height: 1; padding-top: 10px;}
+#buddypress .profile table.field-avail td.verify{ border: none !important; padding: 0; width:65px; padding-left: 5px; cursor: pointer;}
+/*#buddypress .profile table.field-avail td.verify span{ display: none;}*/
+/*#buddypress .profile table.field-avail td.verify:hover span{ */
+.wrap_field-avail .sec_mouseover{
+    display: none;
+    position: absolute;
+    top: -28px;
+    font-size: 11px;
+    right: 0;
+    border: 1px solid #dcbd60;
+    padding: 3px 6px;
+  }
+}
 #buddypress .profile table.field-avail a{font-size: 14px;}
 #buddypress .profile table.field-avail tr{ background: none; }
 #buddypress .profile table.field-avail tr td{ padding-top: 15px; }
@@ -371,6 +385,15 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
   font-weight: 600;
 }
 #buddypress .profile table td p { line-height: 1.2; }
+#buddypress .profile table .data span {    
+    background: #ccc;
+    text-transform: uppercase;
+    color: #fff;
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+  }
 
 /* **custom member details** */
 

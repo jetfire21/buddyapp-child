@@ -88,15 +88,16 @@ $user_id = $bp->displayed_user->id;
 							
 							<?php if($prof_name == "mission"):?>	
 								<table class="profile-fields mission">
-								<tr<?php bp_field_css_class(); ?>>
 								<td class="data"><?php bp_the_profile_field_value(); ?></td>
 								</tr>
 								</table>
 							<?php elseif($prof_name == "basic info"):?>
 								<?php if($bi < 1):?>
+									<div class="wrap_field-avail">
 									<table class=" field-avail">
 									<tr<?php bp_field_css_class(); ?>>
 									<td class="data">
+									<span>Availability</span>
 									<?php
 										// check registration user from facebook login,if ok,then get field default from xProfile
 										$v_avail = xprofile_get_field_data('Volunteer Availability');
@@ -118,12 +119,30 @@ $user_id = $bp->displayed_user->id;
 									<td class="verify">
 									<?php
 
-									if($verify_user[0] == 'YES') echo "<img src='".get_stylesheet_directory_uri()."/images/user_verified.png' />";
-									else echo "<img src='".get_stylesheet_directory_uri()."/images/user_not_verified.png' />";
+									if($verify_user[0] == 'YES') {
+										echo "<img src='".get_stylesheet_directory_uri()."/images/user_verified.png' alt='Security check verified'/>";
+										$sec_mouseover = "Security Check Verified";
+									}else{
+									 echo "<img src='".get_stylesheet_directory_uri()."/images/user_not_verified.png' alt='Security check verified'/>";
+									 	$sec_mouseover = "Security Check Non-Verified";
+									}
 									?>
 									</td>
 									</tr>
 									</table>
+									<!-- <span>Security Check Verified</span> -->
+									<span class="sec_mouseover"><?php echo $sec_mouseover;?></span>
+									</div>
+									<script type="text/javascript">
+									jQuery(document).ready(function() { 
+										jQuery( ".field-avail td.verify" ).mouseover(function() { 
+											jQuery(".wrap_field-avail .sec_mouseover").css({"display":"block"});
+										});
+										jQuery( ".field-avail td.verify" ).mouseout(function() { 
+											jQuery(".wrap_field-avail .sec_mouseover").css({"display":"none"});
+										});
+									});
+									</script>
 								<?php endif;?>
 								<?php $bi++; ?>								
 							<?php elseif($prof_name=="details"):?>
