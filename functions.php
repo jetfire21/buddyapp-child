@@ -542,6 +542,34 @@ function alex_nothome_search_form( $atts = array(), $content = null ) {
 	return $output;
 }
 
+add_action("wp_footer","alex_redirect_context_for_searchform");
+function alex_redirect_context_for_searchform(){
+	$site = "http://".$_SERVER['HTTP_HOST'];
+	?>
+		<script type="text/javascript">
+
+	    jQuery(document).ready(function() {
+	    	jQuery(".header-search-button").on("click",function(e){
+	    		e.preventDefault();
+	    		var search_type = jQuery('.kleo_ajax_results').html();
+			  	var has_groups = search_type.search(/kleo-ajax-type-groups/i);
+			  	var has_members = search_type.search(/kleo-ajax-type-members/i);
+			  	var serach_text = jQuery("#main-search").val();
+			  	var host = '<?php echo $site;?>';
+			  	// only if exist groups results
+			  	if( has_groups >= 0 && has_members == "-1") {
+			  		location.href=host+"/causes/?s="+serach_text;
+					// http://dugoodr.dev/causes/?s=ottawa			  
+				}else{
+					location.href=host+"/members/?s="+serach_text;
+				}
+	    	});
+
+	    });
+	    </script>
+	<?php
+}
+
 add_action('bp_before_register_page' ,"alex_add_icon_close_for_register_page");
 function alex_add_icon_close_for_register_page(){
 	echo '<div class="wrap-reg-close"><a class="reg-close" href="/">×</a></div>';
@@ -1223,8 +1251,8 @@ function alex_kleo_bp_group_title() {
 
 add_action('wp_footer',"group_pages_scroll_to_anchor",999);
 function group_pages_scroll_to_anchor(){
-	echo $d = "<div id='alex-s'>dddddddd</div>";
-	var_dump(bp_is_groups_component());
+	// echo $d = "<div id='alex-s'>dddddddd</div>";
+	// var_dump(bp_is_groups_component());
 	// if page related group
 	if( bp_is_groups_component() && !bp_is_user() ) {
 		?>
@@ -1232,11 +1260,9 @@ function group_pages_scroll_to_anchor(){
 	    jQuery(document).ready(function() {
 	    	var scroll = (jQuery('#item-nav').offset().top)-110;
 	    	// jQuery(document.body).scrollTop(scroll);
-	    	setTimeout(function(){ 
 		    	jQuery(document.body).scrollTop(scroll);
 	    	  	// window.scrollTo(0,1000);
-	    	}, 50);
-	    	console.log("width groups: "+jQuery(window).width());
+	    	// console.log("width groups: "+jQuery(window).width());
 	    });
 		</script>
 		<?
@@ -1253,7 +1279,7 @@ function group_pages_scroll_to_anchor(){
 		    	  	// window.scrollTo(0,1000);
 		    	}, 50);
 	    	}
-	    	console.log("width members: "+jQuery(window).width());
+	    	// console.log("width members: "+jQuery(window).width());
 	    });
 		</script>
 		<?

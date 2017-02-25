@@ -501,3 +501,68 @@ function group_pages_scroll_to_anchor(){
 		<?
 	}
 }
+
+################
+
+// rev1 работает частично ( пропускает самое первое нажатие клавиши в поле поиска)
+// rev2 проверяем есть ли в результатах поиска группы или участники и при клике на кнопку search делаем перенаправление на нужную опцию
+// ( только не срабатывает когда пользователь слишком быстро введет слово для поиска,то есть когда не успевают показать ajax результаты)
+add_action("wp_footer","alex_redirect_context_for_searchform");
+function alex_redirect_context_for_searchform(){
+	// alex_debug(1,0,"s",is_front_page() );
+	?>
+		<script type="text/javascript">
+		console.log('test');
+
+	    jQuery(document).ready(function() {
+
+		  // var input = document.getElementById('main-search');
+		  // var search_type = jQuery('.kleo-ajax-part').html();
+		  // console.log(search_type);
+		  // input.oninput = function() {
+		  //   console.log(input.value);
+		  //   // kleo-ajax-part kleo-ajax-type-members
+		  //   // kleo-ajax-part kleo-ajax-type-groups
+		  //   // if(search_type.hasClass("kleo-ajax-type-groups")) console.log("res "+search_type.hasClass("kleo-ajax-type-groups"));
+		  // };
+
+	    	// jQuery(".kleo-search-form").on("keypress","#main-search",function(){
+	    	// // jQuery(".kleo-search-form").on("input","#main-search",function(){
+	    	// 	console.log('change');
+	    	// 	// console.log("input event= " +jQuery('.kleo-ajax-part').html()  );
+	    	// 	console.log("input event= " +jQuery(this).html()  );
+	    	// 	setTimeout(function() { console.log("kleo-ajax-part duration 1s\r\n" +jQuery('.kleo-ajax-part').html()  ); }, 700)
+
+	    	// });
+
+	    	jQuery(".header-search-button").on("click",function(e){
+	    		e.preventDefault();
+	    		var search_type = jQuery('.kleo_ajax_results').html();
+	    		console.log('submit click');	
+			  	// console.log("input event= \r\n" + search_type.html() +"\r\n" );  
+			  	console.log("input event= \r\n" + search_type +"\r\n" );  
+			  	console.log("input event= \r\n" + typeof search_type +"\r\n" );  
+			  	// console.log("input event= \r\n" + search_type +"\r\n" );  
+			  	// console.log(search_type.find(".kleo-ajax-type-groups").html() );	
+			  	var has_groups = search_type.search(/kleo-ajax-type-groups/i);
+			  	var has_members = search_type.search(/kleo-ajax-type-members/i);
+			  	console.log("has_g "+has_groups);	
+			  	console.log("has_m "+has_members);	
+			  	console.log('v '+jQuery("#main-search").val() );
+			  	console.log('t '+jQuery("#main-search").text() );
+			  	var serach_text = jQuery("#main-search").val();
+			  	if( has_groups >= 0 && has_members == "-1") {
+			  		console.log("only gr exist");
+			  		// console.log(jQuery(".kleo-search-form").attr("action");
+			  		location.href="http://dugoodr.dev/causes/?s="+serach_text;
+					// http://dugoodr.dev/causes/?s=ottawa			  
+				}else{
+					location.href="http://dugoodr.dev/members/?s="+serach_text;
+				}
+			  	// if( has_groups == "-1" && has_members >= 0) console.log("only memb exist");
+	    	});
+	    	
+	    });
+	    </script>
+	<?php
+}
