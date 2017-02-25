@@ -542,34 +542,6 @@ function alex_nothome_search_form( $atts = array(), $content = null ) {
 	return $output;
 }
 
-add_action("wp_footer","alex_redirect_context_for_searchform");
-function alex_redirect_context_for_searchform(){
-	$site = "http://".$_SERVER['HTTP_HOST'];
-	?>
-		<script type="text/javascript">
-
-	    jQuery(document).ready(function() {
-	    	jQuery(".header-search-button").on("click",function(e){
-	    		e.preventDefault();
-	    		var search_type = jQuery('.kleo_ajax_results').html();
-			  	var has_groups = search_type.search(/kleo-ajax-type-groups/i);
-			  	var has_members = search_type.search(/kleo-ajax-type-members/i);
-			  	var serach_text = jQuery("#main-search").val();
-			  	var host = '<?php echo $site;?>';
-			  	// only if exist groups results
-			  	if( has_groups >= 0 && has_members == "-1") {
-			  		location.href=host+"/causes/?s="+serach_text;
-					// http://dugoodr.dev/causes/?s=ottawa			  
-				}else{
-					location.href=host+"/members/?s="+serach_text;
-				}
-	    	});
-
-	    });
-	    </script>
-	<?php
-}
-
 add_action('bp_before_register_page' ,"alex_add_icon_close_for_register_page");
 function alex_add_icon_close_for_register_page(){
 	echo '<div class="wrap-reg-close"><a class="reg-close" href="/">×</a></div>';
