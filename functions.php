@@ -1379,3 +1379,22 @@ function remove_wp_adminbar_profile_link() {
 add_action( 'wp_before_admin_bar_render', 'remove_wp_adminbar_profile_link' );
 add_filter( 'bp_activity_can_favorite', '__return_false' );
 add_filter( 'bp_get_total_favorite_count_for_user', '__return_false' );
+
+/* **************** */
+
+function a_redirect_if_changed_group_page() {
+
+	global $bp;
+	$bp->members->slug; // выводит- members
+	// выводит например- new_members...это page_name  (если компонент ассоциировали с нестандартной страницей в http://dugoodr.dev/wp-admin/admin.php?page=bp-page-settings)
+	$root_slug = $bp->members->root_slug;
+	$uri = $_SERVER['REQUEST_URI'];  // /members/admin7/groups/
+	$has_members_slug = preg_match("/{$root_slug}/i", $uri);
+	$has_groups_slug = preg_match("/groups/i", $uri);
+
+	if($has_members_slug && $has_groups_slug) {
+		get_template_part("404");
+		exit;
+	}
+}
+add_action( 'wp_head', 'a_redirect_if_changed_group_page', 999 );

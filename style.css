@@ -1,4 +1,3 @@
-
 /*
 Theme Name:     BuddyApp Child
 Theme URI:
@@ -340,9 +339,12 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 /* **custom bp-users-reviews** */
 
 .bp-users-reviews-list img{ border-radius: 50%; }
-.bp-users-reviews-list .text{ font-style: normal !important; }
 .bp-users-reviews-list .author{ font-size: 11px; font-style: italic; }
-.bp-users-reviews-list .author a{ font-family: 'Montserrat'; font-size: 13px; color:#000; font-style: normal;}
+.bp-users-reviews-list .author a{ font-size: 13px; color:#000; font-style: normal;}
+.bp-users-reviews-list .review .author { padding: 35px; border-bottom: none; background-color: #fff;}
+.bp-users-reviews-list .review .details { border-bottom: 5px solid #fff;}
+.bp-users-reviews-list .review .details .rating .text { font-size: 12px;}
+.bp-user-reviews textarea {background-color: #edeee6 !important; }
 
 /* **custom bp-users-reviews** */
 
@@ -423,4 +425,5 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 #header-cover-image{ background-size: cover !important; }
 /*#user-reviews i:before, .icon-panorama-fisheye:before{  content: "\e902"; }
 #user-invite-anyone i:before{ content: "\e70e"; }*/
-/*#wpadminbar, #header,#item-header-wrap{display:none !important;}*/
+/*#wpadminbar, #header,*/
+/*#item-header-wrap{display:none !important;}*/

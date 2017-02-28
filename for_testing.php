@@ -596,3 +596,60 @@ function alex_redirect_context_for_searchform(){
 	    </script>
 	<?php
 }
+
+############
+
+add_action( 'wp_footer','alex_test1');
+function alex_test1(){
+	global $bp;
+	// получить slug группы, текущий компонент,текущий action и все созданные страницы pages
+	$slug = $bp->groups->slug;
+	$root_slug = $bp->groups->root_slug;
+	$current_component = $bp->current_component;
+	$current_action = $bp->current_action;
+	echo "PAGES "; print_r($bp->pages);
+	echo "<h1>=== 777 slug-{$slug} / root_slug-{$root_slug} / current_component-{$current_component}
+	/ current_action-{$current_action}</h1>";
+	// print_r($bp);
+
+}
+
+function bbg_change_profile_tab_order() {
+global $bp;
+
+// unset( $bp->bp_nav['groups'] );
+$bp->bp_nav['groups'] = false;
+}
+add_action( 'bp_setup_nav', 'bbg_change_profile_tab_order', 999 );
+
+function a_redirect_if_changed_group_page() {
+global $bp;
+
+	// $bp->pages->groups = false;
+	// $bp->groups = false; // не будет показыать группы
+
+	// print_r($bp);
+
+	$bp->members->slug; // выводит- members
+	// выводит например- new_members...это page_name  (если компонент ассоциировали с нестандартной страницей в http://dugoodr.dev/wp-admin/admin.php?page=bp-page-settings)
+	$root_slug = $bp->members->root_slug;
+	$uri = $_SERVER['REQUEST_URI'];  // /members/admin7/groups/
+	$has_members_slug = preg_match("/{$root_slug}/i", $uri);
+	$has_groups_slug = preg_match("/groups/i", $uri);
+
+	// var_dump($has_members_slug);
+	// var_dump($has_groups_slug);
+
+	if($has_members_slug && $has_groups_slug) {
+		// echo "is groups!";
+		get_template_part("404");
+		exit;
+	}
+
+	// сделать перенаправление на страницу 404.php,например если мы на странице http://dugoodr.dev/members/admin7/groups/
+	// if( bp_is_user_groups() ){
+	// 	get_template_part("404");
+	// 	exit;
+	// }
+}
+add_action( 'wp_head', 'a_redirect_if_changed_group_page', 999 );
