@@ -1397,4 +1397,4 @@ function a_redirect_if_changed_group_page() {
 		exit;
 	}
 }
-add_action( 'wp_head', 'a_redirect_if_changed_group_page', 999 );
+add_action( 'kleo_header', 'a_redirect_if_changed_group_page', 999 );

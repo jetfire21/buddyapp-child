@@ -694,7 +694,7 @@ h2.resp-accordion {
     background: #fff;
 }
 .s-bar .second-menu .kleo_ajax_results .ajax_search_content .search_title {
-    font-family: 'Montserrat';
+    /*font-family: 'Montserrat';*/
     color: #00796b;
 }
 .s-bar .second-menu .kleo_ajax_results h4 {
