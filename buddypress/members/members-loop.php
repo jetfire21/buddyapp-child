@@ -23,8 +23,6 @@ do_action( 'bp_before_members_loop' );
 
 ?>
 
-
-
 <?php if ( bp_get_current_member_type() ) : ?>
 	<p class="current-member-type"><?php bp_current_member_type_message() ?></p>
 <?php endif; ?>

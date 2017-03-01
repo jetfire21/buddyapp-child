@@ -23,7 +23,7 @@ global $bp;
 $user_id = $bp->displayed_user->id;
 $verify_user = xprofile_get_field_data('Active security check', $user_id);
 
-if($verify_user[0] == 'YES'){
+if($verify_user[0] == 'YES' && is_user_logged_in() ){
 
 	$sec_verify_desc = xprofile_get_field_data('Description', $user_id);
 	if( empty($sec_verify_desc) ){
@@ -32,7 +32,6 @@ if($verify_user[0] == 'YES'){
 		// default description under field
 		$sec_verify_desc = $sec_verify_desc->description;
 	}
-	// echo $sec_verify_desc;
 }
 
 ?>
@@ -133,8 +132,10 @@ if($verify_user[0] == 'YES'){
 									<?php
 
 									if($verify_user[0] == 'YES') {
-										$popup_s = "<a href='#security_desc' class='popup-modal'>";
-										$popup_e = "</a>";
+										if(is_user_logged_in() ) {
+											$popup_s = "<a href='#security_desc' class='popup-modal'>";
+											$popup_e = "</a>";
+										}
 										echo $popup_s."<img src='".get_stylesheet_directory_uri()."/images/user_verified.png' alt='Security check verified'/>".$popup_e;
 										$sec_mouseover = "Security Check Verified";
 									}else{
