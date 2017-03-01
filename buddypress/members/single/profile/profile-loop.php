@@ -21,7 +21,20 @@ $user_id_gr = bp_displayed_user_id();
 
 global $bp;
 $user_id = $bp->displayed_user->id;
- $verify_user = xprofile_get_field_data('Active security check', $user_id);
+$verify_user = xprofile_get_field_data('Active security check', $user_id);
+
+if($verify_user[0] == 'YES'){
+
+	$sec_verify_desc = xprofile_get_field_data('Description', $user_id);
+	if( empty($sec_verify_desc) ){
+		// tab Security field Description,wich id=44
+		$sec_verify_desc = xprofile_get_field(44, $user_id);
+		// default description under field
+		$sec_verify_desc = $sec_verify_desc->description;
+	}
+	// echo $sec_verify_desc;
+}
+
 ?>
 
 <?php if ( bp_has_profile() ) : ?>
@@ -120,7 +133,9 @@ $user_id = $bp->displayed_user->id;
 									<?php
 
 									if($verify_user[0] == 'YES') {
-										echo "<img src='".get_stylesheet_directory_uri()."/images/user_verified.png' alt='Security check verified'/>";
+										$popup_s = "<a href='#security_desc' class='popup-modal'>";
+										$popup_e = "</a>";
+										echo $popup_s."<img src='".get_stylesheet_directory_uri()."/images/user_verified.png' alt='Security check verified'/>".$popup_e;
 										$sec_mouseover = "Security Check Verified";
 									}else{
 									 echo "<img src='".get_stylesheet_directory_uri()."/images/user_not_verified.png' alt='Security check verified'/>";
@@ -266,6 +281,25 @@ $user_id = $bp->displayed_user->id;
 /** This action is documented in bp-templates/bp-legacy/buddypress/members/single/profile/profile-wp.php */
 do_action( 'bp_after_profile_loop_content' ); ?>
 
-
- 
  <!-- 4:05 -->
+
+<script type="text/javascript">
+ jQuery(document).ready(function(){   
+    jQuery('.popup-modal').magnificPopup({
+        type: 'inline',
+        preloader: false,
+        focus: '#username',
+        modal: true
+    });
+});
+ </script>
+
+<!-- <a href="#security_desc" class="popup-modal">click me!</a>-->
+<?php if( !empty($sec_verify_desc) ):?>
+	<div id="security_desc" class="white-popup-block mfp-hide">
+		<!-- <div> Demo text Demo text Demo text Demo text Demo text Demo text</div> -->
+		<div><?php echo $sec_verify_desc;?></div>
+	    <!-- <a class="popup-modal-dismiss" href="#">x</a> -->
+	    <a class="mfp-close" href="#">x</a>
+	</div>
+<?php endif;?>
