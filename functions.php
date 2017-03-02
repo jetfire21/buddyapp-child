@@ -1403,117 +1403,26 @@ add_action( 'kleo_header', 'a_redirect_if_changed_group_page', 999 );
 add_action("bp_after_members_loop","a_show_groups_search_result_on_members");
 function a_show_groups_search_result_on_members(){
 
-	global $wpdb,$bp;
-	$table = $wpdb->prefix."bp_groups_groupmeta";
-	$root_slug = $bp->groups->root_slug;
+	global $groups_template;
+	$search_string = esc_html($_GET['s']);
 
- 	$search_string = esc_html($_GET['s']);
+	// $groups = groups_get_groups(array('search_terms' => $search_string, 'per_page' => 100, 'populate_extras' => false));
+	// alex_debug(0,1,"all gr",$groups);
+	// echo "total gr=".$count_groups = $groups['total'];
+
+	// var_dump( bp_has_groups(bp_ajax_querystring( 'groups' )."&search_terms=".$search_string."&update_admin_cache=true&per_page=3" ) );
+	// alex_debug(0,1,"gr_temp", $groups_template); // work only call bp_has_groups
+
+	// echo 'grs_q='.$grs_query = bp_has_groups( bp_ajax_querystring( 'groups' )."&search_terms=".$search_string."&update_admin_cache=true&per_page=50" );
+	// var_dump( bp_has_groups("&search_terms=".$search_string."&per_page=2" ) );
+	// $groups_template->current_group = -1; // for some reason by default set 0,though in original set -1,shows the correct count of groups
+
+	// echo '<br><h3>начало цикла группы</h3>';	
+	// bp_get_template_part( 'groups/groups-loop-on-member-dir' );
+	// echo '<br><h3>конец цикла группы</h3>';
+
 	if( !empty($search_string) ){
-
-		// echo '<h3>this is test 888</h3>';
-		
-		// $context = "groups";
-		// $defaults = array(
-		// 	'numberposts' => 4,
-		// 	'posts_per_page' => 20,
-		// 	// 'post_type' => 'any',
-		// 	'post_type' => $context,
-		// 	'post_status' => 'publish',
-		// 	'post_password' => '',
-		// 	'suppress_filters' => false,
-		// 	's' => $search_string
-		// );
-
-		// $defaults =  apply_filters( 'kleo_ajax_query_args', $defaults);
-		// // print_r($defaults);
-
-		// $the_query = new WP_Query( $defaults );
-		// $posts = $the_query->get_posts();
-		// print_r($posts);
-
-		$groups = groups_get_groups(array('search_terms' => $search_string, 'per_page' => $defaults['numberposts'], 'populate_extras' => false));
-		// print_r($groups);
-		?>
-
-		<?php
-		if ( $groups['total'] != 0 ) {
-			?>
-			<?php 
-
-			// add_filter('bp_get_groups_pagination_count', 'add_text_to_content');
-			// function add_text_to_content($message, $from_num = 1, $to_num=10, $total=20){
-			// 	return $message;
-			// }
-			// echo apply_filters( 'bp_get_groups_pagination_count', false,1,10, 20 );
-
-			// echo bp_get_groups_pagination_count();
-			// 	function bp_get_groups_pagination_count_on_members_page() {
-
-			// 		$pag_page = 1;
-			// 		$pag_num = 20;
-			// 		$start_num = intval( ( $pag_page - 1 ) * $pag_num ) + 1;
-			// 		echo $from_num  = bp_core_number_format( $start_num );
-			// 		$to_num    = bp_core_number_format( ( $start_num + ( $pag_num - 1 ) > $groups['total'] ) ? $groups['total'] : $start_num + ( $pag_num - 1 ) );
-			// 		$total     = bp_core_number_format( $groups['total'] );
-
-			// 		if ( 1 == $groups['total'] ) {
-			// 			$message = __( 'Viewing 1 group', 'buddypress' );
-			// 		} else {
-			// 			$message = sprintf( _n( 'Viewing %1$s - %2$s of %3$s group', 'Viewing %1$s - %2$s of %3$s groups', $groups['total'], 'buddypress' ), $from_num, $to_num, $total );
-			// 		}
-			// 		return $message;
-			// 	}
-			// 	echo "new pag ".bp_get_groups_pagination_count_on_members_page();
-
-			?>
-
-		<ul id="groups-list" class="item-list">
-		<?php foreach ( (array) $groups['groups'] as $group ) :?>
-
-			<?php 
-			$group_rating = $wpdb->get_row($wpdb->prepare("SELECT meta_value FROM {$table} WHERE group_id = %d AND meta_key = %s",intval($group->id),"bpgr_rating")); 
-			$group_enable = $wpdb->get_row($wpdb->prepare("SELECT meta_value FROM {$table} WHERE group_id = %d AND meta_key = %s",intval($group->id),"bpgr_is_reviewable")); 
-			$members = groups_get_group_members($group->id);
-			// print_r($members);
-			$avatar_options = array ( 'item_id' => $group->id, 'object' => 'group', 'type' => 'full', 'avatar_dir' => 'group-avatars', 'alt' => 'Group avatar', 'css_id' => 1234, 'class' => 'avatar', 'width' => 50, 'height' => 50, 'html' => true );
-			$gr_avatar = bp_core_fetch_avatar($avatar_options);
-			?>
-			<li class="odd public is-admin is-member group-has-avatar">
-				<div class="item-wrap">
-					<div <?php echo kleo_bp_get_group_cover_attr($group->id);?> >
-						<div class="item-avatar">
-							<a href="<?php echo get_site_url()."/".$root_slug."/".$group->slug;?>"><?php echo $gr_avatar; ?></a>
-						</div>
-					</div>
-				
-				<div class="item">
-					<div class="item-title"><a href="<?php echo get_site_url()."/".$root_slug."/".$group->slug;?>"><?php echo $group->name;?></a></div>
-					<div class="item-meta"><span class="activity">active 1 day, 3 hours ago</span></div>
-					<div class="item-desc"><p><?php echo $group->description;?></p></div>				
-					<div class="action">					
-		
-				<?php
-				if( $group_enable->meta_value == strtolower("yes") ) echo bpgr_get_plugin_rating_html($group_rating->meta_value);
-
-				// var_dump( bpgr_directory_rating() );
-				// print_r($group_rating);
-				// print_r($group_enable);
-				// echo kleo_bp_get_group_cover_attr();
-				// var_dump(kleo_bp_get_group_cover_attr($group->id));
-
-				?>
-	 			</div>
-	 				<?php // members+1 as admin user not considered ?>
-					<div class="meta"><?php echo ucfirst($group->status); ?> / <?php echo $members['count']+1; ?> members</div>
-				</div>
-
-				</div><!-- end item-wrap -->
-			</li>
-			<?php endforeach;?>
-			</ul>
-			<?php
-		} // end if related $groups['total'] 
-
+		bp_get_template_part( 'groups/groups-loop-on-member-dir' );
 	}
 }
 
@@ -1523,4 +1432,6 @@ function a_show_groups_search_result_on_members(){
 // 	global $groups_template;
 // 	echo "groups_template";
 //  	alex_debug(1,1,"g ",$groups_template);
+//  	$group_type = bp_get_current_group_directory_type();
+//  	var_dump($group_type);
 // }
