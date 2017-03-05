@@ -688,7 +688,7 @@ h2.resp-accordion {
 .s-bar .second-menu .kleo_ajax_results a.ajax_view_all {
     color: #000;
     background: #cddc39;
-    font-family: 'Montserrat';
+    /*font-family: 'Montserrat';*/
 }
 .s-bar .second-menu .kleo_ajax_results h4 span {
     background: #fff;

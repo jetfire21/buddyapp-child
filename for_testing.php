@@ -871,3 +871,169 @@ function a_show_groups_search_result_on_members(){
 
 	}
 }
+
+############
+from original functions.php
+
+
+add_action('wp_ajax_get_tweets', 'alex_my_action_callback');
+add_action('wp_ajax_nopriv_get_tweets', 'alex_my_action_callback');
+function alex_my_action_callback(){
+
+// print_r($_POST);
+$gr_id = (int)$_POST['gr_id'];
+$gr_permalink = sanitize_text_field($_POST['gr_permalink']);
+$gr_name = sanitize_text_field($_POST['gr_name']);
+$gr_avatar = sanitize_text_field($_POST['gr_avatar']);
+    // [gr_id] => 13
+    // [gr_permalink] => http://dugoodr.dev/causes/linux/
+    // [gr_name] => Linux
+	// require 'libs/twitter/test.php';
+// require 'libs/twitter/TwitterAPIExchange.php';
+require 'libs/twitter/tw-api.php';
+$twitter_debug = false;
+$tweets = a21_tw_get_tweets($settings,$url,$getfield,$requestMethod,$twitter_debug);
+
+if(!$twitter_debug):
+	foreach ($tweets as $k => $v):
+		$output['date_format'] = ago($v->created_at,1,1)."<br>";
+		$output['tweet'] = $v->text;
+		$output['date'] = $v->created_at."<br>";
+		if(!empty($v->entities->urls[0]->url)) $output['short_link'] = $v->entities->urls[0]->url;
+
+$html .= '
+<li class="groups activity_update activity-item date-recorded-1488491970" id="activity-900">
+	<div class="activity-avatar">
+		<a href="http://dugoodr.dev/members/admin7/">
+			<img src="http://dugoodr.dev/wp-content/uploads/avatars/1/5803f61eb836b-bpthumb.jpg" class="avatar user-1-avatar avatar-50 photo" width="50" height="50" alt="Profile picture of Admin" />
+		</a>
+	</div>
+
+	<div class="activity-content">
+		<div class="activity-header">
+			<p><a href="http://dugoodr.dev/members/admin7/" title="Admin">Admin</a> posted tweet <a href="'.$gr_permalink.'" class=""><img src="'.$gr_avatar.'" class="avatar group-8-avatar avatar-20 photo" width="20" height="20" alt="Group cause logo of Ottawa Food Bank" /></a><a href="http://dugoodr.dev/causes/ottawa-food-bank/">'.$gr_name.'</a> <a href="http://dugoodr.dev/activity/p/168/" class="view activity-time-since" title="View Discussion"><span class="time-since" data-livestamp="2017-03-04T19:59:30+0000">'.$output['date_format'].'</span></a></p>
+		</div>	
+			<div class="activity-inner">
+				<p>'.$output['tweet'].'</p>
+			</div>	
+		<div class="activity-meta">		
+			<a href="?ac=168/#ac-form-168" class="button acomment-reply bp-primary-action" id="acomment-comment-168">
+						Comment <span>0</span>					</a>				
+				<a href="http://dugoodr.dev/activity/delete/168/?_wpnonce=d14e60b831" class="button item-button bp-secondary-action delete-activity confirm" rel="nofollow">Delete</a>
+		</div>
+	</div>
+		<div class="activity-comments">	
+				<form action="http://dugoodr.dev/activity/reply/" method="post" id="ac-form-168" class="ac-form">
+					<div class="ac-reply-avatar"><img src="http://dugoodr.dev/wp-content/uploads/avatars/1/5803f61eb836b-bpthumb.jpg" class="avatar user-1-avatar avatar-50 photo" width="50" height="50" alt="Profile picture of Admin" /></div>
+					<div class="ac-reply-content">
+						<div class="ac-textarea">
+							<textarea id="ac-input-168" class="ac-input bp-suggestions" name="ac_input_168"></textarea>
+						</div>
+						<input type="submit" name="ac_form_submit" value="Post" /> &nbsp; <a href="#" class="ac-reply-cancel">Cancel</a>
+						<input type="hidden" name="comment_form_id" value="168" />
+					</div>
+									<input type="hidden" id="rt_upload_hf_comment"
+				       value="1"
+				       name="comment"/>
+								<input type="hidden" id="rt_upload_hf_privacy"
+				       value="0"
+				       name="privacy"/>
+								<input type="hidden" class="rt_upload_hf_upload_parent_id"
+				       value="168"
+				       name="upload_parent_id"/>
+								<input type="hidden" class="rt_upload_hf_upload_parent_id_type"
+				       value="activity"
+				       name="upload_parent_id_type"/>
+								<input type="hidden" id="rt_upload_hf_upload_parent_id_context"
+				       value="groups"
+				       name="upload_parent_id_context"/>
+					<div class="rtmedia-container rtmedia-uploader-div">
+					<div class="rtmedia-uploader no-js">
+				<div id="rtmedia-uploader-form-activity-168">				
+					<div class="rtm-tab-content-wrapper">
+						<div id="rtm-file_upload-ui-activity-168" class="rtm-tab-content">
+							<div class="rtmedia-plupload-container rtmedia-comment-media-main rtmedia-container clearfix"><div id="rtmedia-comment-action-update-activity-168" class="clearfix"><div class="rtm-upload-button-wrapper"><div id="rtmedia-comment-media-upload-container-activity-168"></div><button type="button" class="rtmedia-comment-media-upload" data-media_context="groups" id="rtmedia-comment-media-upload-activity-168" title="Attach Media"><span class="dashicons dashicons-admin-media"></span></button></div><input type="hidden" name="privacy" value="0" /></div></div><div class="rtmedia-plupload-notice"><ul class="plupload_filelist_content ui-sortable rtm-plupload-list clearfix" id="rtmedia_uploader_filelist-activity-168"></ul></div><input type="hidden" name="mode" value="file_upload" />							</div>
+						</div>				
+						<input type="hidden" id="rtmedia_upload_nonce" name="rtmedia_upload_nonce" value="dc7191db20" /><input type="hidden" name="_wp_http_referer" value="/causes/ottawa-food-bank/" />
+												<input type="submit" id="rtMedia-start-upload-activity-168" name="rtmedia-upload" value="Upload" />
+					</div>
+				</div>
+				</div>
+					<input type="hidden" id="_wpnonce_new_activity_comment" name="_wpnonce_new_activity_comment" value="7e4cd8101a" /><input type="hidden" name="_wp_http_referer" value="/causes/ottawa-food-bank/" />
+				</form>
+		</div>
+</li>';
+	endforeach;
+	endif;
+	// echo $output['date'];
+	// var_dump($output);
+	echo $html;
+	// echo json_encode($html);
+	exit;
+}
+
+add_action("wp_footer","alex_tweet");
+function alex_tweet(){
+
+		echo $gr_id = bp_get_group_id();
+		// echo "gr ".$gid;
+		$group = groups_get_group($gr_id);
+		echo $group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
+		$avatar_options = array ( 'item_id' => $gr_id, 'object' => 'group','avatar_dir' => 'group-avatars', 'html' => false );
+		echo $gr_avatar = bp_core_fetch_avatar($avatar_options);
+
+		// print_r($bp);
+
+echo $getfield;
+// print_r($settings);
+
+	if(bp_is_group_home()) {
+		echo "<h3>this is page-test888</h3>";
+
+		// add_action("wp_ajax_get_tweets", "alex_my_action_callback");
+		// add_action("wp_ajax_nopriv_get_tweets", 'alex_my_action_callback');
+		// function alex_my_action_callback(){
+		// 	echo $res['res'] = "php ajax";
+		// 	json_encode($res);
+		// 	exit;
+		// }
+	?>
+	<script>
+	jQuery( document ).ready(function() {
+	    function get_tweets(){
+	    	console.log(KLEO.ajaxurl);
+		var data = {
+			'action': 'get_tweets',
+			'gr_id': <?php echo $gr_id;?>,
+			'gr_permalink': '<?php echo $group_permalink;?>',
+			'gr_name': '<?php echo $group->name;?>',
+			'gr_avatar': '<?php echo $gr_avatar;?>',
+		};
+
+		jQuery.ajax({
+			url:KLEO.ajaxurl, // обработчик
+			data:data, // данные
+			type:'POST', // тип запроса
+			success:function(data){
+				console.log("js ok!");
+				console.log(data);
+				if( data ) { 
+					// current_page++; // увеличиваем номер страницы на единицу
+					// if (current_page == max_pages) $("#true_loadmore").remove(); // если последняя страница, удаляем кнопку
+					jQuery(".activity.single-group>ul").prepend(data);
+				} else {
+					// $('#true_loadmore').remove(); // если мы дошли до последней страницы постов, скроем кнопку
+				}
+			},
+			beforeSend: function(){
+				// $("#loading-text").html('<a class="loading-link" href="#">Loading ...</a>');
+				console.log("Loading get_tweets");
+			}
+		 });
+		}
+		get_tweets();
+	});
+	</script>
+	<?php
+	}
+}

@@ -1191,7 +1191,7 @@ function alex_add_rating_header_group(){
 	    <?php if( !empty($ext_url) ):?>
 	    <span itemprop="sameAs" content="<?php echo $ext_url;?>"></span>
 		<?php endif;?>
-		<?php echo bpgr_review_html() ?>
+		<?php echo bpgr_review_html(); ?>
 		</span>
 	<?php
 	}
@@ -1400,7 +1400,8 @@ function a_redirect_if_changed_group_page() {
 add_action( 'kleo_header', 'a_redirect_if_changed_group_page', 999 );
 
 
-add_action("bp_after_members_loop","a_show_groups_search_result_on_members");
+add_action("bp_after_directory_members","a_show_groups_search_result_on_members");
+// add_action("bp_after_members_loop","a_show_groups_search_result_on_members");
 function a_show_groups_search_result_on_members(){
 
 	global $groups_template;
@@ -1421,9 +1422,13 @@ function a_show_groups_search_result_on_members(){
 	// bp_get_template_part( 'groups/groups-loop-on-member-dir' );
 	// echo '<br><h3>конец цикла группы</h3>';
 
-	if( !empty($search_string) ){
-		bp_get_template_part( 'groups/groups-loop-on-member-dir' );
-	}
+	if( !empty($search_string) ):?>
+		<form action="" method="post" id="groups-directory-form" class="dir-form">
+			<div id="groups-dir-list" class="groups dir-list">
+			<?php bp_get_template_part( 'groups/groups-loop-on-member-dir' );?>
+			</div>
+		</form>
+	<?php endif;
 }
 
 
@@ -1435,3 +1440,4 @@ function a_show_groups_search_result_on_members(){
 //  	$group_type = bp_get_current_group_directory_type();
 //  	var_dump($group_type);
 // }
+

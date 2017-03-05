@@ -20,7 +20,7 @@
  */
 do_action( 'bp_before_groups_loop' ); ?>
 
-<!-- <h4>page groups-loop-on-member-dir.php</h4> -->
+<h4>you mean <?php echo ucfirst(bp_get_groups_root_slug());?> such as:</h4>
 <?php
 $search_string = esc_html($_GET['s']);
  // if (  bp_has_groups(bp_ajax_querystring( 'groups' )."&search_terms=".$search_string."&update_admin_cache=true&per_page=50" )  ) :
