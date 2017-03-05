@@ -20,7 +20,6 @@
  */
 do_action( 'bp_before_groups_loop' ); ?>
 
-<h4>you mean <?php echo ucfirst(bp_get_groups_root_slug());?> such as:</h4>
 <?php
 $search_string = esc_html($_GET['s']);
  // if (  bp_has_groups(bp_ajax_querystring( 'groups' )."&search_terms=".$search_string."&update_admin_cache=true&per_page=50" )  ) :
@@ -28,6 +27,7 @@ $search_string = esc_html($_GET['s']);
  // if (bp_has_groups( bp_ajax_querystring( 'groups' )."&search_terms=".$search_string."&update_admin_cache=true&per_page=3" )) :
  if (bp_has_groups( bp_ajax_querystring( 'groups' )."&search_terms=".$search_string."&per_page=50" )) :
   ?>
+		<h5 class="text_between_memb_and_gr">you mean <?php echo ucfirst(bp_get_groups_root_slug());?> such as:</h5>
 
 	<div id="pag-top" class="pagination" xmlns="http://www.w3.org/1999/html">
 
