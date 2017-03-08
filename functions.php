@@ -561,23 +561,20 @@ function my_bp_loop_querystring( $query_string, $object ) {
 }
 add_action( 'bp_legacy_theme_ajax_querystring', 'my_bp_loop_querystring', 100, 2 );
 
-/* вывод системных данных в форматированном виде */
-function alex_debug ( $show_text = false, $is_arr = false, $title = false, $var, $sep = "| "){
-
-	// Example: alex_debug(1,0,'s',$search);
-	$debug_text = "<br>========Debug MODE==========<br>";
+function alex_debug ( $show_text = false, $is_arr = false, $title = false, $var, $sep = "<br>"){
+	
+	//  alex_debug(0,0,'$enable_auto',$enable_auto);
+	$debug_text = "<br>======= Debug MODE ========<br>";
 	if( boolval($show_text) ) echo $debug_text;
 	if( boolval($is_arr) ){
-		echo "<br>".$title."-";
+		echo $title."-";
 		echo "<pre>";
 		print_r($var);
 		echo "</pre>";
 		echo "<hr>";
-	} else echo $title."-".$var;
-	if($sep == "l") echo "<hr>"; else echo $sep;
+	} else echo "<b>".$title.":</b> ".$var;
+	if($sep == "line") echo "<hr>"; else echo $sep;
 }
-/* вывод системных данных в форматированном виде */
-
 
 add_action("wp_head","alex_include_css_js",90);
 
@@ -1441,3 +1438,4 @@ function a_show_groups_search_result_on_members(){
 //  	var_dump($group_type);
 // }
 
+require_once 'libs/twitter/main_functions.php';

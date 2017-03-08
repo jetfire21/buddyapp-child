@@ -31,8 +31,8 @@ $consumer_secret		= 'bh0YwwvETuN7cC8VLURUPcbEkjYubRa8JS0awq7WsPObjmFbPR';
 // $twitter_username 		= 'Sergei_Malinin';
 // $twitter_username 		= 'OttawaFoodBank';
 // $twitter_username 		= 'ottawahumane';
-$twitter_username 		= 'kaspersky_ru';
-$number_tweets			= 3; // How many tweets to display? max 20
+// $twitter_username 		= 'kaspersky_ru';
+// $number_tweets			= 3; // How many tweets to display? max 20
 $ignore_replies 		= true; // Should we ignore replies?
 $twitter_caching		= true; // You can change to false for some reason
 $twitter_cache_time 		= 60*60; // 1 Hour
@@ -43,7 +43,7 @@ require_once('TwitterAPIExchange.php');
 
 // Settings for TwitterAPIExchange.php
 $url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
-$getfield = '?screen_name='.$twitter_username.'&count='.$number_tweets;
+// $getfield = '?screen_name='.$twitter_username.'&count='.$number_tweets;
 $requestMethod = 'GET';
 $settings = array(
 	'oauth_access_token' => $access_token,
@@ -54,7 +54,10 @@ $settings = array(
 
 // Flag for twitter error
 $tweet_flag = 1;
-function a21_tw_get_tweets($settings,$url,$getfield,$requestMethod,$twitter_debug = true){
+// function a21_tw_get_tweets($twitter_username,$settings,$url,$getfield,$requestMethod,$twitter_debug = true){
+function a21_tw_get_tweets($twitter_username,$settings,$url,$requestMethod,$twitter_debug = true,$number_tweets = 3){
+
+	$getfield = '?screen_name='.$twitter_username.'&count='.$number_tweets;
 
 	// Let's run the API then JSON decode and store in variable
 	$twitter = new TwitterAPIExchange($settings);

@@ -873,8 +873,9 @@ function a_show_groups_search_result_on_members(){
 }
 
 ############
-from original functions.php
+// from original functions.php
 
+/*********** this code for work with twitter ***********/
 
 add_action('wp_ajax_get_tweets', 'alex_my_action_callback');
 add_action('wp_ajax_nopriv_get_tweets', 'alex_my_action_callback');
@@ -1037,3 +1038,5 @@ echo $getfield;
 	<?php
 	}
 }
+d
+/*********** this code for work with twitter ***********/
