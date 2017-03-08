@@ -428,7 +428,7 @@ a#link_edit_timeline{ display: block; margin:20px 0 70px 0; font-weight: bold; }
 .profile #security_desc{
   padding: 25px; position: relative;
    border-radius: 10px;
-  width: 300px;
+  width: 80%;
   margin:auto;
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+23,cccccc+100 */
   background: #ffffff; /* Old browsers */

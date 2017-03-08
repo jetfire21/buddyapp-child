@@ -466,7 +466,7 @@ function alex_search_form( $atts = array(), $content = null ) {
 				<i> </i>
 	<div class="s-bar">
 	<form id="' . $el_id . '" class="' . $el_class . ' second-menu" method="get" ' . ( $search_page == 'no' ? ' onsubmit="return false;"' : '' ) . ' action="' . $action . '" data-context="' . $context  .'">';
-	$output .= '<input id="' . $input_id . '" class="' . $input_class . ' ajax_s" autocomplete="off" type="text" name="' . $input_name . '" onfocus="this.value = \'\';" onblur="if (this.value == \'\') {this.value = \'Search\';}" value="Find your cause...">';
+	$output .= '<input id="' . $input_id . '" class="' . $input_class . ' ajax_s" autocomplete="off" type="text" name="' . $input_name . '" onfocus="this.value = \'\';" onblur="if (this.value == \'\') {this.value = \'Find your cause...\';}" value="Find your cause...">';
 	$output .= '<input type="submit" class="' . $button_class . '" value="Search" />';
 	if ( $ajax_results == 'yes' ) {
 		$output .= '<div class="kleo_ajax_results search-style-' . $form_style . '"></div>';
