@@ -21,6 +21,12 @@ $gr_permalink = sanitize_text_field($_POST['gr_permalink']);
 $gr_name = sanitize_text_field($_POST['gr_name']);
 $gr_avatar = sanitize_text_field($_POST['gr_avatar']);
 $tw_user = sanitize_text_field($_POST['user']);
+    // [gr_id] => 13
+    // [gr_permalink] => http://dugoodr.dev/causes/linux/
+    // [gr_name] => Linux
+	// require 'libs/twitter/test.php';
+// require 'libs/twitter/TwitterAPIExchange.php';
+// require_once 'libs/twitter/tw-api.php';
 require_once 'tw-api.php';
 $twitter_debug = false;
 // $twitter_username = 'ottawafoodbank';
@@ -50,6 +56,12 @@ if(!$twitter_debug):
 		//$check_tweet_db = $wpdb->get_row("SELECT id FROM `{$table_activity}` WHERE date_recorded='{$date_to_db}' AND content='{$tweet}' ");
 		$check_tweet_db = $wpdb->get_row( $wpdb->prepare( "SELECT id FROM `{$table_activity}` WHERE component='%s' AND date_recorded='%s' AND content='%s' AND item_id='%d' ",
 			'groups',$date_to_db,$tweet, $gr_id) );
+		// var_dump($check_tweet_db);
+
+	   // echo "<pre>";
+	   // print_r($wpdb->queries);
+	   // echo "</pre>";
+
 
 		// if value = NULL, in other words if tweet not exist db then add it in db and output on site
 		if( is_null($check_tweet_db) ) {
@@ -194,7 +206,15 @@ function alex_tweet(){
 
 
 	if(bp_is_group_home()) {
-		
+		// echo "<h3>this is page-test888</h3>";
+
+		// add_action("wp_ajax_get_tweets", "alex_my_action_callback");
+		// add_action("wp_ajax_nopriv_get_tweets", 'alex_my_action_callback');
+		// function alex_my_action_callback(){
+		// 	echo $res['res'] = "php ajax";
+		// 	json_encode($res);
+		// 	exit;
+		// }
 		 $setting_2 = groups_get_groupmeta( $gr_id, 'al21_automate_enable' );
 		if( $setting_2 =="yes"):
 		?>
@@ -217,18 +237,18 @@ function alex_tweet(){
 					type:'POST', // тип запроса
 					success:function(data){
 						console.log("js ok!");
-						// console.log(data);
-						// // console.log(typeof data);
-						// var data = JSON.parse(data);
-						// console.log(data.debug);
-						// if( data.html != 'null' ) { 
-						// 	// current_page++; // увеличиваем номер страницы на единицу
-						// 	// if (current_page == max_pages) $("#true_loadmore").remove(); // если последняя страница, удаляем кнопку
-						// 	jQuery(".activity.single-group>ul").prepend(data.html);
-						// } else {
-						// 	console.log("no html");
-						// }
-						// console.log("\r\n------------");
+						console.log(data);
+						// console.log(typeof data);
+						var data = JSON.parse(data);
+						console.log(data.debug);
+						if( data.html != 'null' ) { 
+							// current_page++; // увеличиваем номер страницы на единицу
+							// if (current_page == max_pages) $("#true_loadmore").remove(); // если последняя страница, удаляем кнопку
+							jQuery(".activity.single-group>ul").prepend(data.html);
+						} else {
+							console.log("no html");
+						}
+						console.log("\r\n------------");
 					},
 					beforeSend: function(){
 						// $("#loading-text").html('<a class="loading-link" href="#">Loading ...</a>');
@@ -379,7 +399,16 @@ class Group_Extension_Example_2 extends BP_Group_Extension {
 						}
 					endforeach;
 				endif;
+				// print_r($output);
 			}	
+			// exit;
+ 		// 	echo "<br>end twitter";
+			//  echo '<hr><br>';
+			// echo "<b>last query:</b> ".$wpdb->last_query."<br>";
+			// echo "<b>last result:</b> "; print_r($wpdb->last_result);
+			// echo "<br><b>last error:</b> "; print_r($wpdb->last_error);
+			// exit;
+
     }
  
     /**
@@ -454,8 +483,54 @@ function al_add_tweets_in_db(){
 		endif;
 		// print_r($output);
 	}
+	// echo "<br>end twitter";
+	//  echo '<hr><br>';
+	// echo "<b>last query:</b> ".$wpdb->last_query."<br>";
+	// echo "<b>last result:</b> "; print_r($wpdb->last_result);
+	// echo "<br><b>last error:</b> "; print_r($wpdb->last_error);
+ //   echo "<pre>";
+ //   print_r($wpdb->queries);
+ //   echo "</pre>";
+	// exit;
 }
 
 // Fires after the group has been successfully created (variation 1) after click button Finish
 add_action( 'groups_group_create_complete','al_add_tweets_in_db');
 
+add_action("wp_head","al21_del");
+function al21_del(){
+
+}
+
+
+
+add_action("wp_footer","a21_test1");
+function a21_test1(){
+
+// 	echo '<hr>';
+// 	echo $str = 'https://twitter.com/ottawafoodbank';
+// 	// echo $str = 'https://twitter.com/ottawafood.bank';
+// 	echo "<br>";
+// 	echo $str = substr(strrchr($str,"/"), 1); // parse url and return last part,e.g. ottawafoodbank
+// 	echo "<br>";
+	// int mktime ([ int $hour = date("H") [, int $minute = date("i") [, int $second = date("s") [, int $month = date("n") [, int $day = date("j") [, int $year = date("Y") [, int $is_dst = -1 ]]]]]]] )
+// 2017-03-09 14:05:19
+	// echo "time ".mktime("2017-03-09 14:05:19"); // e.g. 1489069887 
+	echo "<br>".$date = "2017-03-09 14:05:19";
+	echo "<br>".$date = date("H:i:s:n:j:Y", strtotime($date)); // 2017-03-08 14:11:10
+	$date = explode(":", $date);
+	print_r($date);
+	// echo $a = "'$date[0]','$date[1]','$date[2]','$date[3]','$date[4]','$date[5]'";
+	echo $a = "$date[0],$date[1],$date[2],'$date[3]','$date[4]','$date[5]'";
+	// echo " <br>strtotime ".strtotime($date);
+	// echo " <br>strtotime ".strtotime("now");
+	// echo " <br>time ". $unix = mktime("14","05","09","3","9","2017"); // e.g. 1489069887 1489068309 1491746709
+	// echo " <br>time ". $unix = mktime($date); // e.g. 1489069887 1489068309 1491746709
+	echo " <br>time ". $unix = mktime($a); // e.g. 1489069887 1489068309 1491746709
+	echo "<br>back ".date("H:i:s:n:j:Y",$unix);
+	echo "<br><b>last query:</b> ".$wpdb->last_query."<br>";
+
+	$b = '2017-03-08 14:11:10';
+	echo strtotime( $b); // e.g 1488982270 произвольную дату в правильном формате в unix метку
+	echo "<hr>";
+}
