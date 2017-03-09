@@ -534,3 +534,16 @@ function a21_test1(){
 	echo strtotime( $b); // e.g 1488982270 произвольную дату в правильном формате в unix метку
 	echo "<hr>";
 }
+
+add_action("wp_footer","a21_test1");
+function a21_test1(){
+	$gr_id = bp_get_group_id();
+	$group = groups_get_group($gr_id);
+	alex_debug(0,1,"gr",$group);
+	$user = wp_get_current_user();
+	$from_user_id = $user->ID;
+	alex_debug(0,1,"mem",$user);
+}
+
+
+// $action = '<a href="http://'.$_SERVER['HTTP_HOST'].'/'.$root_member_slug.'/'.$user->user_login.'/" title="'.$user->user_login.'">'.$user->user_login.'</a> posted tweet <a href="http://'.$_SERVER['HTTP_HOST'].'/'.$gr_root_slug.'/'.$group->slug.'/">'.$group->name.'</a>';

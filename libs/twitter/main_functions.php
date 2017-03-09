@@ -26,11 +26,11 @@ $twitter_debug = false;
 // $twitter_username = 'ottawafoodbank';
 // $twitter_username = 'kaspersky_ru';
 // $tweets = a21_tw_get_tweets($settings,$url,$getfield,$requestMethod,$twitter_debug,5);
-$tweets = a21_tw_get_tweets($tw_user,$settings,$url,$requestMethod,$twitter_debug, 4);
+$tweets = a21_tw_get_tweets($tw_user,$settings,$url,$requestMethod,$twitter_debug, 10);
 
-global $wpdb;
+global $wpdb,$bp;
 $table_activity = $wpdb->prefix."bp_activity";
-$res['debug'] = 'for debug: ';
+// $res['debug'] = 'for debug: ';
 $tw_i = 1;
 if(!$twitter_debug):
 	foreach ($tweets as $k => $v):
@@ -55,7 +55,7 @@ if(!$twitter_debug):
 		if( is_null($check_tweet_db) ) {
 
 			// echo "\r\n == this tweet not exist in db \r\n";
-			$res['debug'] .= "has tweet db: ".$check_tweet_db."; ";
+			// $res['debug'] .= "has tweet db: ".$check_tweet_db."; ";
 
 			$user = wp_get_current_user();
 			$from_user_id = $user->ID;
@@ -63,11 +63,17 @@ if(!$twitter_debug):
 			$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
 			$avatar_options = array ( 'item_id' => $gr_id, 'object' => 'group','avatar_dir' => 'group-avatars', 'html' => false );
 			$gr_avatar = bp_core_fetch_avatar($avatar_options);
-			$action = '<a href="http://dugoodr.dev/members/toddroberts/" title="Todd2_LongName">Todd2_LongName</a> posted tweet <a href="http://dugoodr.dev/causes/ottawa-food-bank/">'.$group->name.'</a>';
+
+			$gr_root_slug = $bp->groups->root_slug;
+			$gr_slug = $bp->groups->slug;
+
+			$action = 'posted tweet <a href="http://'.$_SERVER['HTTP_HOST'].'/'.$gr_root_slug.'/'.$group->slug.'/">'.$group->name.'</a>';
 
 			$q = $wpdb->prepare( "INSERT INTO {$table_activity} (user_id, component, type, action, content, primary_link, date_recorded, item_id, secondary_item_id, hide_sitewide, is_spam ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %d, %d, %d, %d )", $from_user_id, 'groups', 'new_event', $action, $tweet, $to_user_link_nohtml, $date_to_db, $gr_id, 0, 0,0);
 			$wpdb->query( $q );	
 			$last_activity_id = $wpdb->get_var( "SELECT MAX(`id`) FROM {$table_activity}");
+
+			// $res['debug'] .= "; user_id: ".$from_user_id.";  root_slug -".$gr_root_slug.";  ".$root_member_slug."; ".$group->slug;
 
 			$html .= '
 				<li class="groups activity_update activity-item date-recorded-'.strtotime($date_to_db).'" id="activity-'.$last_activity_id.'">
@@ -134,41 +140,29 @@ if(!$twitter_debug):
 						</div>
 				</li>';
 		}
-		$res['debug'] .= "\r\n last query: ".$wpdb->last_query.";\r\n--- ";
+		// $res['debug'] .= "\r\n last query: ".$wpdb->last_query.";\r\n--- ";
 		$tw_i++;
 	endforeach;
 	endif;
 
 	$count_tw = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*)  FROM {$table_activity} WHERE component='%s' AND item_id='%d' AND type='%s' ",
 	'groups',$gr_id,'new_event') );
-	// var_dump($count_tw);
-	// echo $count_tw;
-	// $i=1;
-	$res['debug'] .= "\r\n count tw before while ".$count_tw.";\r\n--- ";
-	while($count_tw > 6){
+
+	// $res['debug'] .= "\r\n count tw before while ".$count_tw.";\r\n--- ";
+	while($count_tw > 15){
 		$old_tw = $wpdb->get_var($wpdb->prepare("SELECT MIN(date_recorded)  FROM {$table_activity} WHERE component='%s' AND item_id='%d' AND type='%s' ",
 		//$old_tw = $wpdb->get_var($wpdb->prepare("SELECT id MIN(date_recorded)  FROM {$table_activity} WHERE component='%s' AND item_id='%d' AND type='%s' ",
 		'groups',$gr_id,'new_event') );
 		// var_dump($old_tw);
 		$wpdb->delete( $table_activity, array( 'item_id'=>$gr_id,'date_recorded' => $old_tw,'component'=> 'groups', 'type'=>'new_event'), array( '%d','%s','%s','%s' ) );
 		$count_tw--;
-		$res['debug'] .= "\r\n count tw in while ".$count_tw.";\r\n--- ";
+		// $res['debug'] .= "\r\n count tw in while ".$count_tw.";\r\n--- ";
 		// echo $i++;
 	}
 
-	// echo "\r\n <b>last query:</b> ".$wpdb->last_query."<br>";
-	// echo "<b>last result:</b> "; print_r($wpdb->last_result);
-	// echo "<br><b>last error:</b> ";	echo "\r\n"; print_r($wpdb->last_error);
-
-
-	// echo $output['date'];
-	// var_dump($output);
-	// echo $html;
-	// echo "test";
-	// $res['html'] = $html;
 	$res['html'] = "html";
 	$end_time =	microtime(true);
-	$res['debug'] .= ($end_time - $st_time) ." sec ";
+	// $res['debug'] .= ($end_time - $st_time) ." sec ";
 
 	echo json_encode($res);
 	exit;
@@ -194,7 +188,7 @@ function alex_tweet(){
 
 
 	if(bp_is_group_home()) {
-		
+
 		 $setting_2 = groups_get_groupmeta( $gr_id, 'al21_automate_enable' );
 		if( $setting_2 =="yes"):
 		?>
@@ -224,7 +218,7 @@ function alex_tweet(){
 						// if( data.html != 'null' ) { 
 						// 	// current_page++; // увеличиваем номер страницы на единицу
 						// 	// if (current_page == max_pages) $("#true_loadmore").remove(); // если последняя страница, удаляем кнопку
-						// 	jQuery(".activity.single-group>ul").prepend(data.html);
+						// 	// jQuery(".activity.single-group>ul").prepend(data.html);
 						// } else {
 						// 	console.log("no html");
 						// }
@@ -300,6 +294,7 @@ class Group_Extension_Example_2 extends BP_Group_Extension {
 		<label for="al21_automate_enable">
 		<input type="checkbox" id="al21_automate_enable" name="al21_automate_enable" <?php if($setting_2 == 'yes') echo 'checked="checked"';?> value="<?php echo $setting_2;?>"> Enable automate
 		</label>
+		<br>
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
 
@@ -345,7 +340,7 @@ class Group_Extension_Example_2 extends BP_Group_Extension {
 				// $twitter_username = 'ottawafoodbank';
 				$twitter_username = substr(strrchr($twitter_url,"/"), 1); // parse url and return last part,e.g. ottawafoodbank
 				// $tweets = a21_tw_get_tweets($twitter_username, $settings,$url,$getfield,$requestMethod,$twitter_debug);
-				$tweets = a21_tw_get_tweets($twitter_username,$settings,$url,$requestMethod,$twitter_debug,3);
+				$tweets = a21_tw_get_tweets($twitter_username,$settings,$url,$requestMethod,$twitter_debug,15);
 
 				global $wpdb,$bp;
 				$table_activity = $wpdb->prefix."bp_activity";
@@ -359,7 +354,12 @@ class Group_Extension_Example_2 extends BP_Group_Extension {
 				$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
 				 $avatar_options = array ( 'item_id' => $gr_id, 'object' => 'group','avatar_dir' => 'group-avatars', 'html' => false );
 				$gr_avatar = bp_core_fetch_avatar($avatar_options);
-				$action = '<a href="http://dugoodr.dev/members/toddroberts/" title="Todd2_LongName">Todd2_LongName</a> posted tweet <a href="http://dugoodr.dev/causes/ottawa-food-bank/">'.$group->name.'</a>';
+
+				$gr_root_slug = $bp->groups->root_slug;
+				$gr_slug = $bp->groups->slug;
+
+				$action = 'posted tweet <a href="http://'.$_SERVER['HTTP_HOST'].'/'.$gr_root_slug.'/'.$group->slug.'/">'.$group->name.'</a>';
+
 				if(!$twitter_debug):
 					foreach ($tweets as $k => $v):
 						$output['date_format'] = ago($v->created_at,1,1);
@@ -424,9 +424,9 @@ function al_add_tweets_in_db(){
 		// $twitter_username = 'ottawafoodbank';
 		$twitter_username = substr(strrchr($twitter_url,"/"), 1); // parse url and return last part,e.g. ottawafoodbank
 		// $tweets = a21_tw_get_tweets($twitter_username, $settings,$url,$getfield,$requestMethod,$twitter_debug);
-		$tweets = a21_tw_get_tweets($twitter_username,$settings,$url,$requestMethod,$twitter_debug,3);
+		$tweets = a21_tw_get_tweets($twitter_username,$settings,$url,$requestMethod,$twitter_debug,15);
 
-		global $wpdb;
+		global $wpdb,$bp;
 		$table_activity = $wpdb->prefix."bp_activity";
 		$user = wp_get_current_user();
 		$from_user_id = $user->ID;
@@ -438,7 +438,11 @@ function al_add_tweets_in_db(){
 		$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
 		$avatar_options = array ( 'item_id' => $gr_id, 'object' => 'group','avatar_dir' => 'group-avatars', 'html' => false );
 		$gr_avatar = bp_core_fetch_avatar($avatar_options);
-		$action = '<a href="http://dugoodr.dev/members/toddroberts/" title="Todd2_LongName">Todd2_LongName</a> posted tweet <a href="http://dugoodr.dev/causes/ottawa-food-bank/">'.$group->name.'</a>';
+
+		$gr_root_slug = $bp->groups->root_slug;
+		$gr_slug = $bp->groups->slug;
+
+		$action = 'posted tweet <a href="http://'.$_SERVER['HTTP_HOST'].'/'.$gr_root_slug.'/'.$group->slug.'/">'.$group->name.'</a>';
 
 		if(!$twitter_debug):
 			foreach ($tweets as $k => $v):
