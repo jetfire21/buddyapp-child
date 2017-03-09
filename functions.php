@@ -561,20 +561,23 @@ function my_bp_loop_querystring( $query_string, $object ) {
 }
 add_action( 'bp_legacy_theme_ajax_querystring', 'my_bp_loop_querystring', 100, 2 );
 
-function alex_debug ( $show_text = false, $is_arr = false, $title = false, $var, $sep = "<br>"){
-	
-	//  alex_debug(0,0,'$enable_auto',$enable_auto);
-	$debug_text = "<br>======= Debug MODE ========<br>";
+/* вывод системных данных в форматированном виде */
+function alex_debug ( $show_text = false, $is_arr = false, $title = false, $var, $sep = "| "){
+
+	// Example: alex_debug(1,0,'s',$search);
+	$debug_text = "<br>========Debug MODE==========<br>";
 	if( boolval($show_text) ) echo $debug_text;
 	if( boolval($is_arr) ){
-		echo $title."-";
+		echo "<br>".$title."-";
 		echo "<pre>";
 		print_r($var);
 		echo "</pre>";
 		echo "<hr>";
-	} else echo "<b>".$title.":</b> ".$var;
-	if($sep == "line") echo "<hr>"; else echo $sep;
+	} else echo $title."-".$var;
+	if($sep == "l") echo "<hr>"; else echo $sep;
 }
+/* вывод системных данных в форматированном виде */
+
 
 add_action("wp_head","alex_include_css_js",90);
 
@@ -599,10 +602,9 @@ function alex_include_css_js(){
     $member_name = bp_core_get_username($user_id_isnotlogin);
 
 	$url_s = $_SERVER['REQUEST_URI'];
-	$profile_view = preg_match("#^/members/[a-z0-9_]+/profile/$#i", $url_s);
-
+	$profile_view = preg_match("#^/i-am/[a-z0-9_]+/profile/$#i", $url_s);
 	$url_s = $_SERVER['REQUEST_URI'];
-	$profile_view_notdefault = preg_match("#^/members/".$member_name."/$#i", $url_s);
+	$profile_view_notdefault = preg_match("#^/i-am/".$member_name."/$#i", $url_s);
 
 	if($profile_view or $profile_view_notdefault){
 
@@ -643,12 +645,15 @@ function alex_custom_scripts()
 
     $member_name = bp_core_get_username($user_id_isnotlogin);
 	$url_s = $_SERVER['REQUEST_URI'];
-	$profile_view = preg_match("#^/members/[a-z0-9_]+/profile/$#i", $url_s);
+	$profile_view = preg_match("#^/i-am/[a-z0-9_]+/profile/$#i", $url_s);
 
-    // full path = http://dugoodr.com/members/admin7/profile/
-    // short path, insted activity set profile http://dugoodr.dev/members/admin7/
+    // full path = http://dugoodr.com/i-ams/admin7/profile/
+
+    // short path, insted activity set profile http://dugoodr.dev/i-am/admin7/
 	$url_s = $_SERVER['REQUEST_URI'];
-	$profile_view_notdefault = preg_match("#^/members/".$member_name."/$#i", $url_s);
+
+	$profile_view_notdefault = preg_match("#^/i-am/".$member_name."/$#i", $url_s);
+
 
 	if($profile_view or $profile_view_notdefault){
 		echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>';
@@ -879,7 +884,7 @@ function alex_sq_login_form_func( $atts, $content = null ) {
 			add_filter( "get_template_part_page-parts/login-form", '__return_false');
 		}
 
-		$output .= "<a class='show_home_form' href='#'>Sign in</a>";
+		$output .= "<a class='show_home_form' href='#'>Sign in  /  Sign up</a>";
 
 		add_action("wp_footer", "alex_custom_scripts_login_form",110);
 
@@ -1101,7 +1106,7 @@ function wp_get_name_page_template(){
 
 	if(!$user_id_islogin){ $user_id_islogin = $user_id_isnotlogin; }
 	$url_s = $_SERVER['REQUEST_URI'];
-	$profile_view_notdefault = preg_match("#^/members/".$member_name."/$#i", $url_s);
+	$profile_view_notdefault = preg_match("#^/i-am/".$member_name."/$#i", $url_s);
 
 	echo "has page profile= "; var_dump(bp_has_profile());
 
@@ -1385,7 +1390,7 @@ function a_redirect_if_changed_group_page() {
 	$bp->members->slug; // выводит- members
 	// выводит например- new_members...это page_name  (если компонент ассоциировали с нестандартной страницей в http://dugoodr.dev/wp-admin/admin.php?page=bp-page-settings)
 	$root_slug = $bp->members->root_slug;
-	$uri = $_SERVER['REQUEST_URI'];  // /members/admin7/groups/
+	$uri = $_SERVER['REQUEST_URI'];  // /i-am/admin7/groups/
 	$has_members_slug = preg_match("/{$root_slug}/i", $uri);
 	$has_groups_slug = preg_match("/groups/i", $uri);
 
