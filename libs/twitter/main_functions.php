@@ -30,7 +30,7 @@ $twitter_debug = false;
 // $twitter_username = 'ottawafoodbank';
 // $twitter_username = 'kaspersky_ru';
 // $tweets = a21_tw_get_tweets($settings,$url,$getfield,$requestMethod,$twitter_debug);
-$tweets = a21_tw_get_tweets($tw_user,$settings,$url,$requestMethod,$twitter_debug, 15);
+$tweets = a21_tw_get_tweets($tw_user,$settings,$url,$requestMethod,$twitter_debug, 5);
 
 global $wpdb;
 $table_activity = $wpdb->prefix."bp_activity";
@@ -334,6 +334,43 @@ class Group_Extension_Example_2 extends BP_Group_Extension {
 				array( '%d', '%s', '%s' )
 			);
 
+			if( !empty($_REQUEST['al21_twitteer_url']) ) $twitter_url = sanitize_text_field($_REQUEST['al21_twitteer_url']);
+			if (!empty($twitter_url) ){
+				require_once 'tw-api.php';
+				$twitter_debug = false;
+				// $twitter_username = 'ottawafoodbank';
+				$twitter_username = substr(strrchr($twitter_url,"/"), 1); // parse url and return last part,e.g. ottawafoodbank
+				// $tweets = a21_tw_get_tweets($twitter_username, $settings,$url,$getfield,$requestMethod,$twitter_debug);
+				$tweets = a21_tw_get_tweets($twitter_username,$settings,$url,$requestMethod,$twitter_debug,15);
+
+				global $wpdb,$bp;
+				$table_activity = $wpdb->prefix."bp_activity";
+				$user = wp_get_current_user();
+				echo $from_user_id = $user->ID;
+
+				// echo $gr_id = bp_get_group_id();
+				// echo "gr ".$gid;
+				 $gr_id = $bp->groups->current_group->id;
+				$group = groups_get_group($gr_id);
+				$group_permalink =  'http://'.$_SERVER['HTTP_HOST'] . '/' . bp_get_groups_root_slug() . '/' . $group->slug . '/';
+				 $avatar_options = array ( 'item_id' => $gr_id, 'object' => 'group','avatar_dir' => 'group-avatars', 'html' => false );
+				$gr_avatar = bp_core_fetch_avatar($avatar_options);
+				$action = '<a href="http://dugoodr.dev/members/toddroberts/" title="Todd2_LongName">Todd2_LongName</a> posted tweet <a href="http://dugoodr.dev/causes/ottawa-food-bank/">'.$group->name.'</a>';
+				if(!$twitter_debug):
+					foreach ($tweets as $k => $v):
+						$output['date_format'] = ago($v->created_at,1,1);
+						$output['tweet'] = $v->text; // in tweets can be as sign ' "
+						$output['date'] = $v->created_at;
+						// Wed Mar 08 16:05:46 +0000 2017
+						 $date_recorded = date("Y-m-d H:i:s", strtotime($output['date']));
+						if(!empty($v->entities->urls[0]->url)) $output['short_link'] = $v->entities->urls[0]->url;
+						$q = $wpdb->prepare( "INSERT INTO {$table_activity} (user_id, component, type, action, content, primary_link, date_recorded, item_id, secondary_item_id, hide_sitewide, is_spam ) VALUES ( %d, %s, %s, %s, %s, %s, %s, %d, %d, %d, %d )", $from_user_id, 'groups', 'new_event', $action, $output['tweet'], $to_user_link_nohtml, $date_recorded, $gr_id, 0, 0,0);
+						$wpdb->query( $q );	
+					endforeach;
+				endif;
+				// print_r($output);
+			}	
+			// exit;
  		// 	echo "<br>end twitter";
 			//  echo '<hr><br>';
 			// echo "<b>last query:</b> ".$wpdb->last_query."<br>";
@@ -378,7 +415,7 @@ function al_add_tweets_in_db(){
 
 	// alex_debug(0,1,'req1',$_REQUEST);
 	// alex_debug(0,1,'post1',$_POST);
-	if( !empty($_REQUEST['al21_twitteer_url']) ) echo $twitter_url = sanitize_text_field($_REQUEST['al21_twitteer_url']);
+	if( !empty($_REQUEST['al21_twitteer_url']) ) $twitter_url = sanitize_text_field($_REQUEST['al21_twitteer_url']);
 	if (!empty($twitter_url) ){
 		require_once 'tw-api.php';
 		$twitter_debug = false;
