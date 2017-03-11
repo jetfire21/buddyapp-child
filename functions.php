@@ -27,9 +27,13 @@ return 'DuGoodr Scout';
 
 //Social Media Icons based on the profile user info
 function member_social_extend(){
+
 		// $dmember_id = $bp->displayed_user->id;
-		$user = wp_get_current_user();
-		$dmember_id = $user->ID;
+		// $user = wp_get_current_user();
+		// $dmember_id = $user->ID;
+		global $bp;
+		$member_id = $bp->displayed_user->id;
+
 
 		$website_info = xprofile_get_field_data('Website', $dmember_id);
 		$fb_info = xprofile_get_field_data('Facebook Profile', $dmember_id);
