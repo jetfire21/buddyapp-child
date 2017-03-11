@@ -19,6 +19,14 @@ $grs = "{".$grs."}";
 echo "<script>var grs = $grs;</script>";
 $user_id_gr = bp_displayed_user_id();
 
+// ---
+remove_filter( 'bp_get_the_profile_field_value',           'stripslashes' );
+remove_filter( 'bp_get_the_profile_field_edit_value',      'stripslashes' );
+remove_filter( 'bp_get_the_profile_field_value',           'bp_xprofile_escape_field_data', 8, 3 );
+remove_filter( 'bp_get_the_profile_field_value',           'xprofile_filter_format_field_value',         1, 2 );
+remove_filter( 'bp_get_the_profile_field_value',           'xprofile_filter_format_field_value_by_type', 8, 3 );
+remove_filter( 'bp_get_the_profile_field_value',           'xprofile_filter_link_profile_data',          9, 3 );
+
 global $bp;
 $user_id = $bp->displayed_user->id;
 $verify_user = xprofile_get_field_data('Active security check', $user_id);
@@ -31,8 +39,20 @@ if($verify_user[0] == 'YES' && is_user_logged_in() ){
 		$sec_verify_desc = xprofile_get_field(44, $user_id);
 		// default description under field
 		$sec_verify_desc = $sec_verify_desc->description;
+	}else 		{
+		$sec_verify_desc = xprofile_get_field(44, $user_id);
+		$sec_verify_desc = $sec_verify_desc->data->value;
 	}
 }
+
+// echo "<h1>test</h1>";
+// $t1 = xprofile_get_field(44, $user_id);
+// // // $t1 = xprofile_get_field(44, $user_id);
+// // // // default description under field
+// echo $t1 = wpautop($t1->data->value);
+// // // // echo $t1->description;
+// // // // echo wpautop( $some_long_text );
+// print_r($t1);
 
 ?>
 
@@ -299,7 +319,7 @@ do_action( 'bp_after_profile_loop_content' ); ?>
 <?php if( !empty($sec_verify_desc) ):?>
 	<div id="security_desc" class="white-popup-block mfp-hide">
 		<!-- <div> Demo text Demo text Demo text Demo text Demo text Demo text</div> -->
-		<div><?php echo $sec_verify_desc;?></div>
+		<div><?php echo wpautop($sec_verify_desc);?></div>
 	    <!-- <a class="popup-modal-dismiss" href="#">x</a> -->
 	    <a class="mfp-close" href="#">x</a>
 	</div>
